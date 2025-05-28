@@ -38,7 +38,7 @@ const QuestionnaireQuestion = sequelize.define(
   },
   {
     tableName: QUESTIONNAIRE_QUESTION_TABLE,
-    timestamps: true,
+    timestamps: false,
   }
 );
 
