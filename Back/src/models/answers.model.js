@@ -1,5 +1,8 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/connection');
+const {EVENT_TABLE}= require('../models/event.model')
+const {QUESTION_TABLE}= require('../models/question.model')
+
 
 const ANSWER_TABLE = 'answers';
 const Answer = sequelize.define(ANSWER_TABLE, {
@@ -12,7 +15,7 @@ const Answer = sequelize.define(ANSWER_TABLE, {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'events',
+            model: EVENT_TABLE,
             key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -22,7 +25,7 @@ const Answer = sequelize.define(ANSWER_TABLE, {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'questions',
+            model: QUESTION_TABLE,
             key: 'id',
         },
         onUpdate: 'CASCADE',
