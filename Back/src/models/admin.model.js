@@ -19,7 +19,7 @@ const Admin = sequelize.define(
       allowNull: false,
       unique: true,
     },
-    password_hash: {
+    password: {
       type: DataTypes.TEXT,
       allowNull: false,
     }
