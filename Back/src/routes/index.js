@@ -7,7 +7,7 @@ const routerApi = (app) => {
     app.use('/api/v1', router);
 
     router
-        .use('/users', require('./user.routes'))
+        .use('/participants', require('./participants.routes'))
 
 }
 
