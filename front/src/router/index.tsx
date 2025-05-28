@@ -29,6 +29,11 @@ export default function AuthRoutes() {
                         <Route index element={<HomeClient />} />
                     </Route>
                     </Route>
+                    <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}>
+                    <Route path="/admin" element={<Navbar/>}>
+                        <Route index element={<HomeAdmin />} />
+                    </Route>
+                    </Route>
                 </Route>
                 <Route path="*" element={<Navigate to="/404" replace />} />
             </Routes>
