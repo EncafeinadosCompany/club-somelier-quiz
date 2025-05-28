@@ -7,6 +7,10 @@ const { Level } = require("./level.model");
 const { Event } = require("./event.model");
 const { QuestionnaireQuestion } = require("./questionnaire-question.model");
 const { QuestionCategory } = require("./question-category.model");
+const { Answer } = require('./answers.model');
+const { EventCategory } = require('./event-categories.model');
+const { EventParticipant } = require('./event-participants.model');
+const { EventQuestion } = require('./event-questions.model');
 
 Questionnaire.hasMany(Event, { foreignKey: "questionnaire_id" });
 Event.belongsTo(Questionnaire, { foreignKey: "questionnaire_id" });
