@@ -15,12 +15,6 @@ const { EventQuestion } = require('./event-questions.model');
 const { QuestionnaireQuestion } = require("./questionnaire-question.model");
 const { QuestionCategory } = require("./question-category.model");
 
-Admin.hasMany(Event, { foreignKey: "created_by" });
-Event.belongsTo(Admin, { foreignKey: "created_by" });
-
-Admin.hasMany(Questionnaire, { foreignKey: "created_by" });
-Questionnaire.belongsTo(Admin, { foreignKey: "created_by" });
-
 Event.hasMany(Answer, { foreignKey: "event_id" });
 Answer.belongsTo(Event, { foreignKey: "event_id" });
 

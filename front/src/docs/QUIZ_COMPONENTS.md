@@ -5,7 +5,6 @@
 ### 1. Pregunta de Opción Múltiple
 
 ```tsx
-// molecules/MultipleChoiceQuestion.tsx
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 
