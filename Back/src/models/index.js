@@ -16,10 +16,34 @@ const { EventParticipant } = require('./event-participants.model');
 const { EventQuestion } = require('./event-questions.model');
 
 
+Event.belongsToMany(Category, {
+  through: EventCategory,
+  foreignKey: 'event_id',
+  otherKey: 'category_id',
+  as: 'categories',
+});
+
+Category.belongsToMany(Event, {
+  through: EventCategory,
+  foreignKey: 'category_id',
+  otherKey: 'event_id',
+  as: 'events',
+});
 
 module.exports = {
-    Category,
+    Admin,
     Participant,
+    Category,
+    Level,
+    Questionnaire,
+    Question,
+    Event,
+    Answer,
+    QuestionCategory,
+    QuestionnaireQuestion,
+    EventCategory,
+    EventParticipant,
+    EventQuestion
 };
 
 // // Ejemplo de relaciones adicionales

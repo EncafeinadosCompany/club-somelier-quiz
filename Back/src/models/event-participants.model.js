@@ -33,7 +33,7 @@ const EventParticipant = sequelize.define(EVENT_PARTICIPANTS_TABLE, {
   }
 }, {
   tableName: EVENT_PARTICIPANTS_TABLE,
-  timestamps: true
+  timestamps: false
 });
 
 module.exports = { EventParticipant, EVENT_PARTICIPANTS_TABLE };

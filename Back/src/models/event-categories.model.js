@@ -33,7 +33,7 @@ const EventCategory = sequelize.define(EVENT_CATEGORIES_TABLE, {
   }
 }, {
   tableName: EVENT_CATEGORIES_TABLE,
-  timestamps: true
+  timestamps: false
 });
 
 module.exports = { EventCategory, EVENT_CATEGORIES_TABLE };
