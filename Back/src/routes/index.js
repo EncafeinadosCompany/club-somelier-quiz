@@ -8,6 +8,7 @@ const routerApi = (app) => {
 
     router
         .use('/participants', require('./participants.routes'))
+        .use('/questionnaires', require('./questionnaire.routes'))
 
 }
 
