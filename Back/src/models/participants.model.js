@@ -22,16 +22,6 @@ const Participant = sequelize.define(PARTICIPANT_TABLE, {
     type: DataTypes.STRING,
     allowNull: true
   }
-  // role_id: {
-  //   type: DataTypes.INTEGER,
-  //   allowNull: false,
-  //   references: {
-  //     model: ROLE_TABLE,
-  //     key: "id",
-  //   },
-  //   onUpdate: 'CASCADE',
-  //   onDelete: 'CASCADE',
-  // },
 }, {
   tableName: PARTICIPANT_TABLE,
   timestamps: true

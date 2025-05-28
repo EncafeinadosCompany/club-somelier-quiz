@@ -1,8 +1,20 @@
 
+const { Admin } = require('./admin.model');
 const { Participant } = require('./participants.model');
 const { Category } = require('./categories.model')
+const { Level } = require('./level.model');
+const { Questionnaire } = require('./questionnaire.model');
 
-// Relaciones
+const { Question } = require('./question.model')
+const { Event } = require('./event.model');
+const { Answer } = require('./answers.model');
+
+const { QuestionCategory } = require('./question-category.model');
+const { QuestionnaireQuestion } = require('./questionnaire-question.model');
+const { EventCategory } = require('./event-categories.model');
+const { EventParticipant } = require('./event-participants.model');
+const { EventQuestion } = require('./event-questions.model');
+
 
 
 module.exports = {
