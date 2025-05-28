@@ -16,13 +16,14 @@ export const HomeClient = () => {
                     </button>
                 </div>
                 
-                <div className="text-center mb-6">
-                    <h1 className="text-3xl font-bold text-gray-800">¡Bienvenido a!</h1>
-                    <h1 className="text-3xl font-bold text-gray-800">Realidad o mito</h1>
+                <div className="text-center mb-2 text-1xl font-bold text-gray-800">
+                    <h1>¡Bienvenido!</h1>
+                    <h1>a</h1>
+                    <h1>Realidad o mito</h1>
                 </div>
                 
                 <div className="relative h-40 mb-8 overflow-hidden">
-                    <div className="absolute inset-0">
+                    {/* <div className="absolute inset-0">
                         <div className="absolute left-10 top-5 w-32 h-32 bg-red-200 rounded-full opacity-80"></div>
                         <div className="absolute right-10 top-10 w-40 h-20 bg-blue-200 rounded-lg opacity-80">
                             <svg className="w-full h-full text-gray-400" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
@@ -38,7 +39,7 @@ export const HomeClient = () => {
                         <div className="absolute right-5 top-5 transform rotate-45">
                             <div className="w-10 h-2 bg-blue-500 rounded-full"></div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 
                 <div className="bg-white rounded-t-3xl p-4 shadow-lg">
