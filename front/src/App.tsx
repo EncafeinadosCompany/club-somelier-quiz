@@ -8,14 +8,14 @@ function App() {
   return (
 
     <div className={`${darkMode ? 'dark' : ''}`}>
-      <div className="bg-white  h-screen space-y-3  w-screen flex flex-col items-center dark:bg-gray-800 rounded-lg px-6 py-8 ring shadow-xl ring-gray-900/5">
+      <div className="bg-white h-screen  container min-w-screen  space-y-3  flex flex-col items-center dark:bg-gray-800 rounded-lg px-6 py-8 ring shadow-xl ring-gray-900/5 overflow-hidden">
         <Button
           onClick={toggleDarkMode}
           className="p-2 border rounded self-end bg-gray-200 text-gray-600  dark:bg-gray-800"
         >
           {darkMode ? "🌙 Modo Oscuro" : "☀️ Modo Claro"}
         </Button>
-        <div className='w-full h-full'>
+        <div className='w-full overflow-y-auto overflow-x-hidden h-full'>
         <Outlet />
         </div>
       
