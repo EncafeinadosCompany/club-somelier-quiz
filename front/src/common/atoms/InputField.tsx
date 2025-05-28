@@ -32,14 +32,15 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-      >        <label className="block text-sm sm:text-base font-medium text-[var(--text-primary)] mb-2 px-1">
+      >        
+        <label className="block text-sm sm:text-base font-medium text-[var(--text-primary)] mb-2 px-1">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
         
         <div className="relative">
           {Icon && (
-            <div className="absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none">
+            <div className="absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none z-10">
               <Icon 
                 size={18} 
                 className="text-[var(--text-secondary)] sm:w-5 sm:h-5" 
@@ -55,7 +56,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
             placeholder={placeholder}
             className={`
               block w-full rounded-lg border
-              ${Icon ? 'pl-10 sm:pl-12' : 'pl-3 sm:pl-4'} 
+              ${Icon ? 'pl-11 sm:pl-14' : 'pl-3 sm:pl-4'} 
               pr-3 sm:pr-4 
               py-3 sm:py-4
               text-base sm:text-lg
@@ -71,6 +72,9 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
               touch-manipulation
               ${error ? 'border-red-500 focus:ring-red-500' : ''}
             `}
+            style={{
+              fontSize: '16px' // Prevent zoom on iOS
+            }}
             whileFocus={{ scale: 1.01 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
           />
@@ -89,3 +93,5 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
     )
   }
 )
+
+InputField.displayName = 'InputField'

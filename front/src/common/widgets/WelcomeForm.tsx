@@ -92,17 +92,18 @@ export function WelcomeForm({ onComplete, className = '' }: WelcomeFormProps) {
   }
 
   return (
-    <div className={`w-full max-w-md mx-auto ${className}`}>
-      <div className="mb-8">
+    <div className={`w-full max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl mx-auto ${className}`}>
+      {/* Header con título responsive */}
+      <div className="mb-6 sm:mb-8 lg:mb-10">
         <SplitTextWelcome 
           text="¡Bienvenido a Realidad o Mito!" 
-          className="mb-4"
+          className="mb-3 sm:mb-4 lg:mb-6"
         />
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
-          className="text-[var(--text-secondary)] text-center text-sm"
+          className="text-[var(--text-secondary)] text-center text-xs sm:text-sm lg:text-base px-2"
         >
           Completa tu información para comenzar
         </motion.p>
@@ -112,32 +113,69 @@ export function WelcomeForm({ onComplete, className = '' }: WelcomeFormProps) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.2, duration: 0.6 }}
-        className="mb-6"
+        className="mb-6 sm:mb-8 lg:mb-10"
       >
-        <div className="flex justify-between mb-2">
+        <div className="flex justify-center items-center mb-3 sm:mb-4">
           {tabs.map((tab, index) => (
             <div key={tab.id} className="flex items-center">
-              <div className={`
-                w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
-                transition-all duration-300
-                ${index <= currentTabIndex 
-                  ? 'bg-[var(--accent-primary)] text-white' 
-                  : 'bg-[var(--surface-secondary)] text-[var(--text-tertiary)]'
-                }
-              `}>
-                {index < currentTabIndex ? '✓' : index + 1}
-              </div>
-              {index < tabs.length - 1 && (
-                <div className={`
-                  w-12 h-0.5 mx-2 transition-all duration-300
-                  ${index < currentTabIndex 
-                    ? 'bg-[var(--accent-primary)]' 
-                    : 'bg-[var(--border-primary)]'
+              {/* Circle indicator - responsive size */}
+              <motion.div 
+                className={`
+                  w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10
+                  rounded-full flex items-center justify-center 
+                  text-xs sm:text-sm lg:text-base font-bold
+                  transition-all duration-300 ease-out
+                  ${index <= currentTabIndex 
+                    ? 'bg-[var(--accent-primary)] text-white shadow-lg scale-110' 
+                    : 'bg-[var(--surface-secondary)] text-[var(--text-tertiary)] scale-100'
                   }
-                `} />
+                `}
+                animate={{
+                  scale: index === currentTabIndex ? [1, 1.1, 1] : 1
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                {index < currentTabIndex ? (
+                  <motion.span
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", bounce: 0.5 }}
+                  >
+                    ✓
+                  </motion.span>
+                ) : (
+                  index + 1
+                )}
+              </motion.div>
+              
+              {index < tabs.length - 1 && (
+                <motion.div 
+                  className={`
+                    w-8 sm:w-12 lg:w-16 h-0.5 mx-2 sm:mx-3 lg:mx-4
+                    transition-all duration-500 ease-out
+                    ${index < currentTabIndex 
+                      ? 'bg-[var(--accent-primary)] opacity-100' 
+                      : 'bg-[var(--border-primary)] opacity-50'
+                    }
+                  `}
+                  animate={{
+                    scaleX: index < currentTabIndex ? 1 : 0.7
+                  }}
+                  transition={{ duration: 0.5 }}
+                />
               )}
             </div>
           ))}
+        </div>
+        
+        <div className="text-center">
+          <motion.div 
+            className="text-xs sm:text-sm lg:text-base font-medium text-[var(--text-secondary)]"
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            Paso {currentTabIndex + 1} de {tabs.length}
+          </motion.div>
         </div>
       </motion.div>
 
@@ -145,6 +183,7 @@ export function WelcomeForm({ onComplete, className = '' }: WelcomeFormProps) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.4, duration: 0.6 }}
+        className="mb-6 sm:mb-8 lg:mb-10"
       >
         <Tabs.Root value={currentTab} onValueChange={setCurrentTab}>
           <AnimatePresence mode="wait">
@@ -155,57 +194,86 @@ export function WelcomeForm({ onComplete, className = '' }: WelcomeFormProps) {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.3 }}
-                  className="space-y-6"
+                  className="space-y-4 sm:space-y-6 lg:space-y-8"
                 >
-                  <InputField
-                    label={tab.label}
-                    type={tab.field === 'email' ? 'email' : tab.field === 'phone' ? 'tel' : 'text'}
-                    placeholder={
-                      tab.field === 'name' ? 'Tu nombre completo' :
-                      tab.field === 'email' ? 'tu@correo.com' :
-                      '+1 234 567 8900'
-                    }
-                    icon={tab.icon}
-                    value={userData[tab.field]}
-                    onChange={(value) => updateUserData(tab.field, value)}
-                    error={errors[tab.field]}
-                    required
-                  />
+                  <div className="relative">
+                    <InputField
+                      label={tab.label}
+                      type={tab.field === 'email' ? 'email' : tab.field === 'phone' ? 'tel' : 'text'}
+                      placeholder={
+                        tab.field === 'name' ? 'Tu nombre completo' :
+                        tab.field === 'email' ? 'tu@correo.com' :
+                        '+1 234 567 8900'
+                      }
+                      icon={tab.icon}
+                      value={userData[tab.field]}
+                      onChange={(value) => updateUserData(tab.field, value)}
+                      error={errors[tab.field]}
+                      required
+                      className="text-base sm:text-lg"
+                    />
+                  </div>
                 </motion.div>
               </Tabs.Content>
             ))}
           </AnimatePresence>
-
-          <div className="flex justify-between items-center mt-8">
-            <Button
-              variant="outline"
-              onClick={handlePrevious}
-              disabled={isFirstTab}
-              className={`${isFirstTab ? 'opacity-50' : ''}`}
-            >
-              <ArrowLeft size={16} className="mr-2" />
-              Anterior
-            </Button>
-
-            {isLastTab ? (
-              <MultiStateBadge
-                state={submitState}
-                text={
-                  submitState === 'pending' ? 'Comenzar' :
-                  submitState === 'loading' ? 'Iniciando...' :
-                  '¡Listo!'
-                }
-                onClick={submitState === 'pending' ? handleNext : undefined}
-                disabled={submitState !== 'pending'}
-              />
-            ) : (
-              <Button onClick={handleNext}>
-                Siguiente
-                <ArrowRight size={16} className="ml-2" />
-              </Button>
-            )}
-          </div>
         </Tabs.Root>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.6, duration: 0.6 }}
+        className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0"
+      >
+        <Button
+          variant="outline"
+          onClick={handlePrevious}
+          disabled={isFirstTab}
+          className={`
+            w-full sm:w-auto order-2 sm:order-1
+            min-h-[44px] sm:min-h-[40px] lg:min-h-[44px]
+            text-sm sm:text-base
+            ${isFirstTab ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}
+          `}
+          size="sm"
+        >
+          <ArrowLeft size={16} className="mr-2" />
+          <span className="hidden sm:inline">Anterior</span>
+          <span className="sm:hidden">Atrás</span>
+        </Button>
+
+        <div className="w-full sm:w-auto order-1 sm:order-2">
+          {isLastTab ? (
+            <MultiStateBadge
+              state={submitState}
+              text={
+                submitState === 'pending' ? 'Comenzar' :
+                submitState === 'loading' ? 'Iniciando...' :
+                '¡Listo!'
+              }
+              onClick={submitState === 'pending' ? handleNext : undefined}
+              disabled={submitState !== 'pending'}
+              className="w-full sm:w-auto min-h-[44px] text-base sm:text-lg font-bold"
+            />
+          ) : (
+            <Button 
+              onClick={handleNext}
+              className="
+                w-full sm:w-auto 
+                min-h-[44px] sm:min-h-[40px] lg:min-h-[44px]
+                text-base sm:text-lg font-semibold
+                bg-[var(--accent-primary)] hover:bg-[var(--accent-secondary)]
+                hover:scale-105 active:scale-95
+                transition-all duration-200
+              "
+              size="sm"
+            >
+              <span className="mr-2">Siguiente</span>
+              <ArrowRight size={16} />
+            </Button>
+          )}
+        </div>
       </motion.div>
     </div>
   )
