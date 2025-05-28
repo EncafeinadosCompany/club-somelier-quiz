@@ -26,7 +26,10 @@ export default function AuthRoutes() {
                     <Route path="/404" element={<NotFound />} />
                     <Route element={<RoleRoute allowedRoles={[ROLES.CLIENTE]} />}>
                     <Route path="/client">
-                        <Route index element={<HomeClient />} />
+                        <Route index element={<HomeView />} />
+                    </Route>
+                    <Route path="/Questions">
+                        <Route index element={<QuestionsView />} />
                     </Route>
                     </Route>
                     <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}>
