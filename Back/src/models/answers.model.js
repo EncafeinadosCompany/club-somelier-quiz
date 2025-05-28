@@ -1,10 +1,11 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/connection');
-const {EVENT_TABLE}= require('../models/event.model')
-const {QUESTION_TABLE}= require('../models/question.model')
-
+const { EVENT_TABLE } = require('../models/event.model')
+const { QUESTION_TABLE } = require('../models/question.model');
+const { PARTICIPANT_TABLE } = require('./participants.model');
 
 const ANSWER_TABLE = 'answers';
+
 const Answer = sequelize.define(ANSWER_TABLE, {
     id: {
         type: DataTypes.INTEGER,
