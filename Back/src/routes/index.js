@@ -8,6 +8,8 @@ const routerApi = (app) => {
 
     router
         .use('/participants', require('./participants.routes'))
+        .use('/events', require('./event.routes'))
+        .use('/categories', require('./category.routes'))
 
 }
 
