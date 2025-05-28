@@ -254,7 +254,6 @@ input:focus, textarea:focus, select:focus {
 
 /* Mobile-first enhancements */
 @media (max-width: 640px) {
-  /* Prevent zoom on input focus */
   input[type="text"],
   input[type="email"],
   input[type="tel"],
