@@ -4,7 +4,9 @@ import { Outlet } from 'react-router-dom'
 function App() {
   return (
     <ThemeProvider defaultTheme="dark">
-      <Outlet />
+      <div className='w-full overflow-y-auto overflow-x-hidden h-full'>
+        <Outlet />
+      </div>
     </ThemeProvider>
   )
 }
