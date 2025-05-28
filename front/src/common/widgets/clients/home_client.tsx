@@ -1,6 +1,8 @@
+import { Mail, User } from "lucide-react"
+
 export const HomeClient = () => {
     return (
-        <div className="relative h-full bg-slate-50  rounded-md">
+        <div className="relative h-full bg-slate-50 dark:bg-slate-300  rounded-md">
             <div className="p-4">
                 <div className="flex items-center mb-4">
                     <button className="rounded-full p-2 bg-gray-100 mr-2">
@@ -16,53 +18,34 @@ export const HomeClient = () => {
                     </button>
                 </div>
                 
-                <div className="text-center mb-2 text-1xl font-bold text-gray-800">
-                    <h1>¡Bienvenido!</h1>
+                <div className="text-center text-md font-bold text-gray-800">
+                    <h1 >¡Bienvenido!</h1>
                     <h1>a</h1>
-                    <h1>Realidad o mito</h1>
+                    <h1>Realidad o Mito</h1>
                 </div>
                 
-                <div className="relative h-40 mb-8 overflow-hidden">
-                    {/* <div className="absolute inset-0">
-                        <div className="absolute left-10 top-5 w-32 h-32 bg-red-200 rounded-full opacity-80"></div>
-                        <div className="absolute right-10 top-10 w-40 h-20 bg-blue-200 rounded-lg opacity-80">
-                            <svg className="w-full h-full text-gray-400" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M0,25 Q25,0 50,25 Q75,50 100,25" fill="none" stroke="currentColor" strokeWidth="2"/>
-                            </svg>
-                        </div>
-                        <div className="absolute left-20 top-15 w-6 h-6 bg-white rounded-full"></div>
-                        <div className="absolute left-30 top-20 w-8 h-8 bg-white rounded-full"></div>
-                        <div className="absolute left-5 top-10 transform -rotate-45">
-                            <div className="w-10 h-2 bg-gray-800 rounded-full"></div>
-                            <div className="w-4 h-4 bg-blue-400 mt-1 ml-1 rounded-sm"></div>
-                        </div>
-                        <div className="absolute right-5 top-5 transform rotate-45">
-                            <div className="w-10 h-2 bg-blue-500 rounded-full"></div>
-                        </div>
-                    </div> */}
+                <div className="relative h-20 mb-8 overflow-hidden">
+                    <div className="absolute inset-0">
+                      
+                    </div>
                 </div>
                 
-                <div className="bg-white rounded-t-3xl p-4 shadow-lg">
+                <div className="bg-white dark:bg-white/10 rounded-t-3xl p-4 shadow-lg">
                     <div className="flex mb-4">
-                        <button className="flex-1 py-2 font-medium text-gray-700">Description</button>
-                        <button className="flex-1 py-2 font-medium text-white bg-gray-800 rounded-full">Playlist</button>
+                        <button className="flex-1 py-2 font-medium text-gray-700">Datos básicos</button>
                     </div>
                     
                     <div className="space-y-4">
                         <div className="flex items-center">
                             <div className="w-10 h-10 bg-indigo-400 rounded-full flex items-center justify-center mr-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                                </svg>
+                               <User className="text-white"/>
                             </div>
                             <div className="flex-grow">
-                                <h3 className="font-semibold text-gray-800">Introduction</h3>
+                                <h3 className="font-semibold text-gray-800">Nombre Compreto</h3>
                                 <p className="text-sm text-gray-500">23 minutes</p>
                             </div>
                             <div className="w-8 h-8 bg-red-200 rounded-full flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                                </svg>
+                                <Mail className="text-white"/>
                             </div>
                         </div>
                         
@@ -102,9 +85,11 @@ export const HomeClient = () => {
                         </div>
                     </div>
                     
-                    <button className="w-full mt-6 py-3 bg-indigo-400 text-white font-medium rounded-full hover:bg-indigo-500 transition-colors">
-                        Start learning
+                   <div className="w-full flex justify-center ">
+                   <button className="w-full max-w-3xl mt-6 py-3 bg-indigo-400 text-gray-700 font-medium rounded-full hover:bg-indigo-500 transition-colors">
+                        Entrar al aula
                     </button>
+                   </div>
                 </div>
             </div>
         </div>
