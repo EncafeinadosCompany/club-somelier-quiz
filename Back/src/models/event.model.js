@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/connection");
-const {ADMIN_TABLE}= require("../models/admin.model")
 const {QUESTIONNAIRE_TABLE}= require("../models/questionnaire.model")
 
 const EVENT_TABLE = "events";
@@ -39,15 +38,7 @@ const Event = sequelize.define(
     end_time: {
        type: DataTypes.DATE,
         allowNull: false
-    },
-    created_by: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: ADMIN_TABLE,
-        key: "id",
-      },
-    },
+    }
   },
   {
     tableName: EVENT_TABLE,
