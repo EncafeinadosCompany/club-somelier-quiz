@@ -109,14 +109,13 @@ export function WelcomeForm({ onComplete, className = '' }: WelcomeFormProps) {
         </motion.p>
       </div>
 
-      {/* Progress indicator - responsive */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.2, duration: 0.6 }}
         className="mb-6 sm:mb-8 lg:mb-10"
       >
-        <div className="flex justify-center sm:justify-between items-center mb-3 sm:mb-4">
+        <div className="flex justify-center items-center mb-3 sm:mb-4">
           {tabs.map((tab, index) => (
             <div key={tab.id} className="flex items-center">
               {/* Circle indicator - responsive size */}
@@ -149,7 +148,6 @@ export function WelcomeForm({ onComplete, className = '' }: WelcomeFormProps) {
                 )}
               </motion.div>
               
-              {/* Connection line - hidden on mobile if too cramped */}
               {index < tabs.length - 1 && (
                 <motion.div 
                   className={`
@@ -170,35 +168,17 @@ export function WelcomeForm({ onComplete, className = '' }: WelcomeFormProps) {
           ))}
         </div>
         
-        {/* Step labels - responsive */}
-        <div className="flex justify-center sm:justify-between text-center">
-          {tabs.map((tab, index) => (
-            <motion.div 
-              key={`${tab.id}-label`}
-              className={`
-                text-xs sm:text-sm lg:text-base font-medium
-                transition-all duration-300
-                ${index === currentTabIndex 
-                  ? 'text-[var(--accent-primary)] scale-105' 
-                  : index < currentTabIndex
-                    ? 'text-[var(--text-primary)]'
-                    : 'text-[var(--text-tertiary)]'
-                }
-              `}
-              animate={{
-                y: index === currentTabIndex ? -2 : 0
-              }}
-            >
-              <span className="hidden sm:inline">{tab.label}</span>
-              <span className="sm:hidden">
-                {tab.id === 'name' ? 'Nombre' : tab.id === 'email' ? 'Email' : 'Tel'}
-              </span>
-            </motion.div>
-          ))}
+        <div className="text-center">
+          <motion.div 
+            className="text-xs sm:text-sm lg:text-base font-medium text-[var(--text-secondary)]"
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            Paso {currentTabIndex + 1} de {tabs.length}
+          </motion.div>
         </div>
       </motion.div>
 
-      {/* Form content - responsive */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -216,7 +196,6 @@ export function WelcomeForm({ onComplete, className = '' }: WelcomeFormProps) {
                   transition={{ duration: 0.3 }}
                   className="space-y-4 sm:space-y-6 lg:space-y-8"
                 >
-                  {/* Input field with responsive sizing */}
                   <div className="relative">
                     <InputField
                       label={tab.label}
@@ -231,7 +210,7 @@ export function WelcomeForm({ onComplete, className = '' }: WelcomeFormProps) {
                       onChange={(value) => updateUserData(tab.field, value)}
                       error={errors[tab.field]}
                       required
-                      className="text-base sm:text-lg" // Larger text on mobile for better UX
+                      className="text-base sm:text-lg"
                     />
                   </div>
                 </motion.div>
@@ -241,14 +220,12 @@ export function WelcomeForm({ onComplete, className = '' }: WelcomeFormProps) {
         </Tabs.Root>
       </motion.div>
 
-      {/* Navigation buttons - responsive */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.6, duration: 0.6 }}
         className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0"
       >
-        {/* Previous button */}
         <Button
           variant="outline"
           onClick={handlePrevious}
@@ -266,7 +243,6 @@ export function WelcomeForm({ onComplete, className = '' }: WelcomeFormProps) {
           <span className="sm:hidden">Atrás</span>
         </Button>
 
-        {/* Next/Submit button */}
         <div className="w-full sm:w-auto order-1 sm:order-2">
           {isLastTab ? (
             <MultiStateBadge
@@ -298,18 +274,6 @@ export function WelcomeForm({ onComplete, className = '' }: WelcomeFormProps) {
             </Button>
           )}
         </div>
-      </motion.div>
-
-      {/* Mobile helper text */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 0.6 }}
-        className="mt-4 sm:mt-6 text-center"
-      >
-        <p className="text-xs text-[var(--text-tertiary)] sm:hidden">
-          Paso {currentTabIndex + 1} de {tabs.length}
-        </p>
       </motion.div>
     </div>
   )
