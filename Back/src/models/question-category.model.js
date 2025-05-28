@@ -29,7 +29,7 @@ const QuestionCategory = sequelize.define(
   },
   {
     tableName: QUESTION_CATEGORY_TABLE,
-    timestamps: true,
+    timestamps: false,
   }
 );
 
