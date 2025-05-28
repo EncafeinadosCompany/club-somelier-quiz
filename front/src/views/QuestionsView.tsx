@@ -44,7 +44,7 @@ export function QuestionsView() {
 
   return (
     <MainLayout backgroundVariant="gradient">
-      <div className="min-h-screen flex flex-col justify-center px-3 sm:px-4 py-4 sm:py-6">
+      <div className="min-h-screen  flex flex-col justify-center px-3 sm:px-4 py-4 sm:py-6">
         <div className="w-full max-w-2xl mx-auto space-y-4 sm:space-y-6 lg:space-y-8">
           
           <motion.div 

@@ -6,7 +6,7 @@ function App() {
     <ThemeProvider defaultTheme="dark">
       <div translate='no' className="h-screen flex flex-col items-center xl:px-6 xl:py-4  ring shadow-xl ring-gray-900/5 overflow-hidden ">
         <div className='relative h-full w-full  rounded-sm overflow-y-auto'>
-          <div className='w-full overflow-y-auto  overflow-x-hidden h-full'>
+          <div className='w-full h-full  overflow-hidden overflow-x-hidden '>
             <Outlet />
           </div>
         </div>
