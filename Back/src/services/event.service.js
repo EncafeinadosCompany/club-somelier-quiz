@@ -9,6 +9,10 @@ class EventService {
     return await this.eventRepository.getAll();
   }
 
+  async getEventById(id) {
+    return await this.eventRepository.getById(id);
+  }
+
   async getEventByCode(code) {
     return await this.eventRepository.getByCode(code);
   }

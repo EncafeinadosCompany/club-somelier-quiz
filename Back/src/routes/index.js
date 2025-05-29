@@ -10,10 +10,10 @@ const routerApi = (app) => {
         .use('/levels', require('./level.routes'))
         .use('/categories', require('./category.routes'))
         .use('/questions', require('./question.routes'))
+        .use('/questionnaires', require('./questionnaire.routes'))
 
         .use('/participants', require('./participants.routes'))
         .use('/events', require('./event.routes'))
-    // .use('/questionnaires', require('./questionnaire.routes'))
 
 }
 

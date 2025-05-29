@@ -2,10 +2,10 @@
 
 import App from "@/App";
 import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
+    BrowserRouter as Router,
+    Route,
+    Routes,
+    Navigate,
 } from "react-router-dom";
 import RoleRoute from "./roleRoute";
 import { ROLES } from "@/common/utils/Roles";
@@ -15,6 +15,7 @@ import { NotFound } from "@/common/utils/404";
 import HomeAdmin from "@/common/widgets/admin/home_admin.widget";
 import Navbar from "@/common/widgets/nav_widget";
 import HomeCuestion from "@/views/cuestions-view";
+import CuestionCard from "@/common/molecules/admin/cuestions/cuestions-card.molecule";
 import { QuizLoader } from "@/common/atoms/QuizLoader";
 import { useAppLoading } from "@/common/hooks/useAppLoading";
 import { Suspense } from "react";
