@@ -2,10 +2,10 @@
 
 import App from "@/App";
 import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
+    BrowserRouter as Router,
+    Route,
+    Routes,
+    Navigate,
 } from "react-router-dom";
 import RoleRoute from "./roleRoute";
 import { ROLES } from "@/common/utils/Roles";
@@ -25,18 +25,13 @@ export default function AuthRoutes() {
 
                 <Route path="/" element={<App />}>
                     <Route path="/404" element={<NotFound />} />
-                    <Route element={<RoleRoute allowedRoles={[ROLES.CLIENTE]} />}>
-                    <Route path="/client">
-                        <Route index element={<HomeView />} />
-                    </Route>
-                    <Route path="/Questions">
-                        <Route index element={<QuestionsView />} />
-                    </Route>
-                    </Route>
+                    <Route path="/client" element={<HomeView />} />
+                    <Route path="/Questions" element={<QuestionsView />} />
+                    
                     <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}>
-                    <Route path="/admin" element={<Navbar/>}>
-                        <Route index element={<HomeCuestion />} />
-                    </Route>
+                        <Route path="/admin" element={<Navbar />}>
+                            <Route index element={<HomeCuestion />} />
+                        </Route>
                     </Route>
                 </Route>
                 <Route path="*" element={<Navigate to="/404" replace />} />
