@@ -237,10 +237,10 @@ export default function HomeCuestion() {
                 <h4 className="text-white font-medium mb-3">Categorías</h4>
 <Button 
   size="icon"
-  className="w-8 h-8 bg-amber-200 hover:bg-amber-300 rounded-full p-1"
+  className="w-6 h-6 bg-amber-200 hover:bg-amber-300 rounded-full p-1"
   variant="ghost"
 >
-  <Plus className="h-4 w-4" />
+  <Plus className="h-1 w-1" />
 </Button>
               </div>
               <div className="space-y-2 text-sm">
