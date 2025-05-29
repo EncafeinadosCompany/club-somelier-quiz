@@ -32,14 +32,7 @@ class AdminService {
   }
 
   async getAdminById(id) {
-    const admin = await this.adminRepository.getById(id);
-    if (!admin) {
-      const error = new Error('Admin not found');
-      error.status = StatusCodes.NOT_FOUND;
-      throw error;
-    }
-    const { password, ...adminWithoutPassword } = admin.toJSON();
-    return adminWithoutPassword;
+    return await this.adminRepository.getById(id);
   }
 }
 
