@@ -1,14 +1,17 @@
-const questionnaireService = require('../services/questionnaires.service')
+const QuestionnaireService = require('../services/questionnaires.service')
 
 class QuestionnaireController {
-    controller() {
-        tthis.questionnaireService = new questionnaireService();
+    constructor() {
+        this.questionnaireService = new QuestionnaireService();
     }
+
     getAllQuestionnaires = async (req, res) => {
         try {
             const questionnaires = await this.questionnaireService.findAll();
+            console.log('Questionnaires fetched successfully:', questionnaires);
             res.json(questionnaires);
         } catch (error) {
+            
             res.status(500).json({ error: 'Internal Server Error' });
         }
     }
@@ -21,6 +24,7 @@ class QuestionnaireController {
             res.status(500).json({ error: 'Internal Server Error' });
         }
     }
+
     createQuestionnaire = async (req, res) => {
         try {
             const questionnaire = await this.questionnaireService.createQuestionnaire(req.body);
@@ -36,6 +40,7 @@ class QuestionnaireController {
             });
         }
     }
+
     updateQuestionnaire = async (req, res) => {
         try {
             const updatedQuestionnaire = await this.questionnaireService.update(req.params.id, req.body);

@@ -6,12 +6,21 @@ const validateQuestionnaire = [
         .isString().withMessage('Title must be a string')
         .isLength({ min: 3 }).withMessage('Title must be at least 3 characters long'),
 
-      body('questions')
+    body('description')
+        .optional({ checkFalsy: true })
+        .isString().withMessage('Title must be a string')
+        .isLength({ min: 3 }).withMessage('Title must be at least 3 characters long'),
+        
+    body('categories')
+        .isArray({ min: 1 }).withMessage('You must provide at least one category')
+        .custom((arr) => arr.every(Number.isInteger)).withMessage('Categories must be integers'),
+
+    body('questions')
         .exists({ checkFalsy: true }).withMessage('Questions is required')
         .isArray().withMessage('Questions must be an array')
         .custom((questions) => {
-            return questions.every(id => 
-                Number.isInteger(id) && 
+            return questions.every(id =>
+                Number.isInteger(id) &&
                 id > 0
             );
         }).withMessage('Questions must be an array of positive integers'),
@@ -28,4 +37,4 @@ const validateQuestionnaire = [
     }
 ];
 
-module.exports = {validateQuestionnaire};
+module.exports = { validateQuestionnaire };
