@@ -14,6 +14,7 @@ const Level = sequelize.define(
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     points: {
       type: DataTypes.INTEGER,

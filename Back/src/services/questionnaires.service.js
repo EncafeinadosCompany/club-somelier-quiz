@@ -3,7 +3,7 @@ const QuestionnaireRepository = require('../repositories/questionnaire.repositor
 const QuestionnaireQuestionRepository = require('../repositories/questionnaire-question.repository');
 
 class QuestionnairesService {
-     constructor() {
+    constructor() {
         this.questionnaireRepository = new QuestionnaireRepository();
         this.questionnaireQuestionRepository = new QuestionnaireQuestionRepository();
     }

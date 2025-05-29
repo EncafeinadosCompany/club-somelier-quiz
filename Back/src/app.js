@@ -5,7 +5,6 @@ const cors = require('cors');
 
 require('dotenv').config();
 
-
 const { createServer } = require('http');
 const { Server: SocketServer } = require('socket.io');
 
@@ -54,7 +53,8 @@ class Server {
   async syncDataBase() {
     try {
       await connectToDatabase();
-      await sequelize.sync({ force: true });
+      require('./models');
+      await sequelize.sync({ alter: true });
 
     } catch (error) {
       console.error('Error connecting to the database:', error.message);
@@ -64,7 +64,7 @@ class Server {
 
   listen() {
     this.httpServer.listen(this.port, () => {
-      console.log(`\n🚀 Server running at http://${this.host}:${this.port}`);
+      console.log(`\n🚀 Server running at http://${this.host}:${this.port}/api/v1`);
     });
   }
 }

@@ -10,7 +10,7 @@ const routerApi = (app) => {
         .use('/participants', require('./participants.routes'))
         .use('/events', require('./event.routes'))
         .use('/categories', require('./category.routes'))
-        .use('/questionnaires', require('./questionnaire.routes'))
+        // .use('/questionnaires', require('./questionnaire.routes'))
 
 }
 

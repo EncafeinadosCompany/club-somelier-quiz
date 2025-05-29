@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "test": "jest"
+    "test": "jest",
+    "seed:create": "npx sequelize-cli seed:generate --name",
+    "seed": "npx sequelize-cli db:seed:all"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +26,7 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "nodemon": "^3.1.10",
+    "sequelize-cli": "^6.6.3",
     "supertest": "^7.1.1"
   }
 }
