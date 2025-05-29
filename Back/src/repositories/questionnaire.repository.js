@@ -1,4 +1,4 @@
-const { Question, Level } = require("../models");
+const { Question, Level, Category } = require("../models");
 const { Questionnaire } = require("../models/questionnaire.model");
 
 class QuestionnairesRepository {
@@ -19,7 +19,7 @@ class QuestionnairesRepository {
               attributes: ["id", "name"]
             }
           ],
-        },
+        }
       ],
     });
   }
@@ -27,6 +27,13 @@ class QuestionnairesRepository {
   async findAll() {
     return await Questionnaire.findAll({
       order: [["createdAt", "DESC"]],
+      include: [
+        {
+          model: Category,
+          as: 'categories',
+          attributes: ['name']
+        },
+      ],
     });
   }
 
