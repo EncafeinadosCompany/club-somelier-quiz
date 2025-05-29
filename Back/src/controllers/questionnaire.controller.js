@@ -8,7 +8,6 @@ class QuestionnaireController {
     getAllQuestionnaires = async (req, res) => {
         try {
             const questionnaires = await this.questionnaireService.findAll();
-            console.log('Questionnaires fetched successfully:', questionnaires);
             res.json(questionnaires);
         } catch (error) {
             

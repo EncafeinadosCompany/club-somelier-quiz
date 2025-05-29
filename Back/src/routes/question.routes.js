@@ -11,5 +11,7 @@ router
     .get('/:id', questionController.getQuestionById)
     .get('/level/:levelId', questionController.getQuestionsByLevelId)
     .post('/', validateQuestion, questionController.createQuestion)
+    .put('/:id', questionController.updateQuestion)
+    .delete('/:id', questionController.deleteQuestion);
 
 module.exports = router;

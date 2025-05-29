@@ -14,6 +14,18 @@ class QuestionCategoryRepository {
         return await QuestionCategory.findByPk(id);
     }
 
+    async findByQuestionId(questionId) {
+        return await QuestionCategory.findAll({
+            where: { question_id: questionId }
+        });
+    }
+
+    async deleteByQuestionId(questionId) {
+        return await QuestionCategory.destroy({
+            where: { question_id: questionId }
+        });
+    }
+
 }
 
 module.exports = QuestionCategoryRepository;

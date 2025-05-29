@@ -5,6 +5,13 @@ class EventRepository {
         return await Event.findAll();
     }
 
+    async getById(id) {
+        return await Event.findOne({
+            where: { id },
+            include: ['questionnaire']
+        });
+    }
+
     async getByCode(code) {
         return await Event.findOne({
             where: { access_code: code },

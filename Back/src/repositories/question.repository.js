@@ -51,6 +51,10 @@ class QuestionRepository {
             transaction
         });
     }
+
+    async delete(id) {
+        return await Question.destroy({ where: { id } });
+    }
 }
 
 module.exports = QuestionRepository;
