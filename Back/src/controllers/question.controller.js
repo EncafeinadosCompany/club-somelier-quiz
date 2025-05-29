@@ -8,7 +8,7 @@ class QuestionController {
 
     createQuestion = async (req, res) => {
         try {
-            const question = await this.questionService.create(req.body);
+            const question = await this.questionService.createQuestion(req.body);
             res.status(201).json(question);
         } catch (error) {
             res.status(500).json({ message: error.message });
