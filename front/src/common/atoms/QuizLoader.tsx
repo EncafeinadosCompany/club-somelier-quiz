@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState } from "react"
 import { Brain, Lightbulb, HelpCircle, CheckCircle } from 'lucide-react'
 
 const initialColors = [
@@ -18,13 +18,8 @@ const iconMap = {
   "#3b82f6": Lightbulb,
 }
 
-function shuffleArray(array: string[]) {
-  const newArray = [...array];
-  for (let i = newArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-  }
-  return newArray;
+function shuffle([...array]: string[]) {
+  return array.sort(() => Math.random() - 0.5)
 }
 
 export function QuizLoader() {
@@ -40,12 +35,12 @@ export function QuizLoader() {
   }, [])
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setOrder(prev => shuffleArray(prev))
-    }, 1000)
-    
-    return () => clearInterval(interval)
-  }, [])
+    const timeout = setTimeout(() => {
+      setOrder(shuffle(order))
+      setCurrentPhase(prev => (prev + 1) % 3)
+    }, 1500) 
+    return () => clearTimeout(timeout)
+  }, [order]) 
 
   const phases = [
     { text: "Preparando preguntas...", icon: Brain },
@@ -76,7 +71,7 @@ export function QuizLoader() {
           return (
             <motion.li
               key={backgroundColor}
-              layoutId={backgroundColor} 
+              layout 
               transition={spring}
               style={{ ...itemStyle, backgroundColor }}
               className="flex items-center justify-center shadow-lg"
