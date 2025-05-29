@@ -15,6 +15,7 @@ import { QuestionsView } from "@/views/QuestionsView";
 import { NotFound } from "@/common/utils/404";
 import HomeAdmin from "@/common/widgets/admin/home_admin.widget";
 import Navbar from "@/common/widgets/nav_widget";
+import HomeCuestion from "@/views/cuestions-view";
 
 export default function AuthRoutes() {
     return (
@@ -34,7 +35,7 @@ export default function AuthRoutes() {
                     </Route>
                     <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}>
                     <Route path="/admin" element={<Navbar/>}>
-                        <Route index element={<HomeAdmin />} />
+                        <Route index element={<HomeCuestion />} />
                     </Route>
                     </Route>
                 </Route>

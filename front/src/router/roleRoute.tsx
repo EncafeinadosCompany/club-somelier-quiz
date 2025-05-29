@@ -16,7 +16,7 @@ const RoleRoute = ({ allowedRoles }: RouteProps) => {
     // if (!user) return <Navigate to="/login" replace />
 
     // const userRole = (user as { role: string }).role;
-    const userRole = ROLES.CLIENTE;
+    const userRole = ROLES.ADMIN;
 
     if (!allowedRoles.includes(userRole) && userRole === ROLES.CLIENTE) {
         toast.error("Te invitamos a iniciar sesión :)",{icon: "🔒", duration: 5000})
