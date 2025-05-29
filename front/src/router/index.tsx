@@ -21,55 +21,47 @@ import { useAppLoading } from "@/common/hooks/useAppLoading";
 import { Suspense } from "react";
 
 function AppWithLoading() {
-  const { isLoading } = useAppLoading(3000); 
+    const { isLoading } = useAppLoading(3000);
 
-  if (isLoading) {
-    return <QuizLoader />;
-  }
+    if (isLoading) {
+        return <QuizLoader />;
+    }
 
-  return <App />;
+    return <App />;
 }
 
 function SuspenseLoader() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)]">
-      <div className="flex items-center space-x-3">
-        <div className="w-6 h-6 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin"></div>
-        <span className="text-[var(--text-secondary)]">Cargando...</span>
-      </div>
-    </div>
-  );
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)]">
+            <div className="flex items-center space-x-3">
+                <div className="w-6 h-6 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin"></div>
+                <span className="text-[var(--text-secondary)]">Cargando...</span>
+            </div>
+        </div>
+    );
 }
 
 export default function AuthRoutes() {
-  return (
-    <Router>
-      <Suspense fallback={<SuspenseLoader />}>
-        <Routes>
-          <Route path="/" element={<AppWithLoading />}>
-            <Route index element={<Navigate to="/client" replace />} />
-            
-            <Route path="404" element={<NotFound />} />
-            
-            <Route element={<RoleRoute allowedRoles={[ROLES.CLIENTE]} />}>
-              <Route path="client">
-                <Route index element={<HomeView />} />
-              </Route>
-              <Route path="questions">
-                <Route index element={<QuestionsView />} />
-              </Route>
-            </Route>
-            
-            <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}>
-              <Route path="admin" element={<Navbar />}>
-                <Route index element={<HomeCuestion />} />
-              </Route>
-            </Route>
-          </Route>
-          
-          <Route path="*" element={<Navigate to="/404" replace />} />
-        </Routes>
-      </Suspense>
-    </Router>
+    return (
+        <Router>
+            <Suspense fallback={<SuspenseLoader />}>
+                <Routes>
+                    <Route path="/" element={<AppWithLoading />}>
+                  
+                        <Route path="404" element={<NotFound />} />
+                        <Route index path="client" element={<HomeView />} />
+                        <Route path="questions" element={<QuestionsView />} />
+    
+                    <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}>
+                        <Route path="admin" element={<Navbar />}>
+                            <Route index element={<HomeCuestion />} />
+                        </Route>
+                    </Route>
+                </Route>
+
+                <Route path="*" element={<Navigate to="/404" replace />} />
+            </Routes>
+        </Suspense>
+    </Router >
   );
 }
