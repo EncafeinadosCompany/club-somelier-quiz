@@ -1,7 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { QuizSession, QuizParticipant, QuizStatus } from '../types/quiz.types';
 
-// Simular APIs - Estas serán reemplazadas por llamadas reales al backend
 const mockQuizSession: QuizSession = {
   id: 'session-1',
   status: 'waiting',
@@ -70,23 +69,34 @@ export function useStartQuizTest() {
 
   return useMutation({
     mutationFn: async (sessionId: string) => {
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      console.log('🔧 Ejecutando mutación startQuizTest para sessionId:', sessionId);
+      await new Promise(resolve => setTimeout(resolve, 800)); 
       
-      return {
+      const result = {
         sessionId,
         status: 'active',
         startedAt: new Date()
       };
+      console.log('🎉 Mutación completada:', result);
+      return result;
     },
-    onSuccess: () => {
-      queryClient.setQueryData(['quiz-status', 'session-1'], (old: QuizStatus | undefined) => ({
-        ...old,
-        sessionId: 'session-1',
-        isActive: true,
-        currentQuestion: 1,
-        totalQuestions: 5,
-        timeRemaining: 30
-      }));
+    onSuccess: (data) => {
+      console.log('🚀 onSuccess ejecutado con data:', data);
+      queryClient.setQueryData(['quiz-status', 'session-1'], (old: QuizStatus | undefined) => {
+        const newData = {
+          ...old,
+          sessionId: 'session-1',
+          isActive: true,
+          currentQuestion: 1,
+          totalQuestions: 5,
+          timeRemaining: 30
+        };
+        console.log('📊 Actualizando quiz-status:', newData);
+        return newData;
+      });
     },
+    onError: (error) => {
+      console.error('💥 Error en useStartQuizTest:', error);
+    }
   });
 }

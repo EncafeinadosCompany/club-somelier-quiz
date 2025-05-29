@@ -1,72 +1,96 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom'; // ⭐ Agregar esto
+import { useNavigate, useLocation } from 'react-router-dom';
 import { MainLayout } from '../common/widgets/MainLayout';
-import { Clock, Users, Play, CheckCircle, AlertCircle } from 'lucide-react';
+import {  Play, CheckCircle, AlertCircle } from 'lucide-react';
 import { useQuizStatus, useJoinQuiz, useStartQuizTest } from '../api/query/quiz.queries';
 
-interface WaitingViewProps {
-  userData: {
-    name: string;
-    email: string;
-    phone: string;
-  };
-  onStartQuiz?: () => void; // ⭐ Hacer opcional
+interface UserData {
+  name: string;
+  email: string;
+  phone: string;
 }
 
-export function WaitingView({ userData, onStartQuiz }: WaitingViewProps) {
+export function WaitingView() {
   const [sessionId] = useState('session-1');
   const [hasJoined, setHasJoined] = useState(false);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  const userData = location.state?.userData as UserData;
 
-  // Queries
+  useEffect(() => {
+    if (!userData) {
+      console.log('❌ No hay datos de usuario, redirigiendo al inicio...');
+      navigate('/', { replace: true });
+      return;
+    }
+    console.log('✅ Datos de usuario recibidos:', userData);
+  }, [userData, navigate]);
   const { data: quizStatus, isLoading: statusLoading } = useQuizStatus(sessionId);
   const joinQuizMutation = useJoinQuiz();
   const startTestMutation = useStartQuizTest();
-
   useEffect(() => {
-    if (!hasJoined) {
+    if (!hasJoined && userData && !joinQuizMutation.isPending) {
+      console.log('🔗 Uniéndose al quiz con datos:', userData);
       joinQuizMutation.mutate({
         name: userData.name,
         email: userData.email,
         phone: userData.phone
       }, {
         onSuccess: () => {
+          console.log('✅ Usuario unido al quiz exitosamente');
+          setHasJoined(true);
+        },
+        onError: (error) => {
+          console.error('❌ Error al unirse al quiz:', error);
           setHasJoined(true);
         }
       });
     }
-  }, [hasJoined, userData, joinQuizMutation]);
+  }, [hasJoined, userData?.name, userData?.email, userData?.phone, joinQuizMutation.isPending]);
 
   const navigateToQuestions = () => {
+    console.log('🚀 Navegando a las preguntas...');
     navigate('/questions');
   };
 
   useEffect(() => {
     if (quizStatus?.isActive) {
-      onStartQuiz?.(); 
+      console.log('✅ Quiz activado por admin, navegando...');
       navigateToQuestions();
     }
-  }, [quizStatus?.isActive, onStartQuiz]);
-
+  }, [quizStatus?.isActive]);
   const handleTestStart = () => {
+    console.log('🧪 Iniciando cuestionario en modo prueba...');
+    console.log('📊 Estado actual - isConnected:', isConnected, 'isPending:', startTestMutation.isPending);
+    
+    if (!isConnected) {
+      console.log('⚠️ No conectado, no se puede iniciar el quiz');
+      return;
+    }
+    
     startTestMutation.mutate(sessionId, {
-      onSuccess: () => {
-        setTimeout(() => {
-          navigateToQuestions();
-        }, 1000);
+      onSuccess: (data) => {
+        console.log('✅ Mutación exitosa:', data);
+        console.log('🎯 Navegando inmediatamente...');
+        navigateToQuestions();
       },
       onError: (error) => {
-        console.error('Error al iniciar cuestionario de prueba:', error);
+        console.error('❌ Error al iniciar cuestionario:', error);
+        console.log('🔄 Navegando de todas formas para pruebas (modo desarrollo)...');
         navigateToQuestions();
       }
     });
   };
-
   const isConnected = hasJoined && !joinQuizMutation.isPending;
   const connectionStatus = joinQuizMutation.isError ? 'error' : 
-                          joinQuizMutation.isPending ? 'connecting' : 
-                          isConnected ? 'connected' : 'disconnected';
+   joinQuizMutation.isPending ? 'connecting' : 
+   isConnected ? 'connected' : 'disconnected';
+
+  if (!userData) {
+    return null;
+  }
 
   return (
     <MainLayout backgroundVariant="gradient">
@@ -136,24 +160,6 @@ export function WaitingView({ userData, onStartQuiz }: WaitingViewProps) {
                       <span className="text-sm text-red-600">Error de conexión</span>
                     </>
                   )}
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
-                  className="flex justify-center"
-                >
-                  <div className="relative">
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                      className="w-16 h-16 sm:w-20 sm:h-20 border-4 border-[var(--accent-primary)]/20 border-t-[var(--accent-primary)] rounded-full"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-[var(--accent-primary)]" />
-                    </div>
-                  </div>
                 </motion.div>
 
                 <motion.div
