@@ -1,5 +1,6 @@
 const { Question } = require('../models/question.model');
 const { Level } = require('../models/level.model');
+const { Category } = require('../models/categories.model');
 // const { Category } = require('../models/categories.model');
 
 class QuestionRepository {
@@ -10,8 +11,15 @@ class QuestionRepository {
     async findAll() {
         return await Question.findAll({
             include: [
-                { model: Level },
-                // { model: Category }
+                {
+                model: Category,
+                as: 'categories',
+                attributes: ['id', 'name']
+            },
+            {
+                model: Level,
+                attributes: ['id', 'name']
+            }
             ]
         });
     }
@@ -19,8 +27,15 @@ class QuestionRepository {
     async findById(id) {
         return await Question.findByPk(id, {
             include: [
-                { model: Level },
-                // { model: Category }
+                {
+                model: Category,
+                as: 'categories',
+                attributes: ['id', 'name']
+            },
+            {
+                model: Level,
+                attributes: ['id', 'name']
+            }
             ]
         });
     }

@@ -4,6 +4,10 @@ class QuestionsResponseDto {
         this.question = question.question;
         this.response = question.response;
         this.level = question?.level?.name || null;
+        this.categories = question.categories ? question.categories.map(category => ({
+            id: category.id,
+            name: category.name
+        })) : [];
     }
 }
 

@@ -6,7 +6,7 @@ const validateCategory = [
     .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/).withMessage('El nombre solo puede contener letras y espacios'),
 
   body('description')
-    .optional({ checkFalsy: true }) // permite que sea opcional o vacío
+    .optional({ checkFalsy: true })
     .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/).withMessage('La descripción solo puede contener letras y espacios'),
 
   (req, res, next) => {
