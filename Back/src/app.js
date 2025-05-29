@@ -1,12 +1,13 @@
 const { connectToDatabase, sequelize } = require('./config/connection');
+const { initializeWebSockets } = require('./sockets/index');
 const routerApi = require('./routes/index');
 const express = require('express');
 const cors = require('cors');
 
-require('dotenv').config();
-
 const { createServer } = require('http');
 const { Server: SocketServer } = require('socket.io');
+
+require('dotenv').config();
 
 class Server {
   constructor() {
@@ -21,7 +22,7 @@ class Server {
       }
     });
 
-    this.initializeWebSockets();
+    initializeWebSockets(this.io);
     this.middlewares();
     this.routers();
     this.syncDataBase();
@@ -36,25 +37,11 @@ class Server {
     routerApi(this.app);
   }
 
-  initializeWebSockets() {
-    this.io.on('connection', (socket) => {
-      console.log('🔌 Socket conectado:', socket.id);
-
-      socket.on('join-event', (eventId) => {
-        socket.join(`event-${eventId}`);
-      });
-
-      socket.on('disconnect', () => {
-        console.log('❌ Socket desconectado:', socket.id);
-      });
-    });
-  };
-
   async syncDataBase() {
     try {
       await connectToDatabase();
       require('./models');
-      await sequelize.sync({ force: true });
+      await sequelize.sync({ alter: true });
 
     } catch (error) {
       console.error('Error connecting to the database:', error.message);
