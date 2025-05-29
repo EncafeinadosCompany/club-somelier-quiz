@@ -1,0 +1,148 @@
+"use client"
+
+import { motion } from "framer-motion"
+import { useEffect, useState, useCallback } from "react"
+import { Brain, Lightbulb, HelpCircle, CheckCircle } from 'lucide-react'
+
+const initialColors = [
+  "#22c55e", 
+  "#f97316", 
+  "#8b5cf6", 
+  "#3b82f6",
+]
+
+const iconMap = {
+  "#22c55e": CheckCircle,
+  "#f97316": HelpCircle, 
+  "#8b5cf6": Brain,
+  "#3b82f6": Lightbulb,
+}
+
+function shuffleArray(array: string[]) {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+}
+
+export function QuizLoader() {
+  const [order, setOrder] = useState(initialColors)
+  const [currentPhase, setCurrentPhase] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640)
+    handleResize() 
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setOrder(prev => shuffleArray(prev))
+    }, 1000)
+    
+    return () => clearInterval(interval)
+  }, [])
+
+  const phases = [
+    { text: "Preparando preguntas...", icon: Brain },
+    { text: "Analizando realidades...", icon: Lightbulb },
+    { text: "Detectando mitos...", icon: HelpCircle }
+  ]
+
+  const currentPhaseData = phases[currentPhase % phases.length]
+  const PhaseIcon = currentPhaseData.icon
+
+  const containerStyle = isMobile ? mobileContainer : container
+  const itemStyle = isMobile ? mobileItemStyle : item
+
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--bg-primary)] p-4">
+      <div className="text-center mb-8 sm:mb-12">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[var(--text-primary)] mb-2">
+          Realidad o Mito
+        </h1>
+        <p className="text-sm sm:text-base text-[var(--text-secondary)]">
+          {currentPhaseData.text}
+        </p>
+      </div>
+
+      <ul style={containerStyle} className="mb-8 sm:mb-12">
+        {order.map((backgroundColor) => {
+          const Icon = iconMap[backgroundColor as keyof typeof iconMap]
+          return (
+            <motion.li
+              key={backgroundColor}
+              layoutId={backgroundColor} 
+              transition={spring}
+              style={{ ...itemStyle, backgroundColor }}
+              className="flex items-center justify-center shadow-lg"
+            >
+              <Icon 
+                size={isMobile ? 20 : 24} 
+                className="text-white drop-shadow-lg" 
+              />
+            </motion.li>
+          )
+        })}
+      </ul>
+
+      <div className="flex items-center space-x-3 text-[var(--text-secondary)]">
+        <PhaseIcon size={isMobile ? 18 : 20} className="text-[var(--accent-primary)]" />
+        <div className="flex space-x-1">
+          {phases.map((_, i) => (
+            <div
+              key={i}
+              className={`w-2 h-2 rounded-full ${
+                i === currentPhase % phases.length 
+                  ? 'bg-[var(--accent-primary)]' 
+                  : 'bg-[var(--accent-primary)]/30'
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const spring = {
+  type: "spring",
+  damping: 20,
+  stiffness: 300,
+}
+
+const container: React.CSSProperties = {
+  listStyle: "none",
+  padding: 0,
+  margin: 0,
+  position: "relative",
+  display: "flex",
+  flexWrap: "wrap",
+  gap: 10,
+  width: 300,
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "center",
+}
+
+const item: React.CSSProperties = {
+  width: 100,
+  height: 100,
+  borderRadius: "10px",
+}
+
+const mobileContainer: React.CSSProperties = {
+  ...container,
+  width: 240, 
+  gap: 8,
+}
+
+const mobileItemStyle: React.CSSProperties = {
+  width: 80, 
+  height: 80,
+  borderRadius: "8px",
+}
