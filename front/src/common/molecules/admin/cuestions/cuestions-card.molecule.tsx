@@ -39,11 +39,11 @@ export default function CuestionCard({ cuestion, onCreateEvent, onViewDetails }:
         >
           {cuestion.title}
         </h3>
-        <div
+        {/* <div
           className={`${getCategoryColor(cuestion.categorie)} px-2 py-1 rounded-full text-xs text-white font-medium self-start sm:self-auto whitespace-nowrap flex-shrink-0`}
         >
           {cuestion.categorie}
-        </div>
+        </div> */}
       </div>
 
       {/* Description */}
