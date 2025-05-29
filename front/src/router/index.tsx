@@ -16,6 +16,7 @@ import { NotFound } from "@/common/utils/404";
 import HomeAdmin from "@/common/widgets/admin/home_admin.widget";
 import Navbar from "@/common/widgets/nav_widget";
 import HomeCuestion from "@/views/cuestions-view";
+import CuestionCard from "@/common/molecules/admin/cuestions/cuestions-card.molecule";
 
 export default function AuthRoutes() {
     return (
@@ -27,9 +28,12 @@ export default function AuthRoutes() {
                     <Route path="/404" element={<NotFound />} />
                     <Route path="/client" element={<HomeView />} />
                     <Route path="/Questions" element={<QuestionsView />} />
-                    
+                    {/* <Route path="/prueba" element={<CuestionCard/>} /> */}
+
+                    {/* ADMIN ROUTES */}
+           
                     <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}>
-                        <Route path="/admin" element={<Navbar />}>
+                        <Route path="/admin">
                             <Route index element={<HomeCuestion />} />
                         </Route>
                     </Route>
