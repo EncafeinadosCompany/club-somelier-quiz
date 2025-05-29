@@ -9,35 +9,35 @@ class QuestionService {
         this.questionCategoryRepository = new QuestionCategoryRepository()
     }
 
-async createQuestion(data) {
-    const question = await this.questionRepository.create({
-        question: data.question,
-        response: data.response,
-        level_id: data.level_id
-    });
+    async createQuestion(data) {
+        const question = await this.questionRepository.create({
+            question: data.question,
+            response: data.response,
+            level_id: data.level_id
+        });
 
-    const failedCategories = [];
+        const failedCategories = [];
 
-    for (const categoryId of data.categories) {
-        const category = await this.categoryRepository.getById(categoryId);
-        if (!category) {
-            failedCategories.push(categoryId);
-            continue; 
+        for (const categoryId of data.categories) {
+            const category = await this.categoryRepository.getById(categoryId);
+            if (!category) {
+                failedCategories.push(categoryId);
+                continue;
+            }
+
+            await this.questionCategoryRepository.create({
+                question_id: question.id,
+                category_id: categoryId
+            });
         }
 
-        await this.questionCategoryRepository.create({
-            question_id: question.id,
-            category_id: categoryId
-        });
+        return {
+            message: failedCategories.length
+                ? `Pregunta creada. Algunas categorías no fueron asignadas porque no existen: ${failedCategories.join(", ")}`
+                : 'Pregunta creada exitosamente con todas las categorías.',
+            question
+        };
     }
-
-    return {
-        message: failedCategories.length
-            ? `Pregunta creada. Algunas categorías no fueron asignadas porque no existen: ${failedCategories.join(", ")}`
-            : 'Pregunta creada exitosamente con todas las categorías.',
-        question
-    };
-}
 
 
     async getQuestions() {

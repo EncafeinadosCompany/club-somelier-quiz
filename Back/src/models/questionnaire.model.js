@@ -15,14 +15,11 @@ const Questionnaire = sequelize.define(
     title: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
-    category_id:{
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: CATEGORIE_TABLE,
-        key: 'id',
-      },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   },
   {

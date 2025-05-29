@@ -15,11 +15,10 @@ const validateQuestion = [
     .notEmpty().withMessage('El nivel es obligatorio')
     .isInt().withMessage('El nivel debe ser un número entero'),
 
-body('categories')
-  .isArray({ min: 1 }).withMessage('Debes proporcionar al menos una categoría')
-  .custom((arr) => arr.every(Number.isInteger)).withMessage('Las categorías deben ser números enteros'),
-
-
+  body('categories')
+    .isArray({ min: 1 }).withMessage('You must provide at least one category')
+    .custom((arr) => arr.every(Number.isInteger)).withMessage('Categories must be integers'),
+    
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
