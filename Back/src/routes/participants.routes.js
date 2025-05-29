@@ -9,6 +9,6 @@ const { authenticateJWT } = require('../middlewares/auth.middleware');
 router
     .get('/', authenticateJWT, participantController.getAllParticipant)
     .get('/:id', authenticateJWT, participantController.getParticipantById)
-    .post('/',validatParticipant, participantController.createParticipant)
+    .post('/:accessCode',validatParticipant, participantController.createParticipant)
 
 module.exports = router;

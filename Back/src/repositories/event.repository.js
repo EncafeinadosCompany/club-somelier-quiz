@@ -24,7 +24,10 @@ class EventRepository {
     }
 
     async update(id, data) {
-        return await Event.update(data, { where: { id } });
+        const updateEvent = await Event.update(data, { where: { id } });;
+        if (!updateEvent) throw new Error("Error updating event");
+
+        return this.getById(id);
     }
 
     async delete(id) {
