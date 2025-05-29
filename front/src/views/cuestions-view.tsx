@@ -14,6 +14,8 @@ import { Event } from "@/api/types/events.types"
 import { Getquestions, question } from "@/api/types/questions.type"
 import QuestionsListModal from "@/common/widgets/admin/questions.widget"
 import CreateQuestionModal from "@/common/molecules/admin/Questions/create-question-modal.molecule"
+import { useCuestionsQuery } from "@/api/query/cuestions.queries"
+import { CategoriesWidget } from "@/common/widgets/admin/categories.widget"
 
 
 export default function HomeCuestion() {
@@ -30,6 +32,11 @@ export default function HomeCuestion() {
   const [isQuestionsListModalOpen, setQuestionsListModalOpen] = useState(false)
   const [isCreateQuestionModalOpen, setIsCreateQuestionModalOpen] = useState(false)
 
+
+
+  //QUESTIONS 
+  const {data, isLoading, isError} = useCuestionsQuery()
+
   useEffect(() => {
     // Aseguramos que isLoaded se establezca a true
     setIsLoaded(true)
@@ -39,67 +46,21 @@ export default function HomeCuestion() {
       {
         id: 1,
         title: "Evaluación de Desempeño Laboral",
-        categorie: "trabajo",
+        categorie: [{name:"hola"}],
         description:
           "Cuestionario completo para evaluar el rendimiento de los empleados durante el último trimestre. Incluye métricas de productividad, trabajo en equipo y cumplimiento de objetivos.",
-      },
-      {
-        id: 2,
-        title: "Encuesta de Satisfacción del Cliente",
-        categorie: "trabajo",
-        description:
-          "Formulario para medir la satisfacción de nuestros clientes con los productos y servicios ofrecidos. Ayuda a identificar áreas de mejora.",
-      },
-      {
-        id: 3,
-        title: "Cuestionario de Salud Mental",
-        categorie: "salud",
-        description:
-          "Evaluación psicológica básica para detectar signos de estrés, ansiedad o depresión. Recomendado para uso profesional.",
-      },
-      {
-        id: 4,
-        title: "Test de Conocimientos en JavaScript",
-        categorie: "tecnología",
-        description:
-          "Examen técnico para evaluar conocimientos en JavaScript, incluyendo ES6+, async/await, y conceptos avanzados de programación.",
-      },
-      {
-        id: 5,
-        title: "Evaluación de Hábitos Alimenticios",
-        categorie: "salud",
-        description:
-          "Cuestionario nutricional para analizar patrones de alimentación y proporcionar recomendaciones personalizadas de dieta.",
-      },
-      {
-        id: 6,
-        title: "Encuesta de Clima Organizacional",
-        categorie: "trabajo",
-        description:
-          "Medición del ambiente laboral, comunicación interna, liderazgo y satisfacción general de los empleados en la organización.",
-      },
-      {
-        id: 7,
-        title: "Test de Personalidad MBTI",
-        categorie: "personal",
-        description:
-          "Cuestionario basado en el indicador Myers-Briggs para identificar tipos de personalidad y preferencias en el comportamiento.",
-      },
-      {
-        id: 8,
-        title: "Evaluación de Riesgo Financiero",
-        categorie: "finanzas",
-        description:
-          "Análisis del perfil de riesgo del inversor para recomendar productos financieros adecuados según su tolerancia al riesgo.",
-      },
+      }
     ]
 
-    // Establecemos los cuestionarios con un pequeño retraso para asegurar que el DOM esté listo
-    setTimeout(() => {
-      setCuestions(sampleCuestions)
-    }, 100)
-  }, [])
+  
+      setCuestions(data || [])
+      console.log('ggg', cuestions)
+    
+  }, [data])
 
+
+
+  console.log('cuestiossssn', data)
 
 
   const handleCreateEventFromCuestion = (cuestion: GetCuestion) => {
@@ -127,8 +88,8 @@ export default function HomeCuestion() {
     return cuestions.filter((cuestion) => {
       const matchesSearch =
         cuestion.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        cuestion.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        cuestion.categorie.toLowerCase().includes(searchTerm.toLowerCase())
+        cuestion.description.toLowerCase().includes(searchTerm.toLowerCase()) 
+        // cuestion.categorie.map.toLowerCase().includes(searchTerm.toLowerCase())
 
       return matchesSearch
     })
@@ -142,7 +103,6 @@ export default function HomeCuestion() {
   }
 
 
-  console.log(isCreateQuestionModalOpen)
   const hasActiveFilters = searchTerm
 
   return (
@@ -241,26 +201,7 @@ export default function HomeCuestion() {
             </div>
 
             {/* Categories */}
-            <div className="bg-white/10 rounded-xl p-4 border border-white/20">
-              <div className="flex justify-between">
-                <h4 className="text-white font-medium mb-3">Categorías</h4>
-                <Button
-                  size="icon"
-                  className="w-6 h-6 bg-amber-200 hover:bg-amber-300 rounded-full p-1"
-                  variant="ghost"
-                >
-                  <Plus className="h-1 w-1" />
-                </Button>
-              </div>
-              <div className="space-y-2 text-sm">
-                {Array.from(new Set(cuestions.map((c) => c.categorie))).map((category) => (
-                  <div key={category} className="flex justify-between text-white/80">
-                    <span className="capitalize">{category}</span>
-                    <span>{cuestions.filter((c) => c.categorie === category).length}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <CategoriesWidget></CategoriesWidget>
 
 
             {/* Cuestion */}
@@ -302,10 +243,10 @@ export default function HomeCuestion() {
             {/* Cuestions Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 max-h-[calc(100vh-250px)] overflow-x-hidden overflow-y-auto scrollbar-thumb pr-2">
               {filteredCuestions.length > 0 ? (
-                filteredCuestions.map((cuestion) => {
+                filteredCuestions.map((cuestion) => 
 
-                  console.log('cuestion', cuestion)
-                  return (
+            (
+                 
 
                     <CuestionCard
                       key={cuestion.id}
@@ -314,7 +255,7 @@ export default function HomeCuestion() {
                       onViewDetails={setSelectedCuestion}
                     />
                   )
-                }
+                
                 )
               ) : (
                 <div className="col-span-full flex flex-col items-center justify-center py-12">

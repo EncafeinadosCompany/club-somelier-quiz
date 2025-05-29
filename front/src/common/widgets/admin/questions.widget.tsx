@@ -12,7 +12,7 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/common/ui/dialog"
-import { useQuestionsQuery } from "@/api/query/query.example"
+import { useQuestionsQuery } from "@/api/query/questions.queries"
 import { QuestionsList } from "../../molecules/admin/Questions/questions-list"
 import { getCategoryColor, getLevelColor } from "@/common/utils/colors"
 

@@ -1,3 +1,5 @@
+import { Getcategories } from "./categories.type";
+
 export interface PostCuestion {
     title: string;
     questions: Number[]
@@ -7,7 +9,7 @@ export interface PostCuestion {
 export interface GetCuestion {
     id:number;
     title: string;
-    categorie: string;
+    categorie:  {name:string}[];
     description: string;
 }
 
