@@ -35,7 +35,7 @@ export function AnswerButton({
 
   const buttonConfig = {
     yes: {
-      text: 'SÍ',
+      text: 'REALIDAD',
       icon: Check,
       colors: {
         bg: 'bg-green-500/90 hover:bg-green-600/90',
@@ -45,7 +45,7 @@ export function AnswerButton({
       }
     },
     no: {
-      text: 'NO',
+      text: 'MITO',
       icon: X,
       colors: {
         bg: 'bg-red-500/90 hover:bg-red-600/90',

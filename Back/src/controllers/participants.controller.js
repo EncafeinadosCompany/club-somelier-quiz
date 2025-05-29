@@ -19,7 +19,8 @@ class ParticipantController {
   };
 
   createParticipant = async (req, res) => {
-    const user = await this.participantService.createParticipant(req.body);
+    const accessCode = req.params.accessCode;
+    const user = await this.participantService.createParticipant(req.body, accessCode);
     res.status(201).json(user);
 
     if (!user) {
