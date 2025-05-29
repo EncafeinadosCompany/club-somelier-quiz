@@ -29,8 +29,6 @@ const getCategoryColor = (categorie: string) => {
 
 export default function CuestionCard({ cuestion, onCreateEvent, onViewDetails }: CuestionCardProps) {
 
-
-  console.log(cuestion, 'holaaa')
   return (
     <div className="bg-white/10 backdrop-blur-lg rounded-xl border border-white/20 p-4 sm:p-6 transition-all duration-200 hover:bg-white/20 hover:scale-105 hover:shadow-lg flex flex-col h-full min-h-[280px] max-w-full">
       {/* Header with title and category */}

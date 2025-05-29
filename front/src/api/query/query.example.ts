@@ -1,30 +1,30 @@
-// import { useQuery } from "@tanstack/react-query";
-// import AuthClient from "@/api/client/axios";
-// import { AlbumResponse, AlbumsListResponse } from "@/api/types/album/album.types";
-// import { AlbumPageResponse } from "@/api/types/album/page.types";
+import { useQuery } from "@tanstack/react-query";
+import AuthClient from "@/api/client/axios";
+import { Getquestions, question } from "../types/questions.type";
 
-// const authClient = new AuthClient();
 
-// export const useAlbumsQuery = () => {
-//   return useQuery<AlbumResponse[], Error>({
-//     queryKey: ['albums'],
-//     queryFn: async () => {
-//       try {
-//         const response = await authClient.get<AlbumsListResponse>('/albums');
+const authClient = new AuthClient();
+
+export const useQuestionsQuery = () => {
+  return useQuery<question[], Error>({
+    queryKey: ['questions'],
+    queryFn: async () => {
+      try {
+        const response = await authClient.get<Getquestions>('/questions');
         
-//         const albumsData = response.albums || [];
+        const questionData = response.questions|| [];
         
-//         if (!Array.isArray(albumsData)) {
-//           return [];
-//         }
+        if (!Array.isArray(questionData)) {
+          return [];
+        }
         
-//         return albumsData;
-//       } catch (error) {
-//         throw error; 
-//       }
-//     },
-//     refetchOnWindowFocus: true,
-//     retry: 1
-//   });
-// };
+        return questionData;
+      } catch (error) {
+        throw error; 
+      }
+    },
+    refetchOnWindowFocus: true,
+    retry: 1
+  });
+};
 
