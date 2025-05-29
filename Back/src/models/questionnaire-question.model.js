@@ -31,10 +31,6 @@ const QuestionnaireQuestion = sequelize.define(
       },
       onDelete: "CASCADE",
     },
-    position: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
   },
   {
     tableName: QUESTIONNAIRE_QUESTION_TABLE,

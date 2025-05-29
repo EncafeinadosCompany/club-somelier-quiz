@@ -57,7 +57,14 @@ const Answer = sequelize.define(ANSWER_TABLE, {
     }
 }, {
     tableName: ANSWER_TABLE,
-    timestamps: true
+    timestamps: true,
+     indexes: [
+    {
+      unique: true,
+      fields: ['event_id', 'question_id', 'participant_id'],
+      name: 'unique_answer_per_participant_event_question'
+    }
+  ]
 });
 
 module.exports = { Answer, ANSWER_TABLE };
