@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { MainLayout } from '../common/widgets/MainLayout';
 import { WelcomeForm } from '../common/widgets/WelcomeForm';
+import { WaitingView } from './WaitingView';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 interface UserData {
   name: string;
@@ -9,10 +12,28 @@ interface UserData {
 }
 
 export function HomeView() {
+  const [currentStep, setCurrentStep] = useState<'welcome' | 'waiting'>('welcome');
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const navigate = useNavigate();
+
   const handleWelcomeComplete = (userData: UserData) => {
     console.log('Usuario registrado:', userData);
-    window.location.href = '/Questions'; 
+    setUserData(userData);
+    setCurrentStep('waiting');
   };
+
+  const handleStartQuiz = () => {
+    navigate('/questions');
+  };
+
+  if (currentStep === 'waiting' && userData) {
+    return (
+      <WaitingView 
+        userData={userData} 
+        onStartQuiz={handleStartQuiz}
+      />
+    );
+  }
 
   return (
     <MainLayout backgroundVariant="gradient">
