@@ -11,6 +11,9 @@ import CreateEventModal from "@/common/molecules/admin/event/create-event-modal.
 import CuestionDetailModal from "@/common/molecules/admin/cuestions/cuestions-detail-modal.molecule"
 import EventsListModal from "@/common/molecules/admin/event/events-list-modal.molecule"
 import { Event } from "@/api/types/events.types"
+import { Getquestions, question } from "@/api/types/questions.type"
+import QuestionsListModal from "@/common/widgets/admin/questions.widget"
+import CreateQuestionModal from "@/common/molecules/admin/Questions/create-question-modal.molecule"
 
 
 export default function HomeCuestion() {
@@ -22,7 +25,10 @@ export default function HomeCuestion() {
   const [selectedCuestion, setSelectedCuestion] = useState<GetCuestion | null>(null)
   const [selectedCuestionForEvent, setSelectedCuestionForEvent] = useState<GetCuestion | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
-
+  
+  //QUESTION MODAL
+  const [isQuestionsListModalOpen, setQuestionsListModalOpen] = useState(false)
+  const [isCreateQuestionModalOpen, setIsCreateQuestionModalOpen] = useState(false)
 
   useEffect(() => {
     // Aseguramos que isLoaded se establezca a true
@@ -95,8 +101,6 @@ export default function HomeCuestion() {
   }, [])
 
 
-  console.log('cuestion', cuestions)
-
 
   const handleCreateEventFromCuestion = (cuestion: GetCuestion) => {
     setSelectedCuestionForEvent(cuestion)
@@ -116,6 +120,9 @@ export default function HomeCuestion() {
     setEvents((prev) => prev.filter((event) => event.id !== id))
   }
 
+
+
+
   const filteredCuestions = useMemo(() => {
     return cuestions.filter((cuestion) => {
       const matchesSearch =
@@ -134,6 +141,8 @@ export default function HomeCuestion() {
     setSearchTerm("")
   }
 
+
+  console.log(isCreateQuestionModalOpen)
   const hasActiveFilters = searchTerm
 
   return (
@@ -235,13 +244,13 @@ export default function HomeCuestion() {
             <div className="bg-white/10 rounded-xl p-4 border border-white/20">
               <div className="flex justify-between">
                 <h4 className="text-white font-medium mb-3">Categorías</h4>
-<Button 
-  size="icon"
-  className="w-6 h-6 bg-amber-200 hover:bg-amber-300 rounded-full p-1"
-  variant="ghost"
->
-  <Plus className="h-1 w-1" />
-</Button>
+                <Button
+                  size="icon"
+                  className="w-6 h-6 bg-amber-200 hover:bg-amber-300 rounded-full p-1"
+                  variant="ghost"
+                >
+                  <Plus className="h-1 w-1" />
+                </Button>
               </div>
               <div className="space-y-2 text-sm">
                 {Array.from(new Set(cuestions.map((c) => c.categorie))).map((category) => (
@@ -258,13 +267,13 @@ export default function HomeCuestion() {
             <div className="bg-white/10 rounded-xl p-4 border border-white/20">
               <h4 className="text-white font-medium mb-3">Preguntas</h4>
               <div className="space-y-2 flex flex-col  text-sm">
-                <Button className="relative">
+                <Button  onClick={()=> setIsCreateQuestionModalOpen(true)} className="relative">
                   <FileQuestion className="absolute left-3 h-6 w-6 mr-3" />
                   Crear nueva pregunta
                 </Button>
-                <Button className="relative">
+                <Button  onClick={() => setQuestionsListModalOpen(true)} className="relative">
                   <FileQuestion className="absolute left-3 h-6 w-6 mr-3" />
-                  Ver todas las preguntas
+                  Ver todas las preguntas 
                 </Button>
 
               </div>
@@ -349,6 +358,17 @@ export default function HomeCuestion() {
         events={events}
         onDeleteEvent={handleDeleteEvent}
       />
+
+
+      <QuestionsListModal
+        isOpen={isQuestionsListModalOpen}
+        onClose={() => setQuestionsListModalOpen(false)}
+      />
+
+      <CreateQuestionModal
+       isOpen={isCreateQuestionModalOpen}
+       onClose={() =>{setIsCreateQuestionModalOpen(false)}}
+      ></CreateQuestionModal>
     </div>
   )
 }

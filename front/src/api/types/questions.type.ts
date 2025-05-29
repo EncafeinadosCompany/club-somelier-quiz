@@ -1,15 +1,18 @@
 
 import { Getcategories } from "./categories.type"
 
-export interface Getquestion {
-questions: 
-    {
-        id: number
-        question: string,
-        response: boolean,
-        level: string,
-        categories: Getcategories[]
-    }[]
+export interface Getquestions {
+questions: question[]
+}
+
+
+export interface question{
+    
+    id: number
+    question: string,
+    response: boolean,
+    level: string,
+    categories: Getcategories[]
 }
 
 

@@ -42,6 +42,8 @@ export function QuestionsView() {
     }, 1000);
   };
 
+
+
   return (
     <MainLayout backgroundVariant="gradient">
       <div className="min-h-screen  flex flex-col justify-center px-3 sm:px-4 py-4 sm:py-6">
