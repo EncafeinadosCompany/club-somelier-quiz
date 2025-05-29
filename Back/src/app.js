@@ -54,7 +54,7 @@ class Server {
     try {
       await connectToDatabase();
       require('./models');
-      await sequelize.sync({ force: true });
+      await sequelize.sync({ alter: true });
 
     } catch (error) {
       console.error('Error connecting to the database:', error.message);

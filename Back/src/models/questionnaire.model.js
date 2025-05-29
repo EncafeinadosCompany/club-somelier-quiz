@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/connection");
-const {CATEGORIE_TABLE}= require("../models/categories.model")
 
 const QUESTIONNAIRE_TABLE = "questionnaires";
 
