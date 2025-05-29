@@ -39,9 +39,7 @@ class QuestionService {
         };
     }
 
-
     async getQuestions() {
-        console.log("Fetching all questions");
         return await this.questionRepository.findAll();
     }
 
@@ -51,6 +49,43 @@ class QuestionService {
 
     async getQuestionsByLevelId(levelId) {
         return await this.questionRepository.findByLevelId(levelId);
+    }
+
+    async updateQuestion(id, data) {
+        const question = await this.questionRepository.findById(id);
+        if (!question) return null;
+
+        const updatedData = {
+            question: data.question,
+            response: data.response,
+            level_id: data.level_id
+        };
+
+        await this.questionRepository.update(id, updatedData);
+
+        // Update categories
+        if (data.categories) {
+            await this.questionCategoryRepository.deleteByQuestionId(id);
+            for (const categoryId of data.categories) {
+                await this.questionCategoryRepository.create({
+                    question_id: id,
+                    category_id: categoryId
+                });
+            }
+
+        }
+
+        return await this.questionRepository.findById(id);
+    }
+
+    async deleteQuestion(id) {
+        const question = await this.questionRepository.findById(id);
+        if (!question) return null;
+
+        await this.questionCategoryRepository.deleteByQuestionId(id);
+        await this.questionRepository.delete(id);
+
+        return question;
     }
 }
 

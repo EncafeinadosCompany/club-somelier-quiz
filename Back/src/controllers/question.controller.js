@@ -1,4 +1,4 @@
-const  {QuestionsResponseDto, ListQuestionsResponseDto}  = require("../dtos/questions.response.dto");
+const { QuestionsResponseDto, ListQuestionsResponseDto } = require("../dtos/questions.response.dto");
 const QuestionService = require("../services/question.service");
 
 class QuestionController {
@@ -17,9 +17,8 @@ class QuestionController {
 
     getQuestions = async (req, res) => {
         try {
-            console.log("controller Fetching all questions");
             const questions = await this.questionService.getQuestions();
-            
+
             res.status(200).json(new ListQuestionsResponseDto(questions));
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -47,6 +46,32 @@ class QuestionController {
                 return res.status(404).json({ message: 'No questions found for this level' });
             }
             res.status(200).json(questions);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    updateQuestion = async (req, res) => {
+        const { id } = req.params;
+        try {
+            const updatedQuestion = await this.questionService.updateQuestion(id, req.body);
+            if (!updatedQuestion) {
+                return res.status(404).json({ message: 'Question not found' });
+            }
+            res.status(200).json(updatedQuestion);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    deleteQuestion = async (req, res) => {
+        const { id } = req.params;
+        try {
+            const deleted = await this.questionService.deleteQuestion(id);
+            if (!deleted) {
+                return res.status(404).json({ message: 'Question not found' });
+            }
+            res.status(200).json({ message: 'Question delete successfully' });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
