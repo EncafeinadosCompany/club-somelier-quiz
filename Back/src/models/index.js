@@ -47,7 +47,6 @@ Question.belongsToMany(Questionnaire, {
     as: 'questionnaires',
 });
 
-
 Question.belongsToMany(Category, {
     through: QuestionCategory,
     foreignKey: 'question_id',
@@ -61,7 +60,6 @@ Category.belongsToMany(Question, {
     otherKey: 'question_id',
     as: 'questions',
 });
-
 
 Event.belongsToMany(Category, {
     through: EventCategory,

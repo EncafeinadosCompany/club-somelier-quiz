@@ -7,7 +7,13 @@ const routerApi = (app) => {
     app.use('/api/v1', router);
 
     router
+        .use('/levels', require('./level.routes'))
+        .use('/categories', require('./category.routes'))
+        .use('/questions', require('./question.routes'))
+
         .use('/participants', require('./participants.routes'))
+        .use('/events', require('./event.routes'))
+    // .use('/questionnaires', require('./questionnaire.routes'))
 
 }
 

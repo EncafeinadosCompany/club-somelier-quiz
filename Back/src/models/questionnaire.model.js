@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/connection");
+const {CATEGORIE_TABLE}= require("../models/categories.model")
 
 const QUESTIONNAIRE_TABLE = "questionnaires";
 
@@ -14,7 +15,15 @@ const Questionnaire = sequelize.define(
     title: {
       type: DataTypes.STRING,
       allowNull: false,
-    }
+    },
+    category_id:{
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: CATEGORIE_TABLE,
+        key: 'id',
+      },
+    },
   },
   {
     tableName: QUESTIONNAIRE_TABLE,
