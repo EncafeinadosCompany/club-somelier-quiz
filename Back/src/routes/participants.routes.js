@@ -1,14 +1,14 @@
 const express = require('express');
-const UserController = require('../controllers/participants.controller');
+const ParticipantContoller = require('../controllers/participants.controller');
+const {validatParticipant}= require('../middlewares/participant.middleware');
 
 const router = express.Router();
-const userController = new UserController();
+const participantController = new ParticipantContoller();
+const { authenticateJWT } = require('../middlewares/auth.middleware');
 
 router
-    .get('/', userController.getAllUsers)
-    .get('/:id', userController.getUserById)
-    .post('/', userController.createUser)
-    .put('/:id', userController.updateUser)
-    .delete('/:id', userController.deleteUser)
+    .get('/', authenticateJWT, participantController.getAllParticipant)
+    .get('/:id', authenticateJWT, participantController.getParticipantById)
+    .post('/:accessCode',validatParticipant, participantController.createParticipant)
 
 module.exports = router;

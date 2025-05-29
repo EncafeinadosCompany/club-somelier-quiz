@@ -11,6 +11,7 @@ import RoleRoute from "./roleRoute";
 import { ROLES } from "@/common/utils/Roles";
 import { HomeView } from "@/views/HomeView";
 import { QuestionsView } from "@/views/QuestionsView";
+import { WaitingView } from "@/views/WaitingView";
 import { NotFound } from "@/common/utils/404";
 import HomeAdmin from "@/common/widgets/admin/home_admin.widget";
 import Navbar from "@/common/widgets/nav_widget";
@@ -44,20 +45,20 @@ function SuspenseLoader() {
 export default function AuthRoutes() {
     return (
         <Router>
-            <Suspense fallback={<SuspenseLoader />}>
-                <Routes>
+            <Suspense fallback={<SuspenseLoader />}>                <Routes>
                     <Route path="/" element={<AppWithLoading />}>
-                  
                         <Route path="404" element={<NotFound />} />
-                        <Route index path="client" element={<HomeView />} />
+                        <Route index element={<HomeView />} />
+                        <Route path="client" element={<HomeView />} />
+                        <Route path="waiting" element={<WaitingView />} />
                         <Route path="questions" element={<QuestionsView />} />
     
-                    <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}>
-                        <Route path="admin" element={<Navbar />}>
-                            <Route index element={<HomeCuestion />} />
+                        <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}>
+                            <Route path="admin" element={<Navbar />}>
+                                <Route index element={<HomeCuestion />} />
+                            </Route>
                         </Route>
                     </Route>
-                </Route>
 
                 <Route path="*" element={<Navigate to="/404" replace />} />
             </Routes>

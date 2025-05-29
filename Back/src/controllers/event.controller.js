@@ -28,8 +28,8 @@ class EventController {
   }
 
   updateEvent = async (req, res) => {
-    await this.eventService.updateEvent(req.params.id, req.body);
-    res.sendStatus(204);
+    const event = await this.eventService.updateEvent(req.params.id, req.body);
+    res.status(200).json(event);
   }
 
   deleteEvent = async (req, res) => {

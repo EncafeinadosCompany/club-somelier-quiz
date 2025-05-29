@@ -10,7 +10,6 @@ const { Event } = require("./event.model");
 const { Answer } = require('./answers.model');
 
 const { EventParticipant } = require('./event-participants.model');
-const { EventQuestion } = require('./event-questions.model');
 const { QuestionnaireQuestion } = require("./questionnaire-question.model");
 const { QuestionCategory } = require("./question-category.model");
 const { QuestionnaireCategory } = require("./questionnaire-categories.model");
@@ -71,19 +70,6 @@ Participant.belongsToMany(Event, {
     as: 'events',
 });
 //-----------------------------------------------------------------------------------------
-Event.belongsToMany(Question, {
-    through: EventQuestion,
-    foreignKey: 'event_id',
-    otherKey: 'question_id',
-    as: 'liveQuestions',
-});
-Question.belongsToMany(Event, {
-    through: EventQuestion,
-    foreignKey: 'question_id',
-    otherKey: 'event_id',
-    as: 'eventsRunningThis',
-});
-//-----------------------------------------------------------------------------------------
 Questionnaire.belongsToMany(Category, {
     through: QuestionnaireCategory,
     foreignKey: 'questionnaire_id',
@@ -109,6 +95,5 @@ module.exports = {
     QuestionCategory,
     QuestionnaireQuestion,
     QuestionnaireCategory,
-    EventParticipant,
-    EventQuestion
+    EventParticipant
 };
