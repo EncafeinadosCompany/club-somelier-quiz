@@ -13,7 +13,7 @@ class AdminService {
 
     if (existingAdmin) {
       const error = new Error('Admin with this email already exists');
-      error.status = StatusCodes.CONFLICT; // 409
+      error.status = StatusCodes.CONFLICT;
       throw error;
     }
 
