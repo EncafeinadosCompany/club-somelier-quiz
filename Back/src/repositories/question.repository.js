@@ -1,21 +1,17 @@
 const { Question } = require('../models/question.model');
 const { Level } = require('../models/level.model');
-const { Admin } = require('../models/admin.model');
+// const { Category } = require('../models/categories.model');
 
 class QuestionRepository {
-    async create(data, transaction) {
-        return await Question.create(data, { transaction });
+    async create(data) {
+        return await Question.create(data);
     }
 
     async findAll() {
         return await Question.findAll({
             include: [
-                {
-                    model: Level
-                },
-                {
-                    model: Admin
-                }
+                { model: Level },
+                // { model: Category }
             ]
         });
     }
@@ -23,13 +19,8 @@ class QuestionRepository {
     async findById(id) {
         return await Question.findByPk(id, {
             include: [
-                {
-                    model: Level,
-                   
-                },
-                {
-                    model: Admin,
-                }
+                { model: Level },
+                // { model: Category }
             ]
         });
     }

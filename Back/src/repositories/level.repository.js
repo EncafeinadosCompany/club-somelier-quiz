@@ -1,27 +1,17 @@
 const { Level } = require('../models/level.model');
-const { Question } = require('../models/question.model');
 
 class LevelRepository {
-    async create(data, transaction) {
-        return await Level.create(data, { transaction });
+    
+    async create(data,) {
+        return await Level.create(data);
     }
 
     async findAll() {
-        return await Level.findAll({
-            include: [{
-                model: Question,
-              
-            }]
-        });
+        return await Level.findAll();
     }
 
     async findById(id) {
-        return await Level.findByPk(id, {
-            include: [{
-                model: Question,
-               
-            }]
-        });
+        return await Level.findByPk(id);
     }
 
 }

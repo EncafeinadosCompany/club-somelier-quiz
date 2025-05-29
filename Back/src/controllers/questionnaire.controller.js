@@ -1,10 +1,10 @@
 const questionnaireService = require('../services/questionnaires.service')
 
-class QuestionnaireController{
-    controller(){
+class QuestionnaireController {
+    controller() {
         tthis.questionnaireService = new questionnaireService();
     }
-   async getAllQuestionnaires (req, res)  {
+    getAllQuestionnaires = async (req, res) => {
         try {
             const questionnaires = await this.questionnaireService.findAll();
             res.json(questionnaires);
@@ -12,7 +12,7 @@ class QuestionnaireController{
             res.status(500).json({ error: 'Internal Server Error' });
         }
     }
-   async getQuestionnaireById (req, res) {
+    getQuestionnaireById = async (req, res) => {
         try {
             const questionnaire = await this.questionnaireService.findById(req.params.id);
             if (!questionnaire) return res.status(404).json({ error: 'Questionnaire not found' });
@@ -21,7 +21,7 @@ class QuestionnaireController{
             res.status(500).json({ error: 'Internal Server Error' });
         }
     }
-   async createQuestionnaire(req, res) {
+    createQuestionnaire = async (req, res) => {
         try {
             const questionnaire = await this.questionnaireService.createQuestionnaire(req.body);
             res.status(201).json({
@@ -36,7 +36,7 @@ class QuestionnaireController{
             });
         }
     }
-    async updateQuestionnaire (req, res) {
+    updateQuestionnaire = async (req, res) => {
         try {
             const updatedQuestionnaire = await this.questionnaireService.update(req.params.id, req.body);
             if (!updatedQuestionnaire) return res.status(404).json({ error: 'Questionnaire not found' });
