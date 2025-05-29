@@ -210,7 +210,7 @@ export function WelcomeForm({ onComplete, className = '' }: WelcomeFormProps) {
                       onChange={(value) => updateUserData(tab.field, value)}
                       error={errors[tab.field]}
                       required
-                      className="text-base sm:text-lg"
+                      className="text-base sm:text-lg "
                     />
                   </div>
                 </motion.div>

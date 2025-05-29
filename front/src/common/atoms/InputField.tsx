@@ -40,7 +40,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
         
         <div className="relative">
           {Icon && (
-            <div className="absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none z-10">
+            <div className="absolute inset-y-0 left-1   flex items-center pointer-events-none z-10">
               <Icon 
                 size={18} 
                 className="text-[var(--text-secondary)] sm:w-5 sm:h-5" 
@@ -56,7 +56,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
             placeholder={placeholder}
             className={`
               block w-full rounded-lg border
-              ${Icon ? 'pl-11 sm:pl-14' : 'pl-3 sm:pl-4'} 
+              ${Icon ? 'pl-11 sm:pl-[24vh]' : 'pl-3 sm:pl-4'} 
               pr-3 sm:pr-4 
               py-3 sm:py-4
               text-base sm:text-lg
@@ -70,10 +70,12 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
               focus:border-transparent
               transition-all duration-200
               touch-manipulation
+            
               ${error ? 'border-red-500 focus:ring-red-500' : ''}
             `}
             style={{
-              fontSize: '16px' // Prevent zoom on iOS
+              fontSize: '16px', // Prevent zoom on iOS
+              paddingLeft: Icon? '4vh' : '10px',
             }}
             whileFocus={{ scale: 1.01 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
