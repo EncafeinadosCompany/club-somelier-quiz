@@ -2,8 +2,9 @@ const { body, validationResult } = require('express-validator');
 
 const validateEvent = [
     body('name')
-        .notEmpty().withMessage('el nombre del producto es obligatoria'),
-    // .matches(/^[a-zA-Záéíóúñ ]+$/).withMessage('Los caracteres no son validos'),
+        .notEmpty().withMessage('el nombre del producto es obligatoria')
+        .isString().withMessage('Title must be a string')
+        .isLength({ min: 3 }).withMessage('Title must be at least 3 characters long'),
 
     body('questionnaire_id')
         .notEmpty().withMessage('El cuestionario es obligatorio')
@@ -12,7 +13,7 @@ const validateEvent = [
     body('start_time')
         .notEmpty().withMessage('La fecha de inicio es obligatoria')
         .isISO8601().withMessage('La fecha de inicio debe ser una fecha válida en formato ISO 8601'),
-        
+
     body('end_time')
         .notEmpty().withMessage('La fecha de fin es obligatoria')
         .isISO8601().withMessage('La fecha de fin debe ser una fecha válida en formato ISO 8601')

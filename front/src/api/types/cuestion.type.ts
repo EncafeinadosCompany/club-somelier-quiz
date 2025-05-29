@@ -4,12 +4,6 @@ export interface PostCuestion {
 }
 
 
-export interface Getquestions {
-    id: number;
-
-}
-
-
 export interface GetCuestion {
     id:number;
     title: string;

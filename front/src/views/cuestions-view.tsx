@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react"
 
-import { Search, Settings, Menu, FileQuestion, Filter, X, Calendar } from "lucide-react"
+import { Search, Settings, Menu, FileQuestion, Filter, X, Calendar, Plus } from "lucide-react"
 import { GetCuestion } from "@/api/types/cuestion.type"
 import { Button } from "@/common/ui/button"
 import { Input } from "@/common/ui/input"
@@ -23,7 +23,9 @@ export default function HomeCuestion() {
   const [selectedCuestionForEvent, setSelectedCuestionForEvent] = useState<GetCuestion | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
 
+
   useEffect(() => {
+    // Aseguramos que isLoaded se establezca a true
     setIsLoaded(true)
 
     // Sample cuestions
@@ -86,24 +88,14 @@ export default function HomeCuestion() {
       },
     ]
 
-    setCuestions(sampleCuestions)
-  }, [])
-
-  
-  useEffect(() => {
-    // Aseguramos que isLoaded se establezca a true
-    setIsLoaded(true)
-
-    // Sample cuestions
-    const sampleCuestions: GetCuestion[] = [
-      // ... existing code ...
-    ]
-
     // Establecemos los cuestionarios con un pequeño retraso para asegurar que el DOM esté listo
     setTimeout(() => {
       setCuestions(sampleCuestions)
     }, 100)
   }, [])
+
+
+  console.log('cuestion', cuestions)
 
 
   const handleCreateEventFromCuestion = (cuestion: GetCuestion) => {
@@ -135,6 +127,9 @@ export default function HomeCuestion() {
     })
   }, [cuestions, searchTerm])
 
+
+  console.log('events', filteredCuestions)
+
   const clearFilters = () => {
     setSearchTerm("")
   }
@@ -143,18 +138,19 @@ export default function HomeCuestion() {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
+
       {/* Background Image */}
       <img
         src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop"
         alt="Beautiful mountain landscape"
-     
-        className="object-cover"
-       
+
+        className="object-cover absolute h-full w-full"
+
       />
 
       {/* Navigation */}
       <header
-        className={`absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-8 py-6 opacity-0 ${isLoaded ? "animate-fade-in" : ""}`}
+        className={`absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-8 py-6 opacity-100 ${isLoaded ? "animate-fade-in" : ""}`}
         style={{ animationDelay: "0.2s" }}
       >
         <div className="flex items-center gap-4">
@@ -178,7 +174,7 @@ export default function HomeCuestion() {
       <main className="relative h-screen w-full pt-20 flex">
         {/* Sidebar */}
         <div
-          className={`w-80 h-full bg-white/10 backdrop-blur-lg p-6 shadow-xl border-r border-white/20 rounded-tr-3xl opacity-0 ${isLoaded ? "animate-fade-in" : ""} flex flex-col`}
+          className={`w-80 h-full bg-white/10 backdrop-blur-lg p-6 shadow-xl border-r border-white/20 rounded-tr-3xl opacity-100 ${isLoaded ? "animate-fade-in" : ""} flex flex-col`}
           style={{ animationDelay: "0.4s" }}
         >
           <div className="mb-6">
@@ -215,42 +211,70 @@ export default function HomeCuestion() {
             )}
           </div>
 
-          {/* Stats */}
-          <div className="bg-white/10 rounded-xl p-4 border border-white/20 mb-6">
-            <h4 className="text-white font-medium mb-3">Estadísticas</h4>
-            <div className="space-y-2 text-sm text-white/80">
-              <div className="flex justify-between">
-                <span>Total cuestionarios:</span>
-                <span className="font-medium text-white">{cuestions.length}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Cuestionarios filtrados:</span>
-                <span className="font-medium text-white">{filteredCuestions.length}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Eventos creados:</span>
-                <span className="font-medium text-white">{events.length}</span>
+          <div className="space-y-5 overflow-y-auto">
+            {/* Stats */}
+            <div className="bg-white/10   rounded-xl p-4 border border-white/20 mb-6">
+              <h4 className="text-white font-medium mb-3">Estadísticas</h4>
+              <div className="space-y-2 text-sm text-white/80">
+                <div className="flex justify-between">
+                  <span>Total cuestionarios:</span>
+                  <span className="font-medium text-white">{cuestions.length}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Cuestionarios filtrados:</span>
+                  <span className="font-medium text-white">{filteredCuestions.length}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Eventos creados:</span>
+                  <span className="font-medium text-white">{events.length}</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Categories */}
-          <div className="bg-white/10 rounded-xl p-4 border border-white/20">
-            <h4 className="text-white font-medium mb-3">Categorías</h4>
-            <div className="space-y-2 text-sm">
-              {Array.from(new Set(cuestions.map((c) => c.categorie))).map((category) => (
-                <div key={category} className="flex justify-between text-white/80">
-                  <span className="capitalize">{category}</span>
-                  <span>{cuestions.filter((c) => c.categorie === category).length}</span>
-                </div>
-              ))}
+            {/* Categories */}
+            <div className="bg-white/10 rounded-xl p-4 border border-white/20">
+              <div className="flex justify-between">
+                <h4 className="text-white font-medium mb-3">Categorías</h4>
+<Button 
+  size="icon"
+  className="w-6 h-6 bg-amber-200 hover:bg-amber-300 rounded-full p-1"
+  variant="ghost"
+>
+  <Plus className="h-1 w-1" />
+</Button>
+              </div>
+              <div className="space-y-2 text-sm">
+                {Array.from(new Set(cuestions.map((c) => c.categorie))).map((category) => (
+                  <div key={category} className="flex justify-between text-white/80">
+                    <span className="capitalize">{category}</span>
+                    <span>{cuestions.filter((c) => c.categorie === category).length}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+
+            {/* Cuestion */}
+            <div className="bg-white/10 rounded-xl p-4 border border-white/20">
+              <h4 className="text-white font-medium mb-3">Preguntas</h4>
+              <div className="space-y-2 flex flex-col  text-sm">
+                <Button className="relative">
+                  <FileQuestion className="absolute left-3 h-6 w-6 mr-3" />
+                  Crear nueva pregunta
+                </Button>
+                <Button className="relative">
+                  <FileQuestion className="absolute left-3 h-6 w-6 mr-3" />
+                  Ver todas las preguntas
+                </Button>
+
+              </div>
             </div>
           </div>
         </div>
 
         {/* Cuestions List */}
         <div
-          className={`flex-1 flex flex-col opacity-0 ${isLoaded ? "animate-fade-in" : ""}`}
+          className={`flex-1 flex flex-col opacity-100 ${isLoaded ? "animate-fade-in" : ""}`}
           style={{ animationDelay: "0.6s" }}
         >
           <div className="p-6">
@@ -267,16 +291,22 @@ export default function HomeCuestion() {
             </div>
 
             {/* Cuestions Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 max-h-[calc(100vh-200px)] overflow-y-auto pr-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 max-h-[calc(100vh-250px)] overflow-x-hidden overflow-y-auto scrollbar-thumb pr-2">
               {filteredCuestions.length > 0 ? (
-                filteredCuestions.map((cuestion) => (
-                  <CuestionCard
-                    key={cuestion.id}
-                    cuestion={cuestion}
-                    onCreateEvent={handleCreateEventFromCuestion}
-                    onViewDetails={setSelectedCuestion}
-                  />
-                ))
+                filteredCuestions.map((cuestion) => {
+
+                  console.log('cuestion', cuestion)
+                  return (
+
+                    <CuestionCard
+                      key={cuestion.id}
+                      cuestion={cuestion}
+                      onCreateEvent={handleCreateEventFromCuestion}
+                      onViewDetails={setSelectedCuestion}
+                    />
+                  )
+                }
+                )
               ) : (
                 <div className="col-span-full flex flex-col items-center justify-center py-12">
                   <FileQuestion className="h-16 w-16 text-white/30 mb-4" />
