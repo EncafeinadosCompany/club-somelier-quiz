@@ -6,7 +6,7 @@ export default class AuthClient {
 
     constructor () {
         this.client = axios.create({
-            baseURL: "",
+            baseURL: import.meta.env.VITE_API_URL,
             headers:{
                 'Content-Type': 'application/json'
             }
