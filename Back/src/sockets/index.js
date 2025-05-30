@@ -44,7 +44,7 @@ function initializeWebSockets(io) {
             liveEvents.set(accessCode, {
                 eventId: event.id,
                 questions,
-                currentIdx: -1,          
+                currentIdx: -1,
                 questionStart: null
             });
 
@@ -69,9 +69,9 @@ function initializeWebSockets(io) {
                 questionId: q.id,
                 position: live.currentIdx + 1,
                 total: live.questions.length,
-                text: q.question,
-                // …opciones si tuvieras
+                text: q.question
             });
+
         });
 
         /* ========== PARTICIPANTE: SUBMIT ANSWER ========== */
@@ -85,9 +85,11 @@ function initializeWebSockets(io) {
 
             const is_correct = (answer === question.response);
             const basePts = await Level.findByPk(question.level_id).then(l => l.points);
-            const k = 1;                                // tu constante
+            const k = 1;
             const seconds = elapsedMs / 1000;
             const score = is_correct ? Math.max(basePts - k * seconds, 0) : 0;
+
+            const roundedScore = Math.round(score * 10) / 10;
 
             await Answer.create({
                 event_id: live.eventId,
@@ -96,7 +98,7 @@ function initializeWebSockets(io) {
                 response: answer,
                 is_correct,
                 response_time: seconds,
-                points_awarded: score
+                points_awarded: roundedScore
             });
 
             socket.emit('answer_ack', { is_correct, score });
@@ -110,17 +112,25 @@ function initializeWebSockets(io) {
             // calcular ranking final
             const scores = await Answer.findAll({
                 where: { event_id: live.eventId },
+                include: [{
+                    model: Participant,
+                    attributes: ['id', 'fullName']
+                }],
                 attributes: [
                     'participant_id',
                     [sequelize.fn('SUM', sequelize.col('points_awarded')), 'total']
                 ],
-                group: ['participant_id'],
-                order: [[sequelize.literal('total'), 'DESC']],
-                include: [{ model: Participant, attributes: ['fullName'] }]
+                group: ['answers.participant_id', 'participant.id', 'participant.fullName'],
+                order: [[sequelize.literal('total'), 'DESC']]
             });
+
 
             io.to(accessCode).emit('event_results', scores);
             liveEvents.delete(accessCode);
+
+            console.log(`Event ${accessCode} ended and results sent.`);
+            console.log('Scores:', scores);
+            socket.emit('event_ended');
         });
 
         socket.on('disconnect', () => {

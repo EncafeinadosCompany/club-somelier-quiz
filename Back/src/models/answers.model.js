@@ -58,7 +58,7 @@ const Answer = sequelize.define(ANSWER_TABLE, {
         comment: 'Response time in seconds with millisecond precision'
     },
     points_awarded: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
         allowNull: true,
         defaultValue: 0
     }

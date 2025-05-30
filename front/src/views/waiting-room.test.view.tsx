@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { MainLayout } from '../common/widgets/MainLayout';
@@ -15,22 +15,16 @@ interface LocationState {
 }
 
 export function WaitingViewTest() {
-    /***** URL state *****/
     const { state } = useLocation();
     const { userData, questionnaireId, accessCode, participantId } = (state || {}) as LocationState;
     const navigate = useNavigate();
 
-    console.log('Participant data:', userData);
-    console.log('Questionnaire ID:', questionnaireId);
-
-    /***** (1) Redirección temprana si falta info *****/
     useEffect(() => {
         if (!userData || !questionnaireId || !accessCode) {
             navigate('/', { replace: true });
         }
     }, [userData, questionnaireId, accessCode, navigate]);
 
-    /* ---------- Cargar estionario ---------- */
     const {
         data: questionnaire,
         isLoading: questionnaireLoading,
@@ -38,36 +32,28 @@ export function WaitingViewTest() {
         refetch,
     } = useQuestionnaire(questionnaireId!);
 
-    /***** (3) Conexión al socket una vez tenemos IDs *********/
-    const socket = useEventSocketParticipant(accessCode, participantId);
-    console.log('🔌 Conectando al socket con:', { accessCode, participantId });
+    const {
+        eventStarted,
+        currentQuestion,
+        noMoreQuestions,
+        eventEnded,
+        results,
+        isConnected
+    } = useEventSocketParticipant(accessCode!, participantId!);
 
-    /***** (4) Navegar cuando el admin inicie *********/
+    // Navegar a preguntas cuando evento inicia o llega pregunta
     useEffect(() => {
-        if (!participantId) return;
+        if (eventStarted || currentQuestion) {
+            navigate("/questions", {
+                state: { questionnaireId, participantId, accessCode },
+            });
+        }
+    }, [eventStarted, currentQuestion, navigate, questionnaireId, participantId, accessCode]);
 
-        const go = () =>
-            navigate('/questions', { state: { questionnaireId, participantId, accessCode } });
-
-        socket.on('event_started', go);
-        socket.on('show_question', go);
-
-        return () => {
-            socket.off('event_started', go);
-            socket.off('show_question', go);
-        };
-    }, [participantId, questionnaireId, accessCode, navigate]);
-
-    /***** (5) Indicador de conexión *********/
-    const connectionStatus = useMemo(() => {
-        return socket.connected ? 'connected' : 'connecting';
-    }, [socket.connected]);
-
-    /***** (6) handlers extras (prueba y recarga cuestionario) *****/
+    const connectionStatus = useMemo(() => (isConnected ? "connected" : "connecting"), [isConnected]);
 
     const handleRetryQuestionnaire = () => refetch();
 
-    /***** (7) render *********/
     if (!userData || !questionnaireId) return null;
 
     return (
