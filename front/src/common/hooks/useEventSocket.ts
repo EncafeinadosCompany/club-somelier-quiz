@@ -1,27 +1,25 @@
-
-
-import { useEffect, useState } from 'react';
-import { socket } from '@/api/client/socket';
+import { participantSocket, adminSocket } from "@/api/client/socket";
+import { useEffect, useState } from "react";
 
 export function useEventSocketParticipant(accessCode?: string, participantId?: string | null) {
     useEffect(() => {
         if (!accessCode || !participantId) return;
 
-        if (!socket.connected) socket.connect();
+        if (!participantSocket.connected) participantSocket.connect();
 
-        socket.emit('join_event', { accessCode, participantId });
+        participantSocket.emit('join_event', { accessCode, participantId });
 
-        socket.on('joined_ok', () => {
+        participantSocket.on('joined_ok', () => {
             console.log('✅ join_event confirmado');
         });
 
         return () => {
-            socket.off('joined_ok');
-            socket.disconnect();
+            participantSocket.off('joined_ok');
+            participantSocket.disconnect();
         };
     }, [accessCode, participantId]);
 
-    return socket;
+    return participantSocket;
 }
 
 export function useEventSocketAdmin(accessCode: string) {
@@ -29,57 +27,96 @@ export function useEventSocketAdmin(accessCode: string) {
     const [currentQuestion, setCurrentQuestion] = useState<any>(null);
     const [noMoreQuestions, setNoMoreQuestions] = useState(false);
     const [eventEnded, setEventEnded] = useState(false);
+    const [isConnected, setIsConnected] = useState(false);
 
     useEffect(() => {
         if (!accessCode) return;
 
-        if (!socket.connected) socket.connect();
+        console.log('Admin Socket:', adminSocket);
 
-        // Solo configurar los listeners, NO ejecutar las acciones automáticamente
-        socket.on('event_started', () => {
+        if (!adminSocket.connected) adminSocket.connect();
+
+        adminSocket.on('connect', () => {
+            console.log('🔗 Admin socket conectado:', adminSocket.id);
+            setIsConnected(true); 
+            adminSocket.emit('admin:join', { accessCode });
+        });
+
+        adminSocket.on('disconnect', () => {
+            console.log('❌ Admin socket desconectado');
+            setIsConnected(false);
+        });
+
+        adminSocket.on('connect_error', (error) => {
+            console.error('❌ Error conexión admin:', error);
+            setIsConnected(false); 
+        });
+
+        adminSocket.on('admin:joined_ok', () => {
+            console.log('✅ Admin join confirmado');
+        });
+
+        adminSocket.on('event_started', () => {
             console.log('✅ Event started');
             setEventStarted(true);
         });
 
-        socket.on('show_question', (question) => {
+        adminSocket.on('show_question', (question) => {
             console.log('✅ Show question:', question);
             setCurrentQuestion(question);
         });
 
-        socket.on('no_more_questions', () => {
+        adminSocket.on('no_more_questions', () => {
             console.log('✅ No more questions');
             setNoMoreQuestions(true);
         });
 
-        socket.on('event_results', (results) => {
+        adminSocket.on('event_results', (results) => {
             console.log('✅ Event results:', results);
-            // Aquí podrías manejar los resultados finales
         });
 
+        if (adminSocket.connected) {
+            setIsConnected(true);
+            adminSocket.emit('admin:join', { accessCode });
+        }
+
         return () => {
-            socket.off('event_started');
-            socket.off('show_question');
-            socket.off('no_more_questions');
-            socket.off('event_results');
-            socket.disconnect();
+            adminSocket.off('connect');
+            adminSocket.off('disconnect');
+            adminSocket.off('connect_error');
+            adminSocket.off('admin:joined_ok');
+            adminSocket.off('event_started');
+            adminSocket.off('show_question');
+            adminSocket.off('no_more_questions');
+            adminSocket.off('event_results');
+            adminSocket.disconnect();
         };
     }, [accessCode]);
 
-    // Funciones para ejecutar las acciones del admin
     const startEvent = () => {
-        socket.emit('admin:start_event', { accessCode });
+        console.log('🚀 Starting event:', accessCode);
+        if (adminSocket.connected) {
+            adminSocket.emit('admin:start_event', { accessCode });
+        } else {
+            console.warn('⚠️ Admin socket no conectado');
+        }
     };
 
     const nextQuestion = () => {
-        socket.emit('admin:next_question', { accessCode });
+        if (adminSocket.connected) {
+            adminSocket.emit('admin:next_question', { accessCode });
+        }
     };
 
     const endEvent = () => {
-        socket.emit('admin:end_event', { accessCode });
+        if (adminSocket.connected) {
+            adminSocket.emit('admin:end_event', { accessCode });
+        }
     };
 
     return {
-        socket,
+        socket: adminSocket,
+        isConnected,
         eventStarted,
         currentQuestion,
         noMoreQuestions,

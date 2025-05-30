@@ -11,16 +11,17 @@ interface LocationState {
     userData: Participant;
     questionnaireId: number;
     accessCode: string;
+    participantId: string;
 }
 
 export function WaitingViewTest() {
     /***** URL state *****/
     const { state } = useLocation();
-    const { userData, questionnaireId, accessCode } = (state || {}) as LocationState;
+    const { userData, questionnaireId, accessCode, participantId } = (state || {}) as LocationState;
     const navigate = useNavigate();
 
-    /***** local state *****/
-    const [participantId, setParticipantId] = useState<string | null>(null);
+    console.log('Participant data:', userData);
+    console.log('Questionnaire ID:', questionnaireId);
 
     /***** (1) Redirección temprana si falta info *****/
     useEffect(() => {

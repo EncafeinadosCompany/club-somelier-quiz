@@ -1,39 +1,50 @@
 const { liveEvents } = require('./liveEvents');
-const { Event, Participant, Answer, QuestionnaireQuestion, Question, Level } = require('../models');
+const { Participant, Answer, Level } = require('../models');
 const { sequelize } = require('../config/connection');
 const EventService = require('../services/event.service');
+const QuestionnairesService = require('../services/questionnaires.service');
 
 const eventService = new EventService();
+const questionnaireService = new QuestionnairesService();
 
 function initializeWebSockets(io) {
     io.on('connection', (socket) => {
         console.log('🔌 Conectado:', socket.id);
 
-        /* ========== JOIN EVENT (todos) ========== */
+        /* ========== JOIN EVENT (Participants) ========== */
         socket.on('join_event', async ({ accessCode, participantId }) => {
             socket.join(accessCode);
-            socket.data = { accessCode, participantId };   // guarda contexto
+            socket.data = { accessCode, participantId };
             console.log(`${socket.id} joined ${accessCode}`);
             socket.emit('joined_ok');
+        });
+
+        /* ========== JOIN EVENT (Admin) ========== */
+        socket.on('admin:join', async ({ accessCode }) => {
+            socket.join(accessCode);
+            socket.data = { accessCode, role: 'admin' };
+            console.log(`👑 Admin ${socket.id} joined ${accessCode}`);
+            socket.emit('admin:joined_ok');
         });
 
         /* ========== ADMIN: START EVENT ========== */
         socket.on('admin:start_event', async ({ accessCode }) => {
             const event = await eventService.getEventByCode(accessCode);
 
+            console.log('acceso al evento:', event.questionnaire_id);
             // 1) obtener lista ordenada de preguntas
-            const qn = await QuestionnaireQuestion.findAll({
-                where: { questionnaire_id: event.questionnaire_id },
-                order: [['position', 'ASC']],
-                include: [{ model: Question, as: 'question' }]
-            });
-
-            const questions = qn.map(q => q.question); // array plano de preguntas
-
+            const qn = await questionnaireService.findById(event.questionnaire_id);
+            const questions = qn.questions
+                .sort(
+                    (a, b) =>
+                        a.questionnaire_questions.position -
+                        b.questionnaire_questions.position
+                )
+                .map((q) => q)
             liveEvents.set(accessCode, {
                 eventId: event.id,
                 questions,
-                currentIdx: -1,          // antes de la primera
+                currentIdx: -1,          
                 questionStart: null
             });
 

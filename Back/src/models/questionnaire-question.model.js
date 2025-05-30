@@ -15,7 +15,6 @@ const QuestionnaireQuestion = sequelize.define(
     },
     questionnaire_id: {
       type: DataTypes.INTEGER,
-      primaryKey: true,
       references: {
         model: QUESTIONNAIRE_TABLE,
         key: "id",
@@ -24,7 +23,6 @@ const QuestionnaireQuestion = sequelize.define(
     },
     question_id: {
       type: DataTypes.INTEGER,
-      primaryKey: true,
       references: {
         model: QUESTION_TABLE,
         key: "id",
