@@ -1,21 +1,23 @@
 "use client"
 
+import type React from "react"
+
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
-import { Brain, Lightbulb, HelpCircle, CheckCircle } from 'lucide-react'
+import { Brain, CheckCircle2, XCircle, HelpCircle, Scale } from "lucide-react"
 
 const initialColors = [
   "#22c55e", 
-  "#f97316", 
+  "#ef4444", 
   "#8b5cf6", 
-  "#3b82f6",
+  "#3b82f6", 
 ]
 
 const iconMap = {
-  "#22c55e": CheckCircle,
-  "#f97316": HelpCircle, 
+  "#22c55e": CheckCircle2, 
+  "#ef4444": XCircle, 
   "#8b5cf6": Brain,
-  "#3b82f6": Lightbulb,
+  "#3b82f6": Scale, 
 }
 
 function shuffle([...array]: string[]) {
@@ -29,23 +31,23 @@ export function QuizLoader() {
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640)
-    handleResize() 
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
   }, [])
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       setOrder(shuffle(order))
-      setCurrentPhase(prev => (prev + 1) % 3)
-    }, 1500) 
+      setCurrentPhase((prev) => (prev + 1) % 3)
+    }, 1500)
     return () => clearTimeout(timeout)
-  }, [order]) 
+  }, [order])
 
   const phases = [
-    { text: "Preparando preguntas...", icon: Brain },
-    { text: "Analizando realidades...", icon: Lightbulb },
-    { text: "Detectando mitos...", icon: HelpCircle }
+    { text: "Cargando preguntas...", icon: HelpCircle },
+    { text: "Separando verdades de mitos...", icon: Scale },
+    { text: "Analizando hechos...", icon: Brain },
   ]
 
   const currentPhaseData = phases[currentPhase % phases.length]
@@ -58,20 +60,18 @@ export function QuizLoader() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--bg-primary)] p-4">
       <div className="text-center mb-8 sm:mb-12">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[var(--text-primary)] mb-2">
-          Realidad o Mito
+          ¿Realidad o Mito?
         </h1>
         <p className="text-sm sm:text-base text-[var(--text-secondary)]">
           {currentPhaseData.text}
         </p>
-      </div>
-
-      <ul style={containerStyle} className="mb-8 sm:mb-12">
+      </div>      <ul style={containerStyle} className="mb-8 sm:mb-12">
         {order.map((backgroundColor) => {
           const Icon = iconMap[backgroundColor as keyof typeof iconMap]
           return (
             <motion.li
               key={backgroundColor}
-              layout 
+              layout
               transition={spring}
               style={{ ...itemStyle, backgroundColor }}
               className="flex items-center justify-center shadow-lg"
@@ -132,12 +132,12 @@ const item: React.CSSProperties = {
 
 const mobileContainer: React.CSSProperties = {
   ...container,
-  width: 240, 
+  width: 240,
   gap: 8,
 }
 
 const mobileItemStyle: React.CSSProperties = {
-  width: 80, 
+  width: 80,
   height: 80,
   borderRadius: "8px",
 }

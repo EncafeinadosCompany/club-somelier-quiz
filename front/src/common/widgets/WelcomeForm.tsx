@@ -93,7 +93,6 @@ export function WelcomeForm({ onComplete, className = '' }: WelcomeFormProps) {
 
   return (
     <div className={`w-full max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl mx-auto ${className}`}>
-      {/* Header con título responsive */}
       <div className="mb-6 sm:mb-8 lg:mb-10">
         <SplitTextWelcome 
           text="¡Bienvenido a Realidad o Mito!" 
@@ -118,7 +117,6 @@ export function WelcomeForm({ onComplete, className = '' }: WelcomeFormProps) {
         <div className="flex justify-center items-center mb-3 sm:mb-4">
           {tabs.map((tab, index) => (
             <div key={tab.id} className="flex items-center">
-              {/* Circle indicator - responsive size */}
               <motion.div 
                 className={`
                   w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10

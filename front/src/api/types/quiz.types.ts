@@ -34,7 +34,7 @@ export interface QuestionnaireQuestion {
 export interface Questionnaire {
   id: number;
   title: string;
-  description: string;
+  description: string;    
   questions: QuestionnaireQuestion[];
 }
 

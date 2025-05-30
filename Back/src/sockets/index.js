@@ -1,6 +1,9 @@
 const { liveEvents } = require('./liveEvents');
 const { Event, Participant, Answer, QuestionnaireQuestion, Question, Level } = require('../models');
 const { sequelize } = require('../config/connection');
+const EventService = require('../services/event.service');
+
+const eventService = new EventService();
 
 function initializeWebSockets(io) {
     io.on('connection', (socket) => {
@@ -16,8 +19,7 @@ function initializeWebSockets(io) {
 
         /* ========== ADMIN: START EVENT ========== */
         socket.on('admin:start_event', async ({ accessCode }) => {
-            const event = await Event.findOne({ where: { access_code: accessCode } });
-            if (!event) return socket.emit('error', 'Evento no existe');
+            const event = await eventService.getEventByCode(accessCode);
 
             // 1) obtener lista ordenada de preguntas
             const qn = await QuestionnaireQuestion.findAll({

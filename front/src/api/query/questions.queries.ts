@@ -28,3 +28,28 @@ export const useQuestionsQuery = () => {
   });
 };
 
+/**
+ * Hook to fetch a single question by ID
+ * @param id The question ID to fetch
+ */
+export const useQuestionByIDQuery = (id: number | null) => {
+  return useQuery<question, Error>({
+    queryKey: ['question', id],
+    queryFn: async (): Promise<question> => {
+      try {
+        if (!id) throw new Error('Question ID is required');
+        
+        const response = await authClient.get<question>(`/questions/${id}`);
+        
+        // Return the response directly
+        return response;
+      } catch (error) {
+        throw error; 
+      }
+    },
+    enabled: !!id, // Only run the query if an ID is provided
+    refetchOnWindowFocus: true,
+    retry: 1
+  });
+};
+

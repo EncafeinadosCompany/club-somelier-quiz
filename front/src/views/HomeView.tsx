@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MainLayout } from '../common/widgets/MainLayout';
 import { WelcomeForm } from '../common/widgets/WelcomeForm';
 import { motion } from 'framer-motion';
 import { useQuestionnaire } from '../api/query/quiz.queries';
+import { useEventByCodeQuery } from '../api/query/events.queries';
 
 interface UserData {
   name: string;
@@ -13,55 +14,75 @@ interface UserData {
 
 export function HomeView() {
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [questionnaireId, setQuestionnaireId] = useState<number | null>(null);
   const navigate = useNavigate();
-  const { questionnaireId } = useParams<{ questionnaireId: string }>();
+  const { questionnaireId: eventCode } = useParams<{ questionnaireId: string }>();
   
-  const numericQuestionnaireId = questionnaireId ? parseInt(questionnaireId, 10) : null;
-  const { data: questionnaire, isLoading: questionnaireLoading, error: questionnaireError } = useQuestionnaire(numericQuestionnaireId!);
+  const { 
+    data: eventData, 
+    isLoading: eventLoading, 
+    error: eventError 
+  } = useEventByCodeQuery(eventCode || null);
 
+  useEffect(() => {
+    if (eventData && eventData.questionnaire_id) {
+      setQuestionnaireId(eventData.questionnaire_id);
+    }
+  }, [eventData]);
+
+  const { 
+    data: questionnaire, 
+    isLoading: questionnaireLoading, 
+    error: questionnaireError 
+  } = useQuestionnaire(questionnaireId!);
+
+  const formatEventDate = (dateString?: string) => {
+    if (!dateString) return '';
+    
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('es', {
+      day: '2-digit',
+      month: 'long',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(date);
+  };
+
+
+  
   const handleWelcomeComplete = (data: UserData) => {
     setUserData(data);
     
     navigate('/waiting', { 
       state: { 
         userData: data,
-        questionnaireId: numericQuestionnaireId
+        questionnaireId: questionnaireId,
+        accessCode: eventCode,
+        eventId: eventData?.id
       } 
     });
   };
 
-  if (!questionnaireId) {
+  if (!eventCode) {
     return (
       <MainLayout backgroundVariant="gradient">
-        <div className="min-h-screen flex items-center justify-center p-3 sm:p-4 lg:p-6">
-        
-        </div>
-      </MainLayout>
-    );
-  }
-
-  if (isNaN(parseInt(questionnaireId, 10))) {
-    return (
-      <MainLayout backgroundVariant="gradient">
-        <div className="min-h-screen flex items-center justify-center p-3 sm:p-4 lg:p-6">
-          <div className="w-full max-w-md text-center">
+        <div className="min-h-screen flex items-center justify-center p-4 sm:p-6">
+          <div className="w-full max-w-xs sm:max-w-sm md:max-w-md text-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              className="bg-red-500/10 border border-red-500/20 rounded-2xl p-6 space-y-4"
+              className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl sm:rounded-2xl p-5 sm:p-6 space-y-4"
             >
-              <div className="text-6xl">❌</div>
-              <h1 className="text-xl font-bold text-red-600">
-                ID inválido
+              <div className="text-4xl sm:text-6xl">⚠️</div>
+              <h1 className="text-lg sm:text-xl font-bold text-yellow-600">
+                Código de evento requerido
               </h1>
-              <p className="text-red-600/80">
-                El ID del cuestionario debe ser un número válido.
-                <br />
-                ID recibido: <code className="bg-red-500/20 px-2 py-1 rounded">{questionnaireId}</code>
+              <p className="text-sm sm:text-base text-yellow-600/80">
+                Se requiere un código de evento para acceder al cuestionario.
               </p>
               <button
                 onClick={() => window.history.back()}
-                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                className="w-full sm:w-auto px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors text-sm sm:text-base"
               >
                 Volver atrás
               </button>
@@ -72,26 +93,80 @@ export function HomeView() {
     );
   }
 
-  if (questionnaireError) {
+  if (eventError) {
     return (
       <MainLayout backgroundVariant="gradient">
-        <div className="min-h-screen flex items-center justify-center p-3 sm:p-4 lg:p-6">
-          <div className="w-full max-w-md text-center">
+        <div className="min-h-screen flex items-center justify-center p-4 sm:p-6">
+          <div className="w-full max-w-xs sm:max-w-sm md:max-w-md text-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              className="bg-red-500/10 border border-red-500/20 rounded-2xl p-6 space-y-4"
+              className="bg-red-500/10 border border-red-500/20 rounded-xl sm:rounded-2xl p-5 sm:p-6 space-y-4"
             >
-              <div className="text-6xl">❌</div>
-              <h1 className="text-xl font-bold text-red-600">
-                Cuestionario no encontrado
+              <div className="text-4xl sm:text-6xl">❌</div>
+              <h1 className="text-lg sm:text-xl font-bold text-red-600">
+                Evento no encontrado
               </h1>
-              <p className="text-red-600/80">
-                El cuestionario no existe o no está disponible.
+              <p className="text-sm sm:text-base text-red-600/80">
+                El código de evento '<span className="font-mono font-medium">{eventCode}</span>' no es válido o el evento no está disponible.
               </p>
               <button
                 onClick={() => window.history.back()}
-                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                className="w-full sm:w-auto px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm sm:text-base"
+              >
+                Volver atrás
+              </button>
+            </motion.div>
+          </div>
+        </div>
+      </MainLayout>
+    );
+  }
+
+  if (eventLoading) {
+    return (
+      <MainLayout backgroundVariant="gradient">
+        <div className="min-h-screen flex items-center justify-center p-4 sm:p-6">
+          <div className="w-full max-w-xs sm:max-w-sm md:max-w-md text-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              className="bg-[var(--surface-secondary)]/80 backdrop-blur-sm border border-[var(--border-primary)]/30 rounded-xl sm:rounded-2xl p-5 sm:p-6"
+            >
+              <div className="w-6 h-6 sm:w-8 sm:h-8 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-3 sm:mb-4"></div>
+              <h2 className="text-base sm:text-lg font-medium text-[var(--text-primary)]">
+                Verificando evento...
+              </h2>
+              <p className="text-xs sm:text-sm text-[var(--text-secondary)] mt-2">
+                Validando el código: <span className="font-mono font-medium">{eventCode}</span>
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </MainLayout>
+    );
+  }
+
+  if (questionnaireError) {
+    return (
+      <MainLayout backgroundVariant="gradient">
+        <div className="min-h-screen flex items-center justify-center p-4 sm:p-6">
+          <div className="w-full max-w-xs sm:max-w-sm md:max-w-md text-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              className="bg-red-500/10 border border-red-500/20 rounded-xl sm:rounded-2xl p-5 sm:p-6 space-y-4"
+            >
+              <div className="text-4xl sm:text-6xl">❌</div>
+              <h1 className="text-lg sm:text-xl font-bold text-red-600">
+                Cuestionario no encontrado
+              </h1>
+              <p className="text-sm sm:text-base text-red-600/80">
+                El cuestionario asociado a este evento no existe o no está disponible.
+              </p>
+              <button
+                onClick={() => window.history.back()}
+                className="w-full sm:w-auto px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm sm:text-base"
               >
                 Volver atrás
               </button>
@@ -105,7 +180,7 @@ export function HomeView() {
   return (
     <MainLayout backgroundVariant="gradient">
       <div className="min-h-screen flex items-center justify-center p-3 sm:p-4 lg:p-6">
-        <div className="w-full max-w-[340px] sm:max-w-md lg:max-w-lg xl:max-w-xl">
+        <div className="w-full max-w-[320px] sm:max-w-md lg:max-w-lg xl:max-w-xl">
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -120,9 +195,9 @@ export function HomeView() {
             <div className="
               bg-[var(--surface-primary)]/95 
               backdrop-blur-md 
-              rounded-2xl sm:rounded-3xl lg:rounded-3xl
-              p-4 sm:p-6 lg:p-8 xl:p-10
-              shadow-xl sm:shadow-2xl lg:shadow-3xl
+              rounded-2xl sm:rounded-3xl
+              p-4 sm:p-6 lg:p-8
+              shadow-xl sm:shadow-2xl
               border border-[var(--border-primary)]/80
               w-full
               relative
@@ -130,50 +205,53 @@ export function HomeView() {
             ">
               <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-primary)]/5 via-transparent to-[var(--accent-secondary)]/5 rounded-2xl sm:rounded-3xl" />
               
-              <div className="relative z-10">
+              <div className="relative z-10 space-y-4 sm:space-y-6">
                 {questionnaireLoading && (
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-center mb-6 p-4 bg-[var(--surface-secondary)]/50 rounded-xl"
+                    className="text-center p-4 bg-[var(--surface-secondary)]/50 rounded-xl"
                   >
                     <div className="w-4 h-4 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
-                    <p className="text-sm text-[var(--text-secondary)]">
-                      Validando cuestionario...
+                    <p className="text-xs sm:text-sm text-[var(--text-secondary)]">
+                      Cargando información del evento...
                     </p>
                   </motion.div>
                 )}
 
-                {questionnaire && (
+                {questionnaire && eventData && (
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-center mb-6 p-4 bg-[var(--surface-secondary)]/50 rounded-xl space-y-2"
+                    className="rounded-xl overflow-hidden"
                   >
-                    <h2 className="text-lg font-bold text-[var(--text-primary)]">
-                      {questionnaire.title}
-                    </h2>
-                    <p className="text-sm text-[var(--text-secondary)]">
-                      {questionnaire.description}
-                    </p>
-                    <div className="flex items-center justify-center space-x-2 text-xs text-[var(--text-secondary)]">
-                      <span>{questionnaire.questions?.length || 0} preguntas</span>
-                      <span>•</span>
-                      <span>ID: {questionnaire.id}</span>
+                    <div className="text-center p-4 sm:p-5 bg-[var(--surface-secondary)]/50 rounded-t-xl space-y-2 sm:space-y-3">
+                      <h2 className="text-base sm:text-lg md:text-xl font-bold text-[var(--text-primary)] leading-tight">
+                        {eventData.name}
+                      </h2>
+                      <p className="text-xs sm:text-sm text-[var(--text-secondary)] line-clamp-2">
+                        {questionnaire.description}
+                      </p>
                     </div>
                   </motion.div>
                 )}
 
-                {!questionnaireLoading && (
-                  <WelcomeForm 
-                    onComplete={handleWelcomeComplete}
-                    className="w-full"
-                  />
+                {questionnaire && !questionnaireLoading && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    <WelcomeForm 
+                      onComplete={handleWelcomeComplete}
+                      className="w-full"
+                    />
+                  </motion.div>
                 )}
 
                 {questionnaireLoading && (
                   <div className="text-center p-4">
-                    <p className="text-sm text-[var(--text-secondary)]">
+                    <p className="text-xs sm:text-sm text-[var(--text-secondary)]">
                       Esperando validación del cuestionario...
                     </p>
                   </div>

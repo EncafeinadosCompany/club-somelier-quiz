@@ -4,7 +4,6 @@ import {DialogContent,DialogHeader,DialogClose,DialogTitle,DialogFooter} from "@
 import { getCategoryColor, getLevelColor } from "@/common/utils/colors"
 import { FileText} from "lucide-react"
 
- 
   interface QuestionsListModalProps {
     setSelectedQuestion: (question: question | null) => void
     setDetailModalOpen: (open: boolean) => void
