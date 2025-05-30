@@ -1,14 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { 
-  QuizSession, 
-  QuizParticipant, 
-  QuizStatus, 
-  Questionnaire, 
-  QuizSubmission, 
-  QuizResult,
-  UserAnswer,
-  JoinQuizResponse
-} from '../types/quiz.types';
+import { QuizSession, QuizStatus, Questionnaire, QuizSubmission, QuizResult } from '../types/quiz.types';
 import AuthClient from '../client/axios';
 
 const apiClient = new AuthClient();
@@ -20,10 +11,10 @@ export function useQuestionnaire(questionnaireId: number) {
       const response = await apiClient.get<Questionnaire>(`/questionnaires/${questionnaireId}`);
       return response;
     },
-    staleTime: 5 * 60 * 1000, 
+    staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
-    enabled: !!questionnaireId, 
-    retry: 1, 
+    enabled: !!questionnaireId,
+    retry: 1,
   });
 }
 
@@ -36,7 +27,7 @@ export function useQuizStatus(sessionId?: string) {
     },
     enabled: !!sessionId,
     refetchInterval: 3000,
-    retry: false, 
+    retry: false,
   });
 }
 
@@ -56,7 +47,7 @@ export function useStartQuizTest() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (sessionId: string) => {      
+    mutationFn: async (sessionId: string) => {
       const response = await apiClient.post(`/quiz/start-test/${sessionId}`, {
         adminAction: true,
         startedAt: new Date()
@@ -64,16 +55,16 @@ export function useStartQuizTest() {
       return response;
     },
     onSuccess: (data) => {
-      
+
       queryClient.setQueryData(['quiz-status', 'session-1'], (old: QuizStatus | undefined) => ({
         ...old,
         sessionId: 'session-1',
         isActive: true,
         currentQuestion: 1,
         totalQuestions: 10,
-        timeRemaining: 300 
+        timeRemaining: 300
       }));
-      
+
       queryClient.invalidateQueries({ queryKey: ['quiz-status'] });
     },
     onError: (error) => {
@@ -86,7 +77,7 @@ export function useSubmitQuizAnswers() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (submission: Omit<QuizSubmission, 'completedAt'>) => {      
+    mutationFn: async (submission: Omit<QuizSubmission, 'completedAt'>) => {
       const submissionData = {
         ...submission,
         completedAt: new Date()
@@ -95,7 +86,7 @@ export function useSubmitQuizAnswers() {
       const response = await apiClient.post<QuizResult>('/quiz/submit', submissionData);
       return response;
     },
-    onSuccess: (result) => {      
+    onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ['quiz-session'] });
       queryClient.invalidateQueries({ queryKey: ['quiz-status'] });
     },

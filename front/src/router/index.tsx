@@ -1,15 +1,7 @@
 import App from "@/App";
-import {
-    BrowserRouter as Router,
-    Route,
-    Routes,
-    Navigate,
-} from "react-router-dom";
-import RoleRoute from "./roleRoute";
-import { ROLES } from "@/common/utils/Roles";
+import {BrowserRouter as Router,Route,Routes,Navigate} from "react-router-dom";
 import { HomeView } from "@/views/HomeView";
 import { QuestionsView } from "@/views/QuestionsView";
-import { WaitingView } from "@/views/WaitingView";
 import { NotFound } from "@/common/utils/404";
 import Navbar from "@/common/widgets/nav_widget";
 import HomeCuestion from "@/views/cuestions-view";
@@ -18,13 +10,14 @@ import { useAppLoading } from "@/common/hooks/useAppLoading";
 import { Suspense } from "react";
 import QuestionnaireDetailPage from "@/views/questionnaire-details.page";
 import EventView from "@/views/events-view";
-import AnimatedBackground from "@/common/atoms/animated-background";
 import HomeQuestionsView from "@/views/questions-view";
 import { WaitingViewTest } from "@/views/waiting-room.test.view";
 import QuestionnaireFormView from "@/common/widgets/admin/quetionnaire/form-quetionnaire.widgest";
 import QuestionnaireEditContainer from "@/views/questionnaire.view";
 import AdminControlView from "@/views/admin-control.view";
 import LoginPage from "@/views/login-view";
+import LandingPage from "@/views/landing-view";
+import ContactPage from "@/views/contact-view";
 
 
 
@@ -58,9 +51,15 @@ export default function AuthRoutes() {
                         <Route path="404" element={<NotFound />} />
 
                         <Route index element={<HomeView />} />
-                        <Route path="client/:questionnaireId" element={<HomeView />} />
+        <Route path="client" element={<HomeView />} />
                         <Route path="waiting" element={<WaitingViewTest />} />
                         <Route path="questions" element={<QuestionsView />} />
+
+                        {/* RUTA LANDING AGREGADA */}
+                        <Route path="landing" element={<LandingPage />} />
+                        <Route path="contact" element={<ContactPage />} />
+
+
 
                         {/* LOGIN */}
                         <Route path="login" element={<LoginPage />} />

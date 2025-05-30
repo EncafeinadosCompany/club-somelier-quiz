@@ -4,9 +4,7 @@ import { Nivel } from "../types/nivel.type";
 
 const authClient = new AuthClient();
 
-/**
- * Hook to fetch all niveles (levels)
- */
+
 export const useNivelesQuery = () => {
   return useQuery<Nivel[], Error>({
     queryKey: ['niveles'],
@@ -14,7 +12,6 @@ export const useNivelesQuery = () => {
       try {
         const response = await authClient.get<{ niveles: Nivel[] }>('/levels');
         
-        // Check if response has niveles array
         if (!Array.isArray(response)) {
           return [];
         }
@@ -47,7 +44,7 @@ export const useNivelByIDQuery = (id: number | null) => {
         throw error; 
       }
     },
-    enabled: !!id, // Only run the query if an ID is provided
+    enabled: !!id, 
     refetchOnWindowFocus: true,
     retry: 1
   });

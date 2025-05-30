@@ -1,19 +1,17 @@
 import { useMutation } from '@tanstack/react-query';
 import AuthClient from '../client/axios';
 import { RegisterParticipantData, RegisterParticipantResponse } from '../types/participant.type';
+
 const apiClient = new AuthClient();
-
-
-
 
 export function useRegisterParticipant() {
   return useMutation({
-    mutationFn: async ({ 
-      eventCode, 
-      participantData 
-    }: { 
-      eventCode: string; 
-      participantData: RegisterParticipantData 
+    mutationFn: async ({
+      eventCode,
+      participantData
+    }: {
+      eventCode: string;
+      participantData: RegisterParticipantData
     }) => {
       try {
         const response = await apiClient.post<RegisterParticipantResponse>(

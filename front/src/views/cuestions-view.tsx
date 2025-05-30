@@ -5,7 +5,6 @@ import {FileQuestion,Search,Filter,X,} from "lucide-react";
 import { Button } from "@/common/ui/button";
 import { Input } from "@/common/ui/input";
 
-import QuestionsListModal from "@/common/widgets/admin/questions.widget";
 
 import { CategoriesWidget } from "@/common/widgets/admin/categories.widget";
 import {ListQuestionnaires} from "@/api/types/quetionnaire.type";
@@ -21,10 +20,6 @@ export default function HomeCuestion() {
   const [events, setEvents] = useState<Event[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
-
-  //QUESTION MODAL
-  const [isQuestionsListModalOpen, setQuestionsListModalOpen] = useState(false);
-  const [isCreateQuestionModalOpen, setIsCreateQuestionModalOpen] = useState(false);
 
   //QUESTIONS
   const { data, isLoading, isError } = useQuestionnaireQuery();
@@ -203,13 +198,6 @@ export default function HomeCuestion() {
           </div>
         </div>
       </main>
-
-      <QuestionsListModal
-        isOpen={isQuestionsListModalOpen}
-        onClose={() => setQuestionsListModalOpen(false)}
-      />
-
-    
     </div>
   );
 }

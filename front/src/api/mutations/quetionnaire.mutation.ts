@@ -58,7 +58,7 @@ export const useUpdateQuestionnaireMutation = () => {
     return useMutation< GetQuestionnaire, Error, UpdateQuestionnaireData>({
         mutationFn: async ({ id, data }): Promise< GetQuestionnaire> => {
             try {
-                const response: AxiosResponse< GetQuestionnaire> = await authClient.put(`/questionnaires/${id}`, data);
+                const response: AxiosResponse< GetQuestionnaire> = await authClient.patch(`/questionnaires/${id}`, data);
                 return response.data;
             } catch (error: any) {
                 throw error;
