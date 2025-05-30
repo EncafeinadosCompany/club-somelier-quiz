@@ -45,14 +45,15 @@ function SuspenseLoader() {
 export default function AuthRoutes() {
     return (
         <Router>
-            <Suspense fallback={<SuspenseLoader />}>                <Routes>
+            <Suspense fallback={<SuspenseLoader />}>
+                <Routes>
                     <Route path="/" element={<AppWithLoading />}>
                         <Route path="404" element={<NotFound />} />
-                        <Route index element={<HomeView />} />
-                        <Route path="client" element={<HomeView />} />
+                        
+                        <Route index element={<HomeView />} />             
+                        <Route path="client/:questionnaireId" element={<HomeView />} />                        
                         <Route path="waiting" element={<WaitingView />} />
-                        <Route path="questions" element={<QuestionsView />} />
-    
+                        <Route path="questions" element={<QuestionsView />} />   
                         <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}>
                             <Route path="admin" element={<Navbar />}>
                                 <Route index element={<HomeCuestion />} />
@@ -60,9 +61,9 @@ export default function AuthRoutes() {
                         </Route>
                     </Route>
 
-                <Route path="*" element={<Navigate to="/404" replace />} />
-            </Routes>
-        </Suspense>
-    </Router >
-  );
+                    <Route path="*" element={<Navigate to="/404" replace />} />
+                </Routes>
+            </Suspense>
+        </Router>
+    );
 }

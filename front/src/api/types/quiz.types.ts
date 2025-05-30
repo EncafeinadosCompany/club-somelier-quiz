@@ -22,3 +22,50 @@ export interface QuizStatus {
   totalQuestions?: number;
   timeRemaining?: number;
 }
+
+export interface QuestionnaireQuestion {
+  id: number;
+  question: string;
+  response: boolean;
+  position: number;
+  levelName: string;
+}
+
+export interface Questionnaire {
+  id: number;
+  title: string;
+  description: string;
+  questions: QuestionnaireQuestion[];
+}
+
+export interface QuestionnaireResponse {
+  questionnaire: Questionnaire;
+}
+
+export interface UserAnswer {
+  questionId: number;
+  answer: boolean;
+  correct?: boolean;
+}
+
+export interface QuizSubmission {
+  participantId: string;
+  questionnaireId: number;
+  answers: UserAnswer[];
+  completedAt: Date;
+}
+
+export interface QuizResult {
+  participantId: string;
+  questionnaireId: number;
+  score: number;
+  totalQuestions: number;
+  percentage: number;
+  answers: UserAnswer[];
+}
+
+export interface JoinQuizResponse {
+  participantId: string;
+  sessionId: string;
+  status: string;
+}
