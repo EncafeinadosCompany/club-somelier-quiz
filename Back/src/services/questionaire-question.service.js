@@ -10,6 +10,24 @@ class QuetionnaireQuestionService {
     this.questionRepository = new questionRepository();
   }
 
+  async findByQuestionnaireId(questionnaireId) {
+    const questionnaire =
+      await this.questionnaireRepository.findById(questionnaireId);
+
+    if (!questionnaire) {
+      const error = new Error("Questionnaire no found");
+      error.status = 404;
+      throw error;
+    }
+
+    const questions =
+      await this.questionnaireQuestionRepository.findByQuestionnaireId(
+        questionnaireId
+      );
+
+    return questions;
+  }
+
   async deleteQuestionnaireQuestion(questionnaireId, questionId) {
     const questionnaire =
       await this.questionnaireRepository.findById(questionnaireId);
