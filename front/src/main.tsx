@@ -14,7 +14,7 @@ import AuthRoutes from './router';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1 * 60 * 1000, 
+      staleTime: 2 * 60 * 1000, 
       gcTime: 5 * 60 * 1000,    
     },
   },
@@ -25,7 +25,7 @@ createRoot(document.getElementById('root')!).render(
   <QueryClientProvider client={queryClient}>
     <Toaster  />
     <AuthRoutes />
-    <ReactQueryDevtools initialIsOpen={false} />
+    {/* <ReactQueryDevtools initialIsOpen={false} /> */}
 </QueryClientProvider>
   // </React.StrictMode>
 )
