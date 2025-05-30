@@ -1,17 +1,16 @@
-
 const { Admin } = require("./admin.model");
-const { Participant } = require('./participants.model');
+const { Participant } = require("./participants.model");
 const { Category } = require("./categories.model");
 const { Level } = require("./level.model");
 
 const { Questionnaire } = require("./questionnaire.model");
 const { Question } = require("./question.model");
 const { Event } = require("./event.model");
-const { Answer } = require('./answers.model');
+const { Answer } = require("./answers.model");
 
-const { EventCategory } = require('./event-categories.model');
-const { EventParticipant } = require('./event-participants.model');
-const { EventQuestion } = require('./event-questions.model');
+const { EventCategory } = require("./event-categories.model");
+const { EventParticipant } = require("./event-participants.model");
+const { EventQuestion } = require("./event-questions.model");
 const { QuestionnaireQuestion } = require("./questionnaire-question.model");
 const { QuestionCategory } = require("./question-category.model");
 
@@ -24,13 +23,17 @@ Questionnaire.belongsTo(Admin, { foreignKey: "created_by" });
 Questionnaire.hasMany(Event, { foreignKey: "questionnaire_id" });
 Event.belongsTo(Questionnaire, { foreignKey: "questionnaire_id" });
 
-QuestionnaireQuestion.belongsTo(Questionnaire, { foreignKey: "questionnaire_id" });
+QuestionnaireQuestion.belongsTo(Questionnaire, {
+  foreignKey: "questionnaire_id",
+});
 QuestionnaireQuestion.belongsTo(Question, { foreignKey: "question_id" });
 
 QuestionCategory.belongsTo(Question, { foreignKey: "question_id" });
 QuestionCategory.belongsTo(Category, { foreignKey: "category_id" });
 
-Questionnaire.hasMany(QuestionnaireQuestion, { foreignKey: "questionnaire_id" });
+Questionnaire.hasMany(QuestionnaireQuestion, {
+  foreignKey: "questionnaire_id",
+});
 Question.hasMany(QuestionnaireQuestion, { foreignKey: "question_id" });
 //-----------------------------------------------------------------------------------------
 
@@ -65,33 +68,32 @@ Participant.hasMany(EventParticipant, { foreignKey: "participant_id" });
 EventParticipant.belongsTo(Event, { foreignKey: "event_id" });
 EventParticipant.belongsTo(Participant, { foreignKey: "participant_id" });
 
-
 Event.belongsToMany(Category, {
-    through: EventCategory,
-    foreignKey: 'event_id',
-    otherKey: 'category_id',
-    as: 'categories',
+  through: EventCategory,
+  foreignKey: "event_id",
+  otherKey: "category_id",
+  as: "categories",
 });
 
 Category.belongsToMany(Event, {
-    through: EventCategory,
-    foreignKey: 'category_id',
-    otherKey: 'event_id',
-    as: 'events',
+  through: EventCategory,
+  foreignKey: "category_id",
+  otherKey: "event_id",
+  as: "events",
 });
 
 module.exports = {
-    Admin,
-    Participant,
-    Category,
-    Level,
-    Questionnaire,
-    Question,
-    Event,
-    Answer,
-    QuestionCategory,
-    QuestionnaireQuestion,
-    EventCategory,
-    EventParticipant,
-    EventQuestion
+  Admin,
+  Participant,
+  Category,
+  Level,
+  Questionnaire,
+  Question,
+  Event,
+  Answer,
+  QuestionCategory,
+  QuestionnaireQuestion,
+  EventCategory,
+  EventParticipant,
+  EventQuestion,
 };
