@@ -6,48 +6,79 @@ import { SplitTextWelcome } from '../atoms/SplitTextWelcome'
 import { InputField } from '../atoms/InputField'
 import { Button } from '../atoms/Button'
 import { MultiStateBadge, BadgeState } from '../atoms/MultiStateBadge'
+import { useRegisterParticipant } from '@/api/mutations/participant.mutation';
+import {Participant} from '@/api/types/participant.type';
 
-interface UserData {
-  name: string
-  email: string
-  phone: string
-}
 
 interface WelcomeFormProps {
-  onComplete?: (userData: UserData) => void
+  onComplete?: (userData: Participant) => void
   className?: string
+  isRegistering?: boolean 
 }
 
-export function WelcomeForm({ onComplete, className = '' }: WelcomeFormProps) {
+export function WelcomeForm({ 
+  onComplete, 
+  className = '', 
+  isRegistering = false 
+}: WelcomeFormProps) {
   const [currentTab, setCurrentTab] = useState('name')
-  const [userData, setUserData] = useState<UserData>({
+  const [userData, setUserData] = useState<Participant>({
     name: '',
     email: '',
     phone: ''
   })
-  const [errors, setErrors] = useState<Partial<UserData>>({})
+  const [errors, setErrors] = useState<Partial<Participant>>({})
   const [submitState, setSubmitState] = useState<BadgeState>('pending')
 
   const tabs = [
-    { id: 'name', label: 'Nombre', icon: User, field: 'name' as keyof UserData },
-    { id: 'email', label: 'Correo', icon: Mail, field: 'email' as keyof UserData },
-    { id: 'phone', label: 'Teléfono', icon: Phone, field: 'phone' as keyof UserData }
+    { id: 'name', label: 'Nombre', icon: User, field: 'name' as keyof Participant },
+    { id: 'email', label: 'Correo', icon: Mail, field: 'email' as keyof Participant },
+    { id: 'phone', label: 'Teléfono', icon: Phone, field: 'phone' as keyof Participant }
   ]
 
   const currentTabIndex = tabs.findIndex(tab => tab.id === currentTab)
   const isLastTab = currentTabIndex === tabs.length - 1
   const isFirstTab = currentTabIndex === 0
 
-  const validateField = (field: keyof UserData, value: string): string | undefined => {
+  const validateField = (field: keyof Participant, value: string): string | undefined => {
     switch (field) {
       case 'name':
-        return value.length < 2 ? 'El nombre debe tener al menos 2 caracteres' : undefined
+        if (!value.trim()) {
+          return 'El nombre es obligatorio';
+        }
+        if (value.trim().length < 3) {
+          return 'El nombre debe tener al menos 3 caracteres';
+        }
+        return undefined;
+        
       case 'email':
-        return !/\S+@\S+\.\S+/.test(value) ? 'Ingresa un correo válido' : undefined
+        if (!value.trim()) {
+          return 'El correo electrónico es obligatorio';
+        }
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(value)) {
+          return 'Formato de correo electrónico inválido';
+        }
+        return undefined;
+        
       case 'phone':
-        return !/^\+?[\d\s-()]{8,}$/.test(value) ? 'Ingresa un teléfono válido' : undefined
+        if (!value.trim()) {
+          return 'El número de teléfono es obligatorio';
+        }
+
+        const phoneRegex = /^(\+?\d{1,3})?[-.\s]?(\d{3,4})[-.\s]?(\d{3,4})[-.\s]?(\d{0,4})$/;
+        if (!phoneRegex.test(value.replace(/\s+/g, ''))) {
+          return 'Formato de teléfono inválido. Ingresa un número válido';
+        }        
+        const digitsOnly = value.replace(/\D/g, '');
+        if (digitsOnly.length < 8) {
+          return 'El número debe tener al menos 8 dígitos';
+        }
+        
+        return undefined;
+        
       default:
-        return undefined
+        return undefined;
     }
   }
 
@@ -78,13 +109,17 @@ export function WelcomeForm({ onComplete, className = '' }: WelcomeFormProps) {
   const handleSubmit = async () => {
     setSubmitState('loading')
     
-    setTimeout(() => {
-      setSubmitState('success')
+    if (!isRegistering) {
+      setTimeout(() => {
+        setSubmitState('success')
+        onComplete?.(userData)
+      }, 1500)
+    } else {
       onComplete?.(userData)
-    }, 1500)
+    }
   }
 
-  const updateUserData = (field: keyof UserData, value: string) => {
+  const updateUserData = (field: keyof Participant, value: string) => {
     setUserData(prev => ({ ...prev, [field]: value }))
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: undefined }))
@@ -199,16 +234,16 @@ export function WelcomeForm({ onComplete, className = '' }: WelcomeFormProps) {
                       label={tab.label}
                       type={tab.field === 'email' ? 'email' : tab.field === 'phone' ? 'tel' : 'text'}
                       placeholder={
-                        tab.field === 'name' ? 'Tu nombre completo' :
-                        tab.field === 'email' ? 'tu@correo.com' :
-                        '+1 234 567 8900'
+                        tab.field === 'name' ? 'Mínimo 3 caracteres' :
+                        tab.field === 'email' ? 'ejemplo@correo.com' :
+                        'Ej: +57 300 123 4567'
                       }
                       icon={tab.icon}
                       value={userData[tab.field]}
                       onChange={(value) => updateUserData(tab.field, value)}
                       error={errors[tab.field]}
                       required
-                      className="text-base sm:text-lg "
+                      className="text-base sm:text-lg"
                     />
                   </div>
                 </motion.div>
@@ -244,14 +279,15 @@ export function WelcomeForm({ onComplete, className = '' }: WelcomeFormProps) {
         <div className="w-full sm:w-auto order-1 sm:order-2">
           {isLastTab ? (
             <MultiStateBadge
-              state={submitState}
+              state={isRegistering ? 'loading' : submitState}
               text={
+                isRegistering ? 'Registrando...' :
                 submitState === 'pending' ? 'Comenzar' :
                 submitState === 'loading' ? 'Iniciando...' :
                 '¡Listo!'
               }
               onClick={submitState === 'pending' ? handleNext : undefined}
-              disabled={submitState !== 'pending'}
+              disabled={isRegistering || submitState !== 'pending'}
               className="w-full sm:w-auto min-h-[44px] text-base sm:text-lg font-bold"
             />
           ) : (

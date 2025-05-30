@@ -36,7 +36,7 @@ class QuestionnairesRepository {
         {
           model: Category,
           as: "categories",
-          attributes: ["name"],
+          attributes: ["id","name"],
         },
       ],
     });

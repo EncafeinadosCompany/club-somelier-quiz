@@ -23,6 +23,10 @@ import HomeQuestionsView from "@/views/questions-view";
 import { WaitingViewTest } from "@/views/waiting-room.test.view";
 import QuestionnaireFormView from "@/common/widgets/admin/quetionnaire/form-quetionnaire.widgest";
 import QuestionnaireEditContainer from "@/views/questionnaire.view";
+import AdminControlView from "@/views/admin-control.view";
+import LoginPage from "@/views/login-view";
+
+
 
 function AppWithLoading() {
     const { isLoading } = useAppLoading(3000);
@@ -51,12 +55,17 @@ export default function AuthRoutes() {
             <Suspense fallback={<SuspenseLoader />}>
                 <Routes>
                     <Route path="/" element={<AppWithLoading />}>
-                        <Route path="404" element={<AnimatedBackground />} />
+                        <Route path="404" element={<NotFound />} />
 
                         <Route index element={<HomeView />} />
                         <Route path="client/:questionnaireId" element={<HomeView />} />
                         <Route path="waiting" element={<WaitingViewTest />} />
                         <Route path="questions" element={<QuestionsView />} />
+
+                        {/* LOGIN */}
+                        <Route path="login" element={<LoginPage />} />
+
+                        
                         {/* <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}> */}
                         <Route path="admin" element={<Navbar />}>
                             <Route index element={<HomeCuestion />} />
@@ -65,6 +74,7 @@ export default function AuthRoutes() {
                             <Route path="questionnaireDetails" element={<QuestionnaireDetailPage />} />
                             <Route path="questionnaire/create" element={<QuestionnaireFormView />} />
                             <Route path="questionnaire/edit/:id" element={<QuestionnaireEditContainer />} />
+                            <Route path="control" element={<AdminControlView />} />
 
                         </Route>
                         {/* </Route> */}
