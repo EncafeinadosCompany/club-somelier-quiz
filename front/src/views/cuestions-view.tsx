@@ -12,8 +12,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/common/ui/button";
 import { Input } from "@/common/ui/input";
-import EventsListModal from "@/common/molecules/admin/event/events-list-modal.molecule";
-import { Event } from "@/api/types/events.types";
+
 import QuestionsListModal from "@/common/widgets/admin/questions.widget";
 import CreateQuestionModal from "@/common/molecules/admin/Questions/create-question-modal.molecule";
 import { CategoriesWidget } from "@/common/widgets/admin/categories.widget";
@@ -31,12 +30,7 @@ export default function HomeCuestion() {
     []
   );
   const [events, setEvents] = useState<Event[]>([]);
-  const [isCreateEventModalOpen, setIsCreateEventModalOpen] = useState(false);
   const [isEventsListModalOpen, setIsEventsListModalOpen] = useState(false);
-  const [selectedQuestionnaire, setSelectedQuestionnaire] =
-    useState<GetQuestionnaire | null>(null);
-  const [selectedCuestionForEvent, setSelectedQuestionnaireForEvent] =
-    useState<ListQuestionnaires | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
@@ -57,23 +51,7 @@ export default function HomeCuestion() {
 
   console.log("cuestiossssn", data);
 
-  const handleCreateEventFromCuestion = (cuestion: ListQuestionnaires) => {
-    setSelectedQuestionnaireForEvent(cuestion);
-    setIsCreateEventModalOpen(true);
-  };
 
-  const handleCreateEvent = (eventData: Omit<Event, "id">) => {
-    const newEvent: Event = {
-      ...eventData,
-      id: Date.now(), // Simple ID generation
-    };
-    setEvents((prev) => [...prev, newEvent]);
-    setSelectedQuestionnaireForEvent(null);
-  };
-
-  const handleDeleteEvent = (id: number) => {
-    setEvents((prev) => prev.filter((event) => event.id !== id));
-  };
 
   const handleCardClick = (questionnaireId: string) => {
     navigate(`/admin/questionnaireDetails?id=${questionnaireId}`);
@@ -283,13 +261,6 @@ export default function HomeCuestion() {
           </div>
         </div>
       </main>
-
-      <EventsListModal
-        isOpen={isEventsListModalOpen}
-        onClose={() => setIsEventsListModalOpen(false)}
-        events={events}
-        onDeleteEvent={handleDeleteEvent}
-      />
 
       <QuestionsListModal
         isOpen={isQuestionsListModalOpen}
