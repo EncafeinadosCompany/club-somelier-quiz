@@ -22,6 +22,7 @@ import AnimatedBackground from "@/common/atoms/animated-background";
 import HomeQuestionsView from "@/views/questions-view";
 import { WaitingViewTest } from "@/views/waiting-room.test.view";
 import AdminControlView from "@/views/admin-control.view";
+import LoginPage from "@/views/login-view";
 
 function AppWithLoading() {
     const { isLoading } = useAppLoading(3000);
@@ -56,6 +57,11 @@ export default function AuthRoutes() {
                         <Route path="client/:questionnaireId" element={<HomeView />} />
                         <Route path="waiting" element={<WaitingViewTest />} />
                         <Route path="questions" element={<QuestionsView />} />
+
+                        {/* LOGIN */}
+                        <Route path="login" element={<LoginPage />} />
+
+                        
                         {/* <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}> */}
                         <Route path="admin" element={<Navbar />}>
                             <Route index element={<HomeCuestion />} />
