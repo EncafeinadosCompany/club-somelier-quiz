@@ -14,6 +14,10 @@ class LevelRepository {
         return await Level.findByPk(id);
     }
 
+    async findByName(name) {
+        return await Level.findOne({ where: { name } });
+    }
+
 }
 
 module.exports = LevelRepository;

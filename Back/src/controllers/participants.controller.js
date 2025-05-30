@@ -19,12 +19,20 @@ class ParticipantController {
   };
 
   createParticipant = async (req, res) => {
-    const accessCode = req.params.accessCode;
+    try{
+      const accessCode = req.params.accessCode;
     const user = await this.participantService.createParticipant(req.body, accessCode);
     res.status(201).json(user);
 
     if (!user) {
       return res.status(400).json({ error: "Failed to create Partcipant" });
+    }
+
+    }catch (error) {
+      if (error.status === 404) {
+        return res.status(404).json({ message: error.message });
+      }
+      return res.status(500).json({ error: "Internal server error" });
     }
   };
 }

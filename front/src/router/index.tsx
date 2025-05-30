@@ -13,13 +13,13 @@ import { HomeView } from "@/views/HomeView";
 import { QuestionsView } from "@/views/QuestionsView";
 import { WaitingView } from "@/views/WaitingView";
 import { NotFound } from "@/common/utils/404";
-import HomeAdmin from "@/common/widgets/admin/home_admin.widget";
 import Navbar from "@/common/widgets/nav_widget";
 import HomeCuestion from "@/views/cuestions-view";
-import CuestionCard from "@/common/molecules/admin/cuestions/cuestions-card.molecule";
 import { QuizLoader } from "@/common/atoms/QuizLoader";
 import { useAppLoading } from "@/common/hooks/useAppLoading";
 import { Suspense } from "react";
+import { EventView } from "@/views/events-view";
+import { DetailsCuestions } from "@/views/details-view";
 
 function AppWithLoading() {
     const { isLoading } = useAppLoading(3000);
@@ -57,6 +57,8 @@ export default function AuthRoutes() {
                         <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}>
                             <Route path="admin" element={<Navbar />}>
                                 <Route index element={<HomeCuestion />} />
+                                 <Route path="event" element={<EventView />} />
+                                 <Route path="detailsCuestions" element={<DetailsCuestions/>}/>
                             </Route>
                         </Route>
                     </Route>

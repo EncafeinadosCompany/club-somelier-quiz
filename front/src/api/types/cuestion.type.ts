@@ -1,3 +1,4 @@
+
 export interface PostCuestion {
     title: string;
     questions: Number[]
@@ -5,11 +6,20 @@ export interface PostCuestion {
 
 
 export interface GetCuestion {
-    id:number;
+    questionnaires: Cuestion[]
+   
+}
+
+
+
+export interface Cuestion {
+     id:number;
     title: string;
-    categorie: string;
+    categories:  {name:string}[];
     description: string;
 }
+
+
 
 
 

@@ -10,6 +10,9 @@ class LevelController {
       const level = await this.levelService.create(req.body);
       res.status(201).json(level);
     } catch (error) {
+      if (error.status === 409) {
+        return res.status(409).json({ message: error.message });
+      }
       res.status(500).json({ message: 'Error creating level', error });
     }
   }

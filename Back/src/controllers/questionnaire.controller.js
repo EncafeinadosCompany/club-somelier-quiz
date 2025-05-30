@@ -1,4 +1,4 @@
-const {QuestionnaireDTO, ListQuestionnaireDTO} = require("../dtos/questionnaire.dto");
+const { QuestionnaireAndQuestionsDTO, ListQuestionnairesDTO } = require("../dtos/questionnaire.dto");
 const QuestionnaireService = require("../services/questionnaires.service");
 
 class QuestionnaireController {
@@ -9,25 +9,25 @@ class QuestionnaireController {
     getAllQuestionnaires = async (req, res) => {
         try {
             const questionnaires = await this.questionnaireService.findAll();
-            res.json(questionnaires);
+            res.json(new ListQuestionnairesDTO(questionnaires));
         } catch (error) {
-            
+
             res.status(500).json({ error: 'Internal Server Error' });
         }
     }
 
-   getQuestionnaireById = async (req, res) => {
+    getQuestionnaireById = async (req, res) => {
         try {
             const questionnaire = await this.questionnaireService.findById(req.params.id);
-            
+
             if (!questionnaire) {
                 return res.status(404).json({
                     message: 'Questionnaire not found'
                 });
             }
 
-            const formattedQuestionnaire = new QuestionnaireDTO(questionnaire);
-            
+            const formattedQuestionnaire = new QuestionnaireAndQuestionsDTO(questionnaire);
+
             return res.status(200).json(formattedQuestionnaire);
         } catch (error) {
             return res.status(500).json({
