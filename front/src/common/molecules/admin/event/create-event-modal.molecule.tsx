@@ -2,13 +2,14 @@
 
 import React, { useEffect } from "react"
 import { X, Clock, AlarmClock, User } from "lucide-react"
-import { Cuestion } from "@/api/types/cuestion.type"
+
 import { Button } from "@/common/ui/button"
 import { Input } from "@/common/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Form, FormControl, FormField, FormItem, FormLabel,FormMessage} from "@/common/ui/form"
 import { createPostEventSchema, type CreateEventInput,type Event} from "@/api/schemas/event.schema"
+import { GetQuestionnaire } from "@/api/types/quetionnaire.type"
 
 interface EventFormModalProps {
   isOpen: boolean
@@ -16,7 +17,7 @@ interface EventFormModalProps {
  
   initialData?: Event
   isEditing?: boolean
-  selectedCuestion?: Cuestion | null
+  selectedCuestion?: GetQuestionnaire | null
 }
 
 export default function EventFormModal({ 

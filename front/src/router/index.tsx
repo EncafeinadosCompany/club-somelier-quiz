@@ -17,7 +17,7 @@ import { QuizLoader } from "@/common/atoms/QuizLoader";
 import { useAppLoading } from "@/common/hooks/useAppLoading";
 import { Suspense } from "react";
 import { EventView } from "@/views/events-view";
-import { DetailsCuestions } from "@/views/details-view";
+import QuestionnaireDetailPage from "@/views/questionnaire-details.page";
 
 function AppWithLoading() {
     const { isLoading } = useAppLoading(3000);
@@ -52,13 +52,13 @@ export default function AuthRoutes() {
                         <Route path="client/:questionnaireId" element={<HomeView />} />                        
                         <Route path="waiting" element={<WaitingView />} />
                         <Route path="questions" element={<QuestionsView />} />   
-                        <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}>
+                        {/* <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}> */}
                             <Route path="admin" element={<Navbar />}>
                                 <Route index element={<HomeCuestion />} />
                                  <Route path="event" element={<EventView />} />
-                                 <Route path="detailsCuestions" element={<DetailsCuestions/>}/>
+                                <Route path="questionnaireDetails" element={<QuestionnaireDetailPage />} />
                             </Route>
-                        </Route>
+                        {/* </Route> */}
                     </Route>
 
                     <Route path="*" element={<Navigate to="/404" replace />} />
