@@ -5,18 +5,22 @@ import { WelcomeForm } from '../common/widgets/WelcomeForm';
 import { motion } from 'framer-motion';
 import { useQuestionnaire } from '../api/query/quiz.queries';
 import { useEventByCodeQuery } from '../api/query/events.queries';
-
-interface UserData {
-  name: string;
-  email: string;
-  phone: string;
-}
+import { useRegisterParticipant } from '../api/mutations/participant.mutation';
+import { Participant } from '../api/types/participant.type';
 
 export function HomeView() {
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [userData, setUserData] = useState<Participant | null>(null);
   const [questionnaireId, setQuestionnaireId] = useState<number | null>(null);
+  const [backendErrorMessage, setBackendErrorMessage] = useState<string>('');
   const navigate = useNavigate();
   const { questionnaireId: eventCode } = useParams<{ questionnaireId: string }>();
+  
+  const { 
+    mutate: registerParticipant, 
+    isPending: isRegistering, 
+    isError: registrationError,
+    error: registrationErrorData
+  } = useRegisterParticipant();
   
   const { 
     data: eventData, 
@@ -48,17 +52,60 @@ export function HomeView() {
     }).format(date);
   };
 
-  const handleWelcomeComplete = (data: UserData) => {
+  const handleWelcomeComplete = (data: Participant) => {
     setUserData(data);
     
-    navigate('/waiting', { 
-      state: { 
-        userData: data,
-        questionnaireId: questionnaireId,
-        accessCode: eventCode,
-        eventId: eventData?.id
-      } 
-    });
+    if (!eventCode) return;
+    
+    const participantData = {
+      fullName: data.name.trim(),       
+      email: data.email.trim().toLowerCase(),
+      numberPhone: data.phone.replace(/\s+/g, '')
+    };
+    
+    registerParticipant(
+      { 
+        eventCode, 
+        participantData 
+      },
+      {
+        onSuccess: (response) => {
+          console.log('Participante registrado exitosamente:', response);
+          
+          navigate('/waiting', { 
+            state: { 
+              userData: data,
+              questionnaireId: questionnaireId,
+              accessCode: eventCode,
+              eventId: eventData?.id,
+              participantId: response.id 
+            } 
+          });
+        },
+        onError: (error: any) => {
+          console.error('Error al registrar participante:', error);
+          
+          if (error.response?.data?.errors) {
+            const backendErrors = error.response.data.errors;
+            
+            const errorMessages = backendErrors.map((err: any) => {
+              switch (err.param) {
+                case 'fullName': 
+                  return `Nombre: ${err.msg}`;
+                case 'email':
+                  return `Correo: ${err.msg}`;
+                case 'numberPhone':
+                  return `Teléfono: ${err.msg}`;
+                default:
+                  return err.msg;
+              }
+            }).join('. ');
+            
+            setBackendErrorMessage(errorMessages);
+          }
+        }
+      }
+    );
   };
 
   if (!eventCode) {
@@ -239,11 +286,33 @@ export function HomeView() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
+                    className="pt-2 xs:pt-3 sm:pt-4"
                   >
                     <WelcomeForm 
                       onComplete={handleWelcomeComplete}
                       className="w-full"
+                      isRegistering={isRegistering} 
                     />
+                    
+                    {registrationError && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-xs sm:text-sm text-red-500 text-center"
+                      >
+                        Error al registrar: Por favor intenta nuevamente.
+                      </motion.div>
+                    )}
+
+                    {backendErrorMessage && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-xs sm:text-sm text-red-500 text-center"
+                      >
+                        {backendErrorMessage}
+                      </motion.div>
+                    )}
                   </motion.div>
                 )}
 

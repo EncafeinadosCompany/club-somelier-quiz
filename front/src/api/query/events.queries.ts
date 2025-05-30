@@ -14,7 +14,6 @@ export const useEventsQuery = () => {
       try {
         const response = await authClient.get<{ events: EventDetail[] }>('/events');
         
-        // Check if response has events array
         if (!Array.isArray(response)) {
           return [];
         }
@@ -68,7 +67,7 @@ export const useEventByCodeQuery = (code: string | null) => {
         throw error; 
       }
     },
-    enabled: !!code && code.length > 0, // Only run the query if a valid code is provided
+    enabled: !!code && code.length > 0, 
     retry: 1
   });
 };

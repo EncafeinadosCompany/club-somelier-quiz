@@ -25,7 +25,7 @@ createRoot(document.getElementById('root')!).render(
   <QueryClientProvider client={queryClient}>
     <Toaster  />
     <AuthRoutes />
-    <ReactQueryDevtools initialIsOpen={false} />
+    {/* <ReactQueryDevtools initialIsOpen={false} /> */}
 </QueryClientProvider>
   // </React.StrictMode>
 )

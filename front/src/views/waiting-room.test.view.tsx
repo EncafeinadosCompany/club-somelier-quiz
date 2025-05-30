@@ -155,7 +155,7 @@ export function WaitingViewTest() {
                                             </div>
                                             <div className="flex items-center space-x-1">
                                                 <span>•</span>
-                                                <span>ID: {questionnaire.id}</span>
+                                                <span>Codigo: {accessCode}</span>
                                             </div>
                                         </div>
                                     </motion.div>
