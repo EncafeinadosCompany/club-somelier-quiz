@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import AuthClient from "@/api/client/axios";
-import { Event, EventDetail } from "../types/events.types";
+import {  EventDetail } from "../types/events.types";
 
 const authClient = new AuthClient();
 

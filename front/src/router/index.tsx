@@ -59,6 +59,7 @@ export default function AuthRoutes() {
                                 <Route index element={<HomeCuestion />} />
                                  <Route path="event" element={<EventView />} />
                                 <Route path="questionnaireDetails" element={<QuestionnaireDetailPage />} />
+                                 
                             </Route>
                         {/* </Route> */}
                     </Route>

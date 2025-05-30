@@ -1,14 +1,4 @@
-import { Cuestion } from "./cuestion.type";
-
-export interface Event {
-    id: number;
-    fecha: string;
-    hora: string;
-    nombre: string;
-    descripcion: string;
-    categoria: string;
-}
-
+import { GetQuestionnaire } from "./quetionnaire.type";
 
 export interface PostEvent{
   name: string,
@@ -18,13 +8,6 @@ export interface PostEvent{
 }
 
 
-export interface Questionnaire {
-  id: number;
-  title: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-}
 
 export interface EventDetail {
   id: number;
@@ -36,7 +19,7 @@ export interface EventDetail {
   status: string;
   createdAt: string;
   updatedAt: string;
-  questionnaire?: Cuestion;
+  questionnaire?: GetQuestionnaire;
 }
 
 

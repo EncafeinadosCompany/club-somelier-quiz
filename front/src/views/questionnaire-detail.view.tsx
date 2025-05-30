@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { GetQuestionnaire } from "@/api/types/quetionnaire.type";
 import AnimatedBackground from "@/common/atoms/animated-background";
+import EventFormModal from "@/common/molecules/admin/event/create-event-modal.molecule";
 
 interface QuestionnaireDetailProps {
   useQuestionnaireByIDQuery: (id: string) => {
@@ -30,9 +31,8 @@ export default function QuestionnaireDetail({
   const id = searchParams.get("id");
 
   const [isLoaded, setIsLoaded] = useState(false);
-  const [questionnaire, setQuestionnaire] = useState<GetQuestionnaire | null>(
-    null
-  );
+  const [questionnaire, setQuestionnaire] = useState<GetQuestionnaire | null>(null);
+  const [IsCreateEventModalOpen, setIsCreateEventModalOpen] = useState(false)
   const [draft, setDraft] = useState<GetQuestionnaire | null>(null);
   const [isEditing, setIsEditing] = useState({
     title: false,
@@ -60,7 +60,7 @@ export default function QuestionnaireDetail({
       prev
         ? {
           ...prev,
-          questions: prev.questions.filter((_, i) => i !== idx),
+          questions: (prev.questions ?? []).filter((_, i) => i !== idx),
         }
         : prev
     );
@@ -71,14 +71,14 @@ export default function QuestionnaireDetail({
       id: Date.now(),
       question: "Nueva pregunta",
       response: false,
-      position: draft?.questions.length ?? 0,
+      position: draft?.questions?.length ?? 0,
       levelName: "Nivel 1",
     };
     setDraft((prev) =>
       prev
         ? {
           ...prev,
-          questions: [...prev.questions, newQuestion],
+          questions: [...(prev.questions ?? []), newQuestion],
         }
         : prev
     );
@@ -99,7 +99,7 @@ export default function QuestionnaireDetail({
   };
 
   const getTotalQuestions = () => {
-    return draft?.questions.length ?? 0;
+    return draft?.questions?.length ?? 0;
   };
 
   // Loading state
@@ -121,8 +121,8 @@ export default function QuestionnaireDetail({
 
   return (
 
-    <div className="max-h-[87vh] w-full overflow-y-auto flex flex-col">
-      <div className="flex-1 flex flex-col p-4 sm:p-6 lg:p-8 xl:p-3 min-h-0">
+    <div className="h-full w-full flex flex-col">
+      <div className="flex-1 flex max-h-[90vh]  overflow-y-auto flex-col p-4 sm:p-6 lg:p-8 xl:p-3 min-h-0">
 
         <AnimatedBackground />
 
@@ -230,7 +230,7 @@ export default function QuestionnaireDetail({
           <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-6">
             <div className="space-y-3 sm:space-y-4">
               <AnimatePresence>
-                {draft.questions.map((q, idx) => (
+                {(draft?.questions ?? []).map((q, idx) => (
                   <motion.div
                     key={q.id}
                     initial={{ opacity: 0, x: -20 }}
@@ -306,7 +306,7 @@ export default function QuestionnaireDetail({
                 ))}
               </AnimatePresence>
 
-              {draft.questions.length === 0 && (
+              {(draft.questions ?? []).length === 0 && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -350,7 +350,7 @@ export default function QuestionnaireDetail({
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={handleCreateEvent}
+            onClick={()=> setIsCreateEventModalOpen(true)}
             className="bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold shadow-xl flex items-center justify-center gap-2 sm:gap-3 transition-all duration-300"
           >
             <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -360,6 +360,14 @@ export default function QuestionnaireDetail({
         </motion.div>
 
       </div>
+
+      <EventFormModal
+        isOpen={IsCreateEventModalOpen}
+        onClose={() => {
+          setIsCreateEventModalOpen(false)
+        }}
+        selectedCuestion={draft}
+      />
     </div>
   );
 }
