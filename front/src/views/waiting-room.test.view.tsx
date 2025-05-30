@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { MainLayout } from '../common/widgets/MainLayout';
 import { CheckCircle, AlertCircle, BookOpen, Clock, RefreshCw } from 'lucide-react';
-import { useJoinQuiz, useQuestionnaire } from '../api/query/quiz.queries';
+import { useQuestionnaire } from '../api/query/quiz.queries';
 import { Participant } from '@/api/types/participant.type';
 import { useEventSocket } from '@/common/hooks/useEventSocket';
 
@@ -21,9 +21,6 @@ export function WaitingViewTest() {
 
     /***** local state *****/
     const [participantId, setParticipantId] = useState<string | null>(null);
-    const joinQuiz = useJoinQuiz();
-    const { data: questionnaire, isLoading: questionnaireLoading, error: questionnaireError, refetch } =
-        useQuestionnaire(questionnaireId!);
 
     /***** (1) Redirección temprana si falta info *****/
     useEffect(() => {
@@ -32,33 +29,16 @@ export function WaitingViewTest() {
         }
     }, [userData, questionnaireId, accessCode, navigate]);
 
-    /***** (2) Registrar participante *********/
-    useEffect(() => {
-        if (!userData || !questionnaire || joinQuiz.isPending || participantId) return;
-
-        joinQuiz.mutate(
-            {
-                name: userData.name,
-                email: userData.email,
-                phone: userData.phone,
-                questionnaireId: questionnaire.id
-            },
-            {
-                onSuccess: (res) => {
-                    setParticipantId(res.participantId);
-                    localStorage.setItem('participantId', res.participantId);
-                },
-                onError: () => {
-                    // fallback local (no rompe el flujo)
-                    const tmp = `tmp-${Date.now()}`;
-                    setParticipantId(tmp);
-                },
-            }
-        );
-    }, [userData, questionnaire, accessCode, joinQuiz, participantId]);
+    /* ---------- Cargar estionario ---------- */
+    const {
+        data: questionnaire,
+        isLoading: questionnaireLoading,
+        error: questionnaireError,
+        refetch,
+    } = useQuestionnaire(questionnaireId!);
 
     /***** (3) Conexión al socket una vez tenemos IDs *********/
-     const socket = useEventSocket(accessCode, participantId);
+    const socket = useEventSocket(accessCode, participantId);
 
     /***** (4) Navegar cuando el admin inicie *********/
     useEffect(() => {
@@ -78,11 +58,8 @@ export function WaitingViewTest() {
 
     /***** (5) Indicador de conexión *********/
     const connectionStatus = useMemo(() => {
-        if (joinQuiz.isError) return 'error';
-        if (joinQuiz.isPending || !participantId) return 'connecting';
-        if (socket.connected) return 'connected';
-        return 'disconnected';
-    }, [joinQuiz.isError, joinQuiz.isPending, participantId, socket.connected]);
+        return socket.connected ? 'connected' : 'connecting';
+    }, [socket.connected]);
 
     /***** (6) handlers extras (prueba y recarga cuestionario) *****/
 
@@ -151,12 +128,6 @@ export function WaitingViewTest() {
                                         <>
                                             <div className="w-4 h-4 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin" />
                                             <span className="text-sm text-[var(--text-secondary)]">Conectando...</span>
-                                        </>
-                                    )}
-                                    {connectionStatus === 'error' && (
-                                        <>
-                                            <AlertCircle className="w-4 h-4 text-red-500" />
-                                            <span className="text-sm text-red-600">Error de conexión</span>
                                         </>
                                     )}
                                 </motion.div>
