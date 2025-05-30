@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import AuthClient from "@/api/client/axios";
-import { GetCuestion } from "../types/cuestion.type";
 import { Getcategories } from "../types/categories.type";
 
 

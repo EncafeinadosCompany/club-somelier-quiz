@@ -7,6 +7,15 @@ class QuestionnaireQuestionRepository {
         });
     }
 
+    async deleteByQuestionnaireandQuestion(questionnaireId, questionId) {
+        return await QuestionnaireQuestion.destroy({
+            where: {
+                questionnaire_id: questionnaireId,
+                question_id: questionId
+            },
+        });
+    }
+
 }
 
 module.exports = QuestionnaireQuestionRepository;

@@ -16,6 +16,7 @@ const routerApi = (app) => {
         .use('/participants', require('./participants.routes'))
         .use('/events', require('./event.routes'))
         .use('/admin', require('./admin.routes'))
+        .use('/questionnaire-questions', require('./questionnaire-question.routes'))
     // .use('/questionnaires', require('./questionnaire.routes'))
 
 }
