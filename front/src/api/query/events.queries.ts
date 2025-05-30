@@ -30,7 +30,6 @@ export const useEventsQuery = () => {
 };
 
 /**
- * Hook to fetch a single event by ID
  * @param id The event ID to fetch
  */
 export const useEventByIDQuery = (id: number | null) => {
@@ -42,14 +41,34 @@ export const useEventByIDQuery = (id: number | null) => {
         
         const response = await authClient.get<EventDetail>(`/events/${id}`);
         
-        // Return the response directly as it should be an EventDetail object
         return response;
       } catch (error) {
         throw error; 
       }
     },
-    enabled: !!id, // Only run the query if an ID is provided
+    enabled: !!id, 
     refetchOnWindowFocus: true,
+    retry: 1
+  });
+};
+
+/**
+ * @param code The event access code to fetch
+ */
+export const useEventByCodeQuery = (code: string | null) => {
+  return useQuery<EventDetail, Error>({
+    queryKey: ['event-by-code', code],
+    queryFn: async (): Promise<EventDetail> => {
+      try {
+        if (!code) throw new Error('Event code is required');
+        
+        const response = await authClient.get<EventDetail>(`/events/code/${code}`);
+        return response;
+      } catch (error) {
+        throw error; 
+      }
+    },
+    enabled: !!code && code.length > 0, // Only run the query if a valid code is provided
     retry: 1
   });
 };

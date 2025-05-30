@@ -52,28 +52,6 @@ export function useQuizSession(sessionId?: string) {
   });
 }
 
-export function useJoinQuiz() {
-  const queryClient = useQueryClient();
-  
-  return useMutation<JoinQuizResponse, Error, Omit<QuizParticipant, 'id' | 'joinedAt' | 'status'> & { questionnaireId: number }>({
-    mutationFn: async (participant) => {      
-      const response = await apiClient.post<JoinQuizResponse>('/quiz/join', {
-        name: participant.name,
-        email: participant.email,
-        phone: participant.phone,
-        questionnaireId: participant.questionnaireId
-      });
-    return response;
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['quiz-session'] });
-      queryClient.invalidateQueries({ queryKey: ['quiz-status'] });
-    },
-    onError: (error) => {
-    }
-  });
-}
-
 export function useStartQuizTest() {
   const queryClient = useQueryClient();
 

@@ -60,7 +60,7 @@ export function QuizLoader() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--bg-primary)] p-4">
       <div className="text-center mb-8 sm:mb-12">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[var(--text-primary)] mb-2">
-          ¿Verdad o Mito?
+          ¿Realidad o Mito?
         </h1>
         <p className="text-sm sm:text-base text-[var(--text-secondary)]">
           {currentPhaseData.text}
