@@ -55,7 +55,7 @@ export function HomeView() {
       state: { 
         userData: data,
         questionnaireId: questionnaireId,
-        eventCode: eventCode,
+        accessCode: eventCode,
         eventId: eventData?.id
       } 
     });
