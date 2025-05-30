@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import { AppBackground } from '../molecules/AppBackground';
-import { ThemeToggle } from '../atoms/ThemeToggle';
+import { AppBackground } from '../../molecules/AppBackground';
+import { ThemeToggle } from '../../atoms/ThemeToggle';
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -9,12 +9,7 @@ interface MainLayoutProps {
   className?: string;
 }
 
-export function MainLayout({ 
-  children, 
-  showThemeToggle = true,
-  backgroundVariant = 'gradient',
-  className = ''
-}: MainLayoutProps) {
+export function MainLayout({ children, showThemeToggle = true, backgroundVariant = 'gradient', className = '' }: MainLayoutProps) {
   return (
     <AppBackground variant={backgroundVariant}>
       <div className={`relative  flex flex-col  min-h-[100dvh] ${className}`}>
@@ -23,8 +18,8 @@ export function MainLayout({
             <ThemeToggle size="md" />
           </header>
         )}
-        
-        <main   className={`flex-1 flex flex-col w-full `}>
+
+        <main className={`flex-1 flex flex-col w-full `}>
           <div className="pt-safe-area-inset-top pb-safe-area-inset-bottom">
             {children}
           </div>

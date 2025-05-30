@@ -3,7 +3,7 @@ import {BrowserRouter as Router,Route,Routes,Navigate} from "react-router-dom";
 import { HomeView } from "@/views/HomeView";
 import { QuestionsView } from "@/views/QuestionsView";
 import { NotFound } from "@/common/utils/404";
-import Navbar from "@/common/widgets/nav_widget";
+import Navbar from "@/common/widgets/admin/nav_widget";
 import HomeCuestion from "@/views/cuestions-view";
 import { QuizLoader } from "@/common/atoms/QuizLoader";
 import { useAppLoading } from "@/common/hooks/useAppLoading";

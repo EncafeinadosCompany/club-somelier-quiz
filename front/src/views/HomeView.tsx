@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { MainLayout } from '../common/widgets/MainLayout';
-import { WelcomeForm } from '../common/widgets/WelcomeForm';
+import { MainLayout } from '../common/widgets/clients/main-layout.widget';
+import { WelcomeForm } from '../common/widgets/clients/welcome-form.widget';
 import { motion } from 'framer-motion';
 import { useQuestionnaire } from '../api/query/quiz.queries';
 import { useEventByCodeQuery } from '../api/query/events.queries';

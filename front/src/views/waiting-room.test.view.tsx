@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { MainLayout } from '../common/widgets/MainLayout';
+import { MainLayout } from '../common/widgets/clients/main-layout.widget';
 import { CheckCircle, AlertCircle, BookOpen, Clock, RefreshCw } from 'lucide-react';
 import { useQuestionnaire } from '../api/query/quiz.queries';
 import { Participant } from '@/api/types/participant.type';

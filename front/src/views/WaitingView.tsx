@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { MainLayout } from '../common/widgets/MainLayout';
+import { MainLayout } from '../common/widgets/clients/main-layout.widget';
 import { Play, CheckCircle, AlertCircle, BookOpen, Clock, RefreshCw } from 'lucide-react';
 import { useQuizStatus,  useStartQuizTest, useQuestionnaire } from '../api/query/quiz.queries';
 

@@ -5,7 +5,7 @@ import { Button } from "@/common/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/common/ui/card"
 import { Input } from "@/common/ui/input"
 import { Label } from "@/common/ui/label"
-import { MainLayout } from '../common/widgets/MainLayout'
+import { MainLayout } from '../common/widgets/clients/main-layout.widget'
 import { Eye, EyeOff, User, Lock } from "lucide-react"
 
 export default function LoginPage() {

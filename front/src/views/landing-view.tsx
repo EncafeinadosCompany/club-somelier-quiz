@@ -1,6 +1,6 @@
 import { Button } from "@/common/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/common/ui/card"
-import { MainLayout } from "@/common/widgets/MainLayout"
+import { MainLayout } from "@/common/widgets/clients/main-layout.widget"
 import { Calendar, Clock, MapPin, ChevronRight, ChevronLeft, User } from "lucide-react"
 import Link from "next/link"
 

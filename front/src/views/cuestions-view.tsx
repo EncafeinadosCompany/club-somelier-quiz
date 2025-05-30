@@ -4,9 +4,10 @@ import { useState, useEffect, useMemo } from "react";
 import {FileQuestion,Search,Filter,X,} from "lucide-react";
 import { Button } from "@/common/ui/button";
 import { Input } from "@/common/ui/input";
+import clubSomelier from '@/assets/clubSomelier.png'
 
 
-import { CategoriesWidget } from "@/common/widgets/admin/categories.widget";
+import { CategoriesWidget } from "@/common/widgets/admin/quetionnaire/categories.widget";
 import {ListQuestionnaires} from "@/api/types/quetionnaire.type";
 import { useQuestionnaireQuery } from "@/api/query/cuestions.queries";
 import QuestionnaireCard from "@/common/molecules/admin/questionnaires/questionnaire-card.molecule";

@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import * as Tabs from '@radix-ui/react-tabs'
 import { User, Mail, Phone, ArrowRight, ArrowLeft } from 'lucide-react'
-import { SplitTextWelcome } from '../atoms/SplitTextWelcome'
-import { InputField } from '../atoms/InputField'
-import { Button } from '../atoms/Button'
-import { MultiStateBadge, BadgeState } from '../atoms/MultiStateBadge'
+import { SplitTextWelcome } from '../../atoms/SplitTextWelcome'
+import { InputField } from '../../atoms/InputField'
+import { Button } from '../../atoms/Button'
+import { MultiStateBadge, BadgeState } from '../../atoms/MultiStateBadge'
 import { useRegisterParticipant } from '@/api/mutations/participant.mutation';
 import {Participant} from '@/api/types/participant.type';
 

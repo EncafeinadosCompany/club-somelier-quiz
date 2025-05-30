@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
-import { NavGeneral } from "../molecules/nav/nav.molecule"
+import { NavGeneral } from "../../molecules/nav/nav.molecule"
 import { NavItemType } from "@/api/types/nav.types"
-import { navAdmin } from "../utils/nav_admin"
+import { navAdmin } from "../../utils/nav_admin"
 
 export type NavItem = {
   navItems?: NavItemType[]

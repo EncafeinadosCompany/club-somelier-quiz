@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { MainLayout } from '../common/widgets/MainLayout';
+import { MainLayout } from '../common/widgets/clients/main-layout.widget';
 import { QuestionCard } from '../common/atoms/QuestionCard';
 import { AnswerButtons } from '../common/molecules/AnswerButtons';
 import { useQuestionnaire, useSubmitQuizAnswers } from '../api/query/quiz.queries';
