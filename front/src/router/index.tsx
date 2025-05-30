@@ -19,6 +19,7 @@ import { QuizLoader } from "@/common/atoms/QuizLoader";
 import { useAppLoading } from "@/common/hooks/useAppLoading";
 import { Suspense } from "react";
 import { EventView } from "@/views/events-view";
+import { DetailsCuestions } from "@/views/details-view";
 
 function AppWithLoading() {
     const { isLoading } = useAppLoading(3000);
@@ -44,7 +45,7 @@ function SuspenseLoader() {
 export default function AuthRoutes() {
     return (
         <Router>
-            <Suspense fallback={<SuspenseLoader />}>                <Routes>
+            <Suspense fallback={<SuspenseLoader />}><Routes>
                     <Route path="/" element={<AppWithLoading />}>
                         <Route path="404" element={<NotFound />} />
                         <Route index element={<HomeView />} />
@@ -56,6 +57,7 @@ export default function AuthRoutes() {
                             <Route path="admin" element={<Navbar />}>
                                 <Route index element={<HomeCuestion />} />
                                  <Route path="event" element={<EventView />} />
+                                 <Route path="detailsCuestions" element={<DetailsCuestions/>}/>
                             </Route>
                         </Route>
                     </Route>
