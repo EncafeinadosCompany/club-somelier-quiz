@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
-import { Search, Settings, Menu, Calendar, Filter, X, Eye, QrCode, Clock, Link, Copy } from "lucide-react"
+import { Search, Settings, Menu, Calendar, Filter, X, Eye, QrCode, Clock, Link, Copy, Play } from "lucide-react"
 
 import { Button } from "@/common/ui/button"
 import { Input } from "@/common/ui/input"
@@ -13,19 +13,21 @@ import { Card } from "@/common/ui/card"
 import toast from "react-hot-toast"
 import { QRCode } from "@/common/atoms/QRCode"
 import EventFormModal from "@/common/molecules/admin/event/create-event-modal.molecule"
+import { useNavigate } from "react-router-dom"
 
 
 export default function EventsView() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedEventId, setSelectedEventId] = useState<number | null>(null)
-  const [IsCreateEventModalOpen,setIsCreateEventModalOpen]= useState(false)
+  const [IsCreateEventModalOpen, setIsCreateEventModalOpen] = useState(false)
+  const navigate = useNavigate()
   // Fetch all events
   const { data: events = [], isLoading, isError } = useEventsQuery()
-  
+
   // Fetch selected event details
-  const { 
-    data: selectedEvent, 
+  const {
+    data: selectedEvent,
     isLoading: isLoadingDetails,
     isError: isErrorDetails
   } = useEventByIDQuery(selectedEventId)
@@ -39,7 +41,7 @@ export default function EventsView() {
 
   // Filter events by name
   const filteredEvents = useMemo(() => {
-    return events.filter((event) => 
+    return events.filter((event) =>
       event.name.toLowerCase().includes(searchTerm.toLowerCase())
     )
   }, [events, searchTerm])
@@ -49,20 +51,24 @@ export default function EventsView() {
   }
 
   const hasActiveFilters = searchTerm
-  
+
   const copyAccessCode = (code: string) => {
     navigator.clipboard.writeText(code)
     toast.success("El código de acceso ha sido copiado al portapapeles")
   }
 
   const getStatusColor = (status: string) => {
-    switch(status?.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case 'active': return 'bg-green-500'
       case 'completed': return 'bg-blue-500'
       case 'pending': return 'bg-yellow-500'
       case 'cancelled': return 'bg-red-500'
       default: return 'bg-gray-500'
     }
+  }
+
+  const redirect = (code: string) => {
+    navigate(`/admin/control?accessCode=${code}`)
   }
 
   return (
@@ -73,8 +79,6 @@ export default function EventsView() {
         alt="Beautiful mountain landscape"
         className="object-cover absolute h-full w-full"
       />
-
- 
 
       {/* Main Content */}
       <main className="relative h-screen w-full pt-5 flex">
@@ -186,7 +190,7 @@ export default function EventsView() {
                 ))
               ) : filteredEvents.length > 0 ? (
                 filteredEvents.map((event) => (
-                  <div 
+                  <div
                     key={event.id}
                     onClick={() => setSelectedEventId(event.id)}
                     className={`bg-white/10 backdrop-blur-lg rounded-xl border cursor-pointer 
@@ -200,48 +204,59 @@ export default function EventsView() {
                       </Badge>
                     </div>
                     <div className="flex items-center text-white/70 text-sm mb-3">
-                        <Clock className="h-4 w-4 mr-2" />
-                        {event.start_time
-                            ? (() => {
-                                    const date = new Date(event.start_time)
-                                    return (
-                                        <>
-                                            {date.toLocaleDateString()}&nbsp;
-                                            <span className="mx-1">|</span>
-                                            {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                        </>
-                                    )
-                                })()
-                            : 'Hora no especificada'}
+                      <Clock className="h-4 w-4 mr-2" />
+                      {event.start_time
+                        ? (() => {
+                          const date = new Date(event.start_time)
+                          return (
+                            <>
+                              {date.toLocaleDateString()}&nbsp;
+                              <span className="mx-1">|</span>
+                              {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </>
+                          )
+                        })()
+                        : 'Hora no especificada'}
                     </div>
                     <div className="flex items-center text-white/70 text-sm mb-3">
-                        <Clock className="h-4 w-4 mr-2" />
-                        {event.end_time
-                            ? (() => {
-                                    const date = new Date(event.end_time)
-                                    return (
-                                        <>
-                                            {date.toLocaleDateString()}&nbsp;
-                                            <span className="mx-1">|</span>
-                                            {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                        </>
-                                    )
-                                })()
-                            : 'Hora no especificada'}
+                      <Clock className="h-4 w-4 mr-2" />
+                      {event.end_time
+                        ? (() => {
+                          const date = new Date(event.end_time)
+                          return (
+                            <>
+                              {date.toLocaleDateString()}&nbsp;
+                              <span className="mx-1">|</span>
+                              {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </>
+                          )
+                        })()
+                        : 'Hora no especificada'}
                     </div>
                     <div className="flex mt-3 justify-between">
-                        <Button 
-                        onClick={()=>setIsCreateEventModalOpen(true)}
-                        size="sm" 
-                        variant="outline" 
+                      <Button
+                        onClick={() => setIsCreateEventModalOpen(true)}
+                        size="sm"
+                        variant="outline"
                         className="bg-white/10 border-white/20 text-white"
                       >
                         <Eye className="h-4 w-4 mr-1" />
                         Editar
                       </Button>
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
+
+                      <Button
+                        onClick={() => redirect(event.access_code)}
+                        size="sm"
+                        variant="outline"
+                        className="bg-white/10 border-white/20 text-white"
+                      >
+                        <Play className="h-4 w-4 mr-1" />
+                        Iniciar Evento
+                      </Button>
+                      
+                      <Button
+                        size="sm"
+                        variant="outline"
                         className="bg-white/10 border-white/20 text-white"
                       >
                         <Eye className="h-4 w-4 mr-1" />
@@ -290,8 +305,8 @@ export default function EventsView() {
                     <p className="text-white/80">
                       No se pudo cargar la información del evento. Intente nuevamente.
                     </p>
-                    <Button 
-                      onClick={() => setSelectedEventId(null)} 
+                    <Button
+                      onClick={() => setSelectedEventId(null)}
                       className="mt-4 bg-white/10 hover:bg-white/20 text-white"
                     >
                       Volver a la lista
@@ -320,23 +335,23 @@ export default function EventsView() {
                       Escanea el código QR para acceder al evento o comparte el enlace:
                     </p>
                     <div className="bg-white p-3 rounded-lg w-full mb-3">
-                      <QRCode 
-                      width={500}
-                        url={`/client?code=${selectedEvent.access_code}`} 
-                        
+                      <QRCode
+                        width={500}
+                        url={`/client?code=${selectedEvent.access_code}`}
+
                       />
                     </div>
                     <div className="flex items-center w-full bg-white/10 rounded-lg p-2 mb-2">
                       <Link className="h-4 w-4 text-white/70 mr-2" />
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         value={`${window.location.origin}/client?code=${selectedEvent.access_code}`}
                         className="bg-transparent text-white text-sm flex-1 outline-none"
                         readOnly
                       />
-                      <Button 
-                        size="sm" 
-                        variant="ghost" 
+                      <Button
+                        size="sm"
+                        variant="ghost"
                         className="h-8 px-2 text-white/70 hover:text-white hover:bg-white/10"
                         onClick={() => copyAccessCode(`${window.location.origin}/client?code=${selectedEvent.access_code}`)}
                       >
@@ -348,9 +363,9 @@ export default function EventsView() {
                         <span className="text-white/70 text-sm mr-2">Código de acceso:</span>
                         <span className="text-white font-medium">{selectedEvent.access_code}</span>
                       </div>
-                      <Button 
-                        size="sm" 
-                        variant="ghost" 
+                      <Button
+                        size="sm"
+                        variant="ghost"
                         className="ml-2 h-8 px-2 text-white/70 hover:text-white hover:bg-white/10"
                         onClick={() => copyAccessCode(selectedEvent.access_code)}
                       >
@@ -389,15 +404,15 @@ export default function EventsView() {
           </div>
         </div>
       </main>
-        <EventFormModal
-              isOpen={IsCreateEventModalOpen}
-              onClose={() => {
-                setIsCreateEventModalOpen(false)
-              }}
-              initialData={selectedEvent}
-              isEditing={true}
-              selectedCuestion={selectedEvent?.questionnaire }
-            />
+      <EventFormModal
+        isOpen={IsCreateEventModalOpen}
+        onClose={() => {
+          setIsCreateEventModalOpen(false)
+        }}
+        initialData={selectedEvent}
+        isEditing={true}
+        selectedCuestion={selectedEvent?.questionnaire}
+      />
     </div>
   )
 }

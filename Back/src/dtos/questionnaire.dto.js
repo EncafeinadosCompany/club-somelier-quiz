@@ -20,6 +20,10 @@ class QuestionnaireAndQuestionsDTO {
             position: question.questionnaire_questions.position,
             levelName: question.level.name
         })) || [];
+        this.categories = questionnaire.categories ? questionnaire.categories.map(category => ({
+            id: category.id,
+            name: category.name
+        })) : [];
     }
 }
 

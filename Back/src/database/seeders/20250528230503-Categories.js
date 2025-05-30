@@ -5,28 +5,26 @@ const { CATEGORIE_TABLE } = require('../../models/categories.model');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
+    // Elimina las categorías existentes
+    await queryInterface.bulkDelete(CATEGORIE_TABLE, null, {});
+
+    // Inserta las nuevas categorías individualmente
     return queryInterface.bulkInsert(CATEGORIE_TABLE, [
       {
-        name: 'Cultura General',
-        description: 'Preguntas sobre cultura general',
+        name: 'Carnes',
+        description: 'Preguntas sobre tipos de carnes, orígenes y preparación.',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        name: 'Ciencia y Tecnología',
-        description: 'Preguntas sobre ciencia y tecnología',
+        name: 'Asados',
+        description: 'Preguntas sobre técnicas de asado, condimentos y métodos de cocción a la parrilla.',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        name: 'Historia',
-        description: 'Preguntas sobre historia mundial',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        name: 'Geografía',
-        description: 'Preguntas sobre geografía mundial',
+        name: 'Cortes',
+        description: 'Preguntas sobre cortes de carne, sus características y usos en gastronomía.',
         createdAt: new Date(),
         updatedAt: new Date(),
       }
@@ -34,8 +32,9 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-
-    await queryInterface.bulkDelete(CATEGORIE_TABLE, null, {});
-
+    // Elimina las categorías que se insertaron
+    await queryInterface.bulkDelete(CATEGORIE_TABLE, {
+      name: { [Sequelize.Op.in]: ['Carnes', 'Asados', 'Cortes'] }
+    }, {});
   }
 };

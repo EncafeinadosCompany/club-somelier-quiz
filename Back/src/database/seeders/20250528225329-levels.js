@@ -10,14 +10,14 @@ module.exports = {
       {
         name: 'Nivel 1',
         points: 100,
-        description: 'Pregunta para personas con conocimiento básico',
+        description: 'Especialistas en gastronomía y estudiantes',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         name: 'Nivel 2',
         points: 200,
-        description: 'Pregunta para personas con conocimiento intermedio',
+        description: 'Entendidos en la materia, pero no gastrónomos',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
