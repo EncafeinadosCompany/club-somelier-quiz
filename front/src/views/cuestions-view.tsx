@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react"
 
-import { Search, Settings, Menu, FileQuestion, Filter, X, Calendar, Plus } from "lucide-react"
+import { Search, Settings, Menu, FileQuestion, Filter, X, Calendar, Plus, Book } from "lucide-react"
 import { Cuestion, GetCuestion } from "@/api/types/cuestion.type"
 import { Button } from "@/common/ui/button"
 import { Input } from "@/common/ui/input"
@@ -16,6 +16,7 @@ import QuestionsListModal from "@/common/widgets/admin/questions.widget"
 import CreateQuestionModal from "@/common/molecules/admin/Questions/create-question-modal.molecule"
 import { useCuestionsQuery } from "@/api/query/cuestions.queries"
 import { CategoriesWidget } from "@/common/widgets/admin/categories.widget"
+import EventFormModal from "@/common/molecules/admin/event/create-event-modal.molecule"
 
 
 export default function HomeCuestion() {
@@ -112,7 +113,7 @@ export default function HomeCuestion() {
         style={{ animationDelay: "0.2s" }}
       >
         <div className="flex items-center gap-4">
-          <Menu className="h-6 w-6 text-white" />
+          <Book className="h-6 w-6 text-white" />
           <span className="text-2xl font-semibold text-white drop-shadow-lg">Gestor de Cuestionarios</span>
         </div>
 
@@ -265,7 +266,7 @@ export default function HomeCuestion() {
       </main>
 
       {/* Modals */}
-      <CreateEventModal
+      <EventFormModal
         isOpen={isCreateEventModalOpen}
         onClose={() => {
           setIsCreateEventModalOpen(false)

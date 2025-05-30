@@ -16,7 +16,7 @@ import HomeCuestion from "@/views/cuestions-view";
 import { QuizLoader } from "@/common/atoms/QuizLoader";
 import { useAppLoading } from "@/common/hooks/useAppLoading";
 import { Suspense } from "react";
-import { EventView } from "@/views/events-view";
+import EventView  from "@/views/events-view";
 import { DetailsCuestions } from "@/views/details-view";
 
 function AppWithLoading() {

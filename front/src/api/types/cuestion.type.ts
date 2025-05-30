@@ -7,16 +7,17 @@ export interface PostCuestion {
 
 export interface GetCuestion {
     questionnaires: Cuestion[]
-   
+
 }
 
 
-
 export interface Cuestion {
-     id:number;
+    id: number;
     title: string;
-    categories:  {name:string}[];
+    categories?: { name: string }[];
     description: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 
