@@ -135,8 +135,8 @@ export function WaitingView() {
 
   const isConnected = hasJoined && !joinQuizMutation.isPending;
   const connectionStatus = joinQuizMutation.isError ? 'error' : 
-                          joinQuizMutation.isPending ? 'connecting' : 
-                          isConnected ? 'connected' : 'disconnected';
+  joinQuizMutation.isPending ? 'connecting' : 
+  isConnected ? 'connected' : 'disconnected';
 
   if (!userData || !questionnaireId) {
     return null;
