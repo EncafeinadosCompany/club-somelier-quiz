@@ -16,6 +16,14 @@ class QuestionnaireQuestionRepository {
         });
     }
 
+    async findByQuestionnaireId(questionnaireId) {
+    return await QuestionnaireQuestion.findAll({
+      where: {
+        questionnaire_id: questionnaireId,
+      },
+    });
+  }
+
 }
 
 module.exports = QuestionnaireQuestionRepository;
