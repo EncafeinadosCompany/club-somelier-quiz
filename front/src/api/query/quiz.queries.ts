@@ -11,10 +11,10 @@ export function useQuestionnaire(questionnaireId: number) {
       const response = await apiClient.get<Questionnaire>(`/questionnaires/${questionnaireId}`);
       return response;
     },
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-    enabled: !!questionnaireId,
-    retry: 1,
+    // staleTime: 5 * 60 * 1000,
+    // gcTime: 10 * 60 * 1000,
+    // enabled: !!questionnaireId,
+    // retry: 1,
   });
 }
 
