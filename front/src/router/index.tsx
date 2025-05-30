@@ -21,8 +21,12 @@ import EventView from "@/views/events-view";
 import AnimatedBackground from "@/common/atoms/animated-background";
 import HomeQuestionsView from "@/views/questions-view";
 import { WaitingViewTest } from "@/views/waiting-room.test.view";
+import QuestionnaireFormView from "@/common/widgets/admin/quetionnaire/form-quetionnaire.widgest";
+import QuestionnaireEditContainer from "@/views/questionnaire.view";
 import AdminControlView from "@/views/admin-control.view";
 import LoginPage from "@/views/login-view";
+
+
 
 function AppWithLoading() {
     const { isLoading } = useAppLoading(3000);
@@ -68,6 +72,8 @@ export default function AuthRoutes() {
                             <Route path="event" element={<EventView />} />
                             <Route path="questions" element={<HomeQuestionsView />} />
                             <Route path="questionnaireDetails" element={<QuestionnaireDetailPage />} />
+                            <Route path="questionnaire/create" element={<QuestionnaireFormView />} />
+                            <Route path="questionnaire/edit/:id" element={<QuestionnaireEditContainer />} />
                             <Route path="control" element={<AdminControlView />} />
 
                         </Route>

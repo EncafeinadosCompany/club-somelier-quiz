@@ -12,7 +12,7 @@ import {
     WifiOff
 } from 'lucide-react';
 import { useEventSocketAdmin } from '@/common/hooks/useEventSocket';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import AnimatedBackground from '@/common/atoms/animated-background';
 
 
@@ -21,14 +21,14 @@ export default function AdminControlView() {
     const [searchParams] = useSearchParams();
     const accessCode = searchParams.get("accessCode");
     if (!accessCode) return <div>Error: Código de acceso no proporcionado</div>;
-    
+
     // Estados locales
     const [timeElapsed, setTimeElapsed] = useState(0);
     const [connectedParticipants, setConnectedParticipants] = useState(8);
 
     // Hook del socket
     const {
-        socket,
+        isConnected,
         eventStarted,
         currentQuestion,
         noMoreQuestions,
@@ -56,10 +56,11 @@ export default function AdminControlView() {
         };
     }, [currentQuestion, eventStarted, eventEnded]);
 
-    // Status de conexión
     const connectionStatus = useMemo(() => {
-        return socket.connected ? 'connected' : 'disconnected';
-    }, [socket.connected]);
+        return isConnected ? 'connected' : 'disconnected';
+    }, [isConnected]);
+
+    console.log('Connection status:', connectionStatus);
 
     const formatTime = (seconds: number) => {
         const mins = Math.floor(seconds / 60);
@@ -76,8 +77,8 @@ export default function AdminControlView() {
     const eventStatus = getEventStatus();
 
     return (
-        <div className="min-h-screen p-4">7
-        <AnimatedBackground />
+        <div className="min-h-screen p-4">
+            <AnimatedBackground />
             <div className="max-w-4xl mx-auto space-y-6">
                 {/* Header */}
                 <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">

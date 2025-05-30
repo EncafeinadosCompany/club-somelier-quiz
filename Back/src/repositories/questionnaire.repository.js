@@ -12,6 +12,9 @@ class QuestionnairesRepository {
         {
           model: Question,
           as: "questions",
+          through: {
+            attributes: ["position"],
+          },
           include: [
             {
               model: Level,
@@ -22,7 +25,7 @@ class QuestionnairesRepository {
         },
         {
           model: Category,
-          as: "categories", // Asegúrate que este alias coincide con el definido en tu modelo
+          as: "categories",
           attributes: ["id", "name"],
         },
       ],
@@ -36,7 +39,7 @@ class QuestionnairesRepository {
         {
           model: Category,
           as: "categories",
-          attributes: ["name"],
+          attributes: ["id", "name"],
         },
       ],
     });
