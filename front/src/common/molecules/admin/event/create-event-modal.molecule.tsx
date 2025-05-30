@@ -17,6 +17,7 @@ import {
 } from "@/common/ui/form"
 import { Cuestion } from "@/api/types/cuestion.type"
 import { EventDetail } from "@/api/types/events.types"
+import { GetQuestionnaire } from "@/api/types/quetionnaire.type"
 
 // Define form input type explicitly
 interface EventFormInputs {
@@ -33,7 +34,7 @@ interface EventFormModalProps {
   onClose: () => void
   initialData?: EventDetail
   isEditing?: boolean
-  selectedCuestion?: Cuestion | null
+  selectedCuestion?: GetQuestionnaire | null
 }
 
 

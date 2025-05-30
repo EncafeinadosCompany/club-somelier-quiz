@@ -10,7 +10,6 @@ export interface GetCuestion {
 
 }
 
-
 export interface Cuestion {
     id: number;
     title: string;
@@ -19,7 +18,6 @@ export interface Cuestion {
     createdAt?: string;
     updatedAt?: string;
 }
-
 
 
 
