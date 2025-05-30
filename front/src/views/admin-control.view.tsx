@@ -15,18 +15,14 @@ import { useEventSocketAdmin } from '@/common/hooks/useEventSocket';
 import { useSearchParams } from 'react-router-dom';
 import AnimatedBackground from '@/common/atoms/animated-background';
 
-
 export default function AdminControlView() {
-    // En tu implementación real, obtienes estos datos de useLocation()
     const [searchParams] = useSearchParams();
     const accessCode = searchParams.get("accessCode");
     if (!accessCode) return <div>Error: Código de acceso no proporcionado</div>;
 
-    // Estados locales
     const [timeElapsed, setTimeElapsed] = useState(0);
     const [connectedParticipants, setConnectedParticipants] = useState(8);
 
-    // Hook del socket
     const {
         isConnected,
         eventStarted,
@@ -38,7 +34,6 @@ export default function AdminControlView() {
         endEvent
     } = useEventSocketAdmin(accessCode);
 
-    // Timer para la pregunta actual
     useEffect(() => {
         let interval: string | number | NodeJS.Timeout | undefined;
 
@@ -152,7 +147,8 @@ export default function AdminControlView() {
                                         <CheckCircle className="w-4 h-4 text-green-400" />
                                         <span className="text-green-200 text-sm">Evento en progreso</span>
                                     </div>
-                                    {currentQuestion ? (
+
+                                    {currentQuestion && (
                                         <div className="space-y-2">
                                             <div className="flex items-center justify-between text-sm">
                                                 <span className="text-green-100">
@@ -167,8 +163,6 @@ export default function AdminControlView() {
                                                 {currentQuestion.text}
                                             </p>
                                         </div>
-                                    ) : (
-                                        <p className="text-green-100 text-sm">Listo para mostrar la primera pregunta</p>
                                     )}
                                 </div>
 
@@ -179,9 +173,7 @@ export default function AdminControlView() {
                                             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg hover:shadow-blue-500/25"
                                         >
                                             <SkipForward className="w-5 h-5" />
-                                            <span>
-                                                {currentQuestion ? 'Siguiente Pregunta' : 'Primera Pregunta'}
-                                            </span>
+                                            <span>Siguiente Pregunta</span>
                                         </button>
                                     ) : (
                                         <div className="text-center text-yellow-200 bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-3">
@@ -200,6 +192,7 @@ export default function AdminControlView() {
                                 </div>
                             </div>
                         )}
+
 
                         {eventStatus === 'ended' && (
                             <div className="text-center space-y-4">

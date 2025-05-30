@@ -16,6 +16,8 @@ import QuestionnaireFormView from "@/common/widgets/admin/quetionnaire/form-quet
 import QuestionnaireEditContainer from "@/views/questionnaire.view";
 import AdminControlView from "@/views/admin-control.view";
 import LoginPage from "@/views/login-view";
+import LandingPage from "@/views/landing-view";
+import ContactPage from "@/views/contact-view";
 
 
 
@@ -52,6 +54,12 @@ export default function AuthRoutes() {
         <Route path="client" element={<HomeView />} />
                         <Route path="waiting" element={<WaitingViewTest />} />
                         <Route path="questions" element={<QuestionsView />} />
+
+                        {/* RUTA LANDING AGREGADA */}
+                        <Route path="landing" element={<LandingPage />} />
+                        <Route path="contact" element={<ContactPage />} />
+
+
 
                         {/* LOGIN */}
                         <Route path="login" element={<LoginPage />} />

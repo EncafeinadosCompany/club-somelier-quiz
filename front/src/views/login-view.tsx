@@ -1,12 +1,13 @@
 "use client"
 import type React from "react"
 import { useState } from "react"
+import { Link } from "react-router-dom"
 import { Button } from "@/common/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/common/ui/card"
 import { Input } from "@/common/ui/input"
 import { Label } from "@/common/ui/label"
 import { MainLayout } from '../common/widgets/clients/main-layout.widget'
-import { Eye, EyeOff, User, Lock } from "lucide-react"
+import { Eye, EyeOff, User, Lock, ArrowLeft } from "lucide-react"
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -30,6 +31,20 @@ export default function LoginPage() {
 
   return (
     <MainLayout backgroundVariant="gradient">
+      {/* Botón de regreso */}
+      <div className="absolute top-6 left-6 z-10">
+        <Link to="/landing">
+          <Button
+            variant="outline"
+            size="sm"
+            className="bg-white/10 border-white/20 text-white hover:bg-white/20 hover:border-white/30 backdrop-blur-sm"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Volver
+          </Button>
+        </Link>
+      </div>
+
       <div className="flex items-center justify-center p-4 min-h-screen">
         <Card className="w-full max-w-md shadow-2xl border-0 bg-[var(--surface-primary)]/95 backdrop-blur-sm">
           <CardHeader className="space-y-4 pb-8 pt-8">

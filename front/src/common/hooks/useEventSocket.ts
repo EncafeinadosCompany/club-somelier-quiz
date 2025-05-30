@@ -1,25 +1,74 @@
 import { participantSocket, adminSocket } from "@/api/client/socket";
 import { useEffect, useState } from "react";
 
-export function useEventSocketParticipant(accessCode?: string, participantId?: string | null) {
+export function useEventSocketParticipant(
+    accessCode?: string,
+    participantId?: string | null
+) {
+    const [eventStarted, setEventStarted] = useState(false);
+    const [currentQuestion, setCurrentQuestion] = useState<any>(null);
+    const [answerAck, setAnswerAck] = useState<{ is_correct: boolean; score: number } | null>(null);
+    const [noMoreQuestions, setNoMore] = useState(false);
+    const [eventEnded, setEventEnded] = useState(false);
+    const [results, setResults] = useState<any[]>([]);
+    const [isConnected, setIsConnected] = useState(false);
+
     useEffect(() => {
         if (!accessCode || !participantId) return;
 
         if (!participantSocket.connected) participantSocket.connect();
+        participantSocket.emit("join_event", { accessCode, participantId });
 
-        participantSocket.emit('join_event', { accessCode, participantId });
+        /* listeners ------------ */
+        const onJoined = () => setIsConnected(true);
+        const onStarted = () => setEventStarted(true);
+        const onShow = (q: any) => {
+            setCurrentQuestion(q);
+            setAnswerAck(null);           // limpiamos feedback anterior
+        };
+        const onNoMore = () => setNoMore(true);
+        const onResults = (scores: any[]) => {
+            console.log("🥇 Resultados:", scores);
+            setResults(scores);
+            setEventEnded(true);
+        };
 
-        participantSocket.on('joined_ok', () => {
-            console.log('✅ join_event confirmado');
-        });
+        const onAck = (payload: any) => setAnswerAck(payload);
+
+        participantSocket.on('joined_ok', onJoined);
+        participantSocket.on('event_started', onStarted);
+        participantSocket.on('show_question', onShow);
+        participantSocket.on("no_more_questions", onNoMore);
+        participantSocket.on("event_results", onResults);
+        participantSocket.on('answer_ack', onAck);
 
         return () => {
-            participantSocket.off('joined_ok');
-            participantSocket.disconnect();
+            participantSocket.off('joined_ok', onJoined);
+            participantSocket.off('event_started', onStarted);
+            participantSocket.off('show_question', onShow);
+            participantSocket.off('no_more_questions', onNoMore);
+            participantSocket.off('event_results', onResults);
+            participantSocket.off('answer_ack', onAck);
         };
+
     }, [accessCode, participantId]);
 
-    return participantSocket;
+    /* -------- API que exponemos -------- */
+    const submitAnswer = (questionId: number, answer: boolean) => {
+        participantSocket.emit('submit_answer', { questionId, answer });
+    };
+
+    return {
+        socket: participantSocket,
+        eventStarted,
+        currentQuestion,
+        answerAck,
+        noMoreQuestions,
+        eventEnded,
+        results,
+        isConnected,
+        submitAnswer
+    };
 }
 
 export function useEventSocketAdmin(accessCode: string) {
@@ -38,7 +87,7 @@ export function useEventSocketAdmin(accessCode: string) {
 
         adminSocket.on('connect', () => {
             console.log('🔗 Admin socket conectado:', adminSocket.id);
-            setIsConnected(true); 
+            setIsConnected(true);
             adminSocket.emit('admin:join', { accessCode });
         });
 
@@ -49,7 +98,7 @@ export function useEventSocketAdmin(accessCode: string) {
 
         adminSocket.on('connect_error', (error) => {
             console.error('❌ Error conexión admin:', error);
-            setIsConnected(false); 
+            setIsConnected(false);
         });
 
         adminSocket.on('admin:joined_ok', () => {
@@ -97,6 +146,7 @@ export function useEventSocketAdmin(accessCode: string) {
         console.log('🚀 Starting event:', accessCode);
         if (adminSocket.connected) {
             adminSocket.emit('admin:start_event', { accessCode });
+
         } else {
             console.warn('⚠️ Admin socket no conectado');
         }
