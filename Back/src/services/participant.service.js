@@ -19,7 +19,9 @@ class ParticipantService {
 
   async createParticipant(data, accessCode) {
     let participant;
-    const existingParticipant = await this.participantRepository.findByEmail(data.email);
+    const existingParticipant = await this.participantRepository.findByEmail(
+      data.email
+    );
 
     if (existingParticipant) {
       participant = existingParticipant;
@@ -29,7 +31,12 @@ class ParticipantService {
     }
 
     const event = await this.eventRepository.getByCode(accessCode);
-    if (!event) throw new Error("Event not found");
+
+    if (!event) {
+      const error = new Error("Event no found");
+      error.status = 404; 
+      throw error;
+    }
 
     await this.eventParticipantRepository.create({
       event_id: event.id,
@@ -38,7 +45,6 @@ class ParticipantService {
 
     return participant;
   }
-
 }
 
 module.exports = ParticipantService;
