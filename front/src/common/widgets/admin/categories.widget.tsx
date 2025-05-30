@@ -21,7 +21,7 @@ export const CategoriesWidget = () => {
                 <div className="space-y-2 text-sm">
                     {
                         data && data.length === 0 ?
-                            <p>No hay cateogorías</p>
+                            <p>No hay categorías</p>
                             :
                             data?.map(categorie => (
                                 <div key={categorie.id } className="flex justify-between text-white/80">

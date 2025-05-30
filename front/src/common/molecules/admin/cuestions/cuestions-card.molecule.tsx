@@ -14,16 +14,12 @@ interface CuestionCardProps {
 
 
  
-
-
-
-
 export default function CuestionCard({ cuestion, onCreateEvent, onViewDetails }: CuestionCardProps) {
 
   const navigate = useNavigate()
 
    const handleClick = () => {
-    navigate(`/admin/detailsCuestions?id=${cuestion.id}`, { replace: true })
+    navigate(`/admin/detailsCuestions?id=${cuestion.id}`)
   }
 
   return (

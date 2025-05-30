@@ -37,8 +37,9 @@ export default function CuestionDetailModal({ cuestion, isOpen, onClose, onCreat
           <div className="flex items-center">
             <Tag className="h-5 w-5 mr-3 text-white/60" />
            {
-            cuestion.categories.map((categorie)=>(
-               <span className={`${getCategoryColor(categorie.name)} px-4 py-2 rounded-full text-white font-medium`}>
+            cuestion.categories.map((categorie, index) => (
+
+               <span key={index} className={`${getCategoryColor(categorie.name)} px-4 py-2 rounded-full text-white font-medium`}>
               {categorie.name}
             </span>
             ))

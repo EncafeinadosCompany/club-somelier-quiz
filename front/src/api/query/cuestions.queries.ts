@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import AuthClient from "@/api/client/axios";
-import { Getquestions, question } from "../types/questions.type";
 import { Cuestion, GetCuestion } from "../types/cuestion.type";
 
 
@@ -11,9 +10,7 @@ export const useCuestionsQuery = () => {
     queryKey: ['Cuestions'],
     queryFn: async (): Promise<Cuestion[]> => {
       try {
-        const response = await authClient.get<GetCuestion>('/questionnaires');
-        
-        const questionData = response|| [];
+        const questionData = await authClient.get<GetCuestion>('/questionnaires');
 
         
         if (!Array.isArray(questionData.questionnaires)) {
@@ -29,8 +26,6 @@ export const useCuestionsQuery = () => {
     retry: 1
   });
 };
-
-
 
 export const useCuestionsByIDQuery = () => {
   return useQuery<Cuestion[], Error>({
