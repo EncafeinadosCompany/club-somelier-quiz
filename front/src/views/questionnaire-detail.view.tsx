@@ -11,6 +11,7 @@ import {
   HelpCircle,
 } from "lucide-react";
 import { GetQuestionnaire } from "@/api/types/quetionnaire.type";
+import AnimatedBackground from "@/common/atoms/animated-background";
 
 interface QuestionnaireDetailProps {
   useQuestionnaireByIDQuery: (id: string) => {
@@ -71,7 +72,7 @@ export default function QuestionnaireDetail({
       question: "Nueva pregunta",
       response: false,
       position: draft?.questions.length ?? 0,
-      levelName: "Fácil",
+      levelName: "Nivel 1",
     };
     setDraft((prev) =>
       prev
@@ -119,8 +120,11 @@ export default function QuestionnaireDetail({
   }
 
   return (
-    <div className="h-screen w-full overflow-hidden flex flex-col">
-      <div className="flex-1 flex flex-col p-4 sm:p-6 lg:p-8 xl:p-10 min-h-0">
+
+    <div className="max-h-[87vh] w-full overflow-y-auto flex flex-col">
+      <div className="flex-1 flex flex-col p-4 sm:p-6 lg:p-8 xl:p-3 min-h-0">
+
+        <AnimatedBackground />
 
         {/* Header Card - Fixed */}
         <motion.div
@@ -196,18 +200,18 @@ export default function QuestionnaireDetail({
           className="bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl border border-white/30 mb-4 sm:mb-6 flex-1 flex flex-col min-h-0"
         >
           {/* Questions Header - Fixed */}
-            <div className="h-20 flex flex-col sm:flex-row items-start sm:items-center justify-between sm:p-6 lg:p-6 border-b border-gray-200/50 flex-shrink-0">
+          <div className="h-20 flex flex-col sm:flex-row items-start sm:items-center justify-between sm:p-6 lg:p-6 border-b border-gray-200/50 flex-shrink-0">
             <div>
               <h3 className="text-lg sm:text-xl font-semibold text-gray-800">
-              Preguntas del Cuestionario
+                Preguntas del Cuestionario
               </h3>
-              
+
               {/* Stats moved under the title */}
               <div className="flex items-center gap-1 text-amber-600 mt-1">
-              <HelpCircle className="h-3 w-3" />
-              <span className="text-xs font-medium">
-                {getTotalQuestions()} preguntas
-              </span>
+                <HelpCircle className="h-3 w-3" />
+                <span className="text-xs font-medium">
+                  {getTotalQuestions()} preguntas
+                </span>
               </div>
             </div>
 
@@ -220,7 +224,7 @@ export default function QuestionnaireDetail({
               <Plus className="h-4 w-4 mr-1" />
               <span>Agregar Pregunta</span>
             </motion.button>
-            </div>
+          </div>
 
           {/* Questions List - Scrollable */}
           <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-6">

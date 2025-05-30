@@ -106,6 +106,7 @@ export default function HomeCuestion() {
         alt="Beautiful mountain landscape"
         className="object-cover absolute h-full w-full"
       />
+      
 
       {/* Navigation */}
       <header

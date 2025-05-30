@@ -18,6 +18,7 @@ import { useAppLoading } from "@/common/hooks/useAppLoading";
 import { Suspense } from "react";
 import QuestionnaireDetailPage from "@/views/questionnaire-details.page";
 import EventView  from "@/views/events-view";
+import AnimatedBackground from "@/common/atoms/animated-background";
 
 function AppWithLoading() {
     const { isLoading } = useAppLoading(3000);
@@ -46,7 +47,7 @@ export default function AuthRoutes() {
             <Suspense fallback={<SuspenseLoader />}>
                 <Routes>
                     <Route path="/" element={<AppWithLoading />}>
-                        <Route path="404" element={<NotFound />} />
+                        <Route path="404" element={<AnimatedBackground />} />
                         
                         <Route index element={<HomeView />} />             
                         <Route path="client/:questionnaireId" element={<HomeView />} />                        

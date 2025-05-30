@@ -49,7 +49,7 @@ export default function AnimatedBackground() {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
       {/* Gradiente de fondo principal */}
-      <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50 to-red-50" />
+      <div className="absolute inset-0 bg-gradient-to-br from-amber-600 via-orange-300 to-red-400" />
 
       {/* Gradiente superpuesto para profundidad */}
       <div className="absolute inset-0 bg-gradient-to-t from-amber-100/30 via-transparent to-orange-100/20" />
