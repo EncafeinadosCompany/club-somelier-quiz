@@ -54,7 +54,7 @@ export default function AuthRoutes() {
                         <Route path="404" element={<NotFound />} />
 
                         <Route index element={<HomeView />} />
-                        <Route path="client/:questionnaireId" element={<HomeView />} />
+        <Route path="client" element={<HomeView />} />
                         <Route path="waiting" element={<WaitingViewTest />} />
                         <Route path="questions" element={<QuestionsView />} />
 
