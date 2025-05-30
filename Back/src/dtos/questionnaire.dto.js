@@ -4,6 +4,7 @@ class QuestionnaireDTO {
         this.title = questionnaire.title;
         this.description = questionnaire.description;
         this.categories = questionnaire.categories?.map(category => ({
+            id: category.id,
             name: category.name
         })) || [];
     }
