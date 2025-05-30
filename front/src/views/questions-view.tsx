@@ -20,8 +20,6 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { CheckCircle, XCircle } from "lucide-react"
 import { useNivelesQuery } from "@/api/query/level.queries"
 
-
-
 export default function QuestionsView() {
     const [isLoaded, setIsLoaded] = useState(false)
     const [searchTerm, setSearchTerm] = useState("")
