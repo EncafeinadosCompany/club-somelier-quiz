@@ -18,6 +18,7 @@ import {
 
 import { EventDetail } from "@/api/types/events.types"
 import { GetQuestionnaire } from "@/api/types/quetionnaire.type"
+import { useCreateEventMutation, useUpdateEventMutation } from "@/api/mutations/events.mutation"
 
 // Define form input type explicitly
 interface EventFormInputs {
@@ -46,9 +47,13 @@ export default function EventFormModal({
   selectedCuestion
 }: EventFormModalProps) {
 
+  const { mutateAsync: useCreateEvent } = useCreateEventMutation()
+  const { mutateAsync: useEditEvent } = useUpdateEventMutation()
+
+
   // Define form with explicit type
   const form = useForm<EventFormData>({
-   resolver: zodResolver(eventFormSchema),
+    resolver: zodResolver(eventFormSchema),
     defaultValues: initialData ? {
       name: initialData.name,
       start_date: formatToDateInput(initialData.start_time),
@@ -97,14 +102,30 @@ export default function EventFormModal({
     // Manually transform the data
     const startDateTime = new Date(`${data.start_date}T${data.start_time}`);
     const endDateTime = new Date(`${data.end_date}T${data.end_time}`);
-    
+
     const transformedData = {
+      questionnaire_id: selectedCuestion?.id || 0,
       name: data.name,
       start_time: startDateTime.toISOString(),
       end_time: endDateTime.toISOString()
     };
-    
+
     console.log(transformedData);
+
+    if (isEditing && initialData?.id) {
+
+      console.log('id',initialData.id)
+       useEditEvent({ id: initialData.id, data: transformedData })
+    } else {
+
+      useCreateEvent(transformedData, {
+        onSuccess: (newEvent) => {
+          console.log('Event created:', newEvent);
+          // Additional success handling if needed
+        }
+      });
+    }
+
     onClose();
   };
 
@@ -117,7 +138,7 @@ export default function EventFormModal({
           <h2 className="text-xl font-semibold text-white">
             {isEditing ? "Editar Evento" : "Crear Nuevo Evento"}
           </h2>
-          <button 
+          <button
             onClick={onClose}
             className="text-white/70 hover:text-white transition-colors"
           >
@@ -169,7 +190,7 @@ export default function EventFormModal({
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="start_time"
@@ -213,7 +234,7 @@ export default function EventFormModal({
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="end_time"

@@ -19,6 +19,8 @@ export function HomeView() {
   const numericQuestionnaireId = questionnaireId ? parseInt(questionnaireId, 10) : null;
   const { data: questionnaire, isLoading: questionnaireLoading, error: questionnaireError } = useQuestionnaire(numericQuestionnaireId!);
 
+
+  
   const handleWelcomeComplete = (data: UserData) => {
     setUserData(data);
     

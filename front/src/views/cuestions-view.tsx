@@ -1,25 +1,14 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import {
-  Search,
-  Settings,
-  Menu,
-  FileQuestion,
-  Filter,
-  X,
-  Calendar,
-} from "lucide-react";
+import {FileQuestion,Search,Filter,X,} from "lucide-react";
 import { Button } from "@/common/ui/button";
 import { Input } from "@/common/ui/input";
 
 import QuestionsListModal from "@/common/widgets/admin/questions.widget";
-import CreateQuestionModal from "@/common/molecules/admin/Questions/create-question-modal.molecule";
+
 import { CategoriesWidget } from "@/common/widgets/admin/categories.widget";
-import {
-  GetQuestionnaire,
-  ListQuestionnaires,
-} from "@/api/types/quetionnaire.type";
+import {ListQuestionnaires} from "@/api/types/quetionnaire.type";
 import { useQuestionnaireQuery } from "@/api/query/cuestions.queries";
 import QuestionnaireCard from "@/common/molecules/admin/questionnaires/questionnaire-card.molecule";
 import { useNavigate } from "react-router-dom";
@@ -30,14 +19,12 @@ export default function HomeCuestion() {
     []
   );
   const [events, setEvents] = useState<Event[]>([]);
-  const [isEventsListModalOpen, setIsEventsListModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
   //QUESTION MODAL
   const [isQuestionsListModalOpen, setQuestionsListModalOpen] = useState(false);
-  const [isCreateQuestionModalOpen, setIsCreateQuestionModalOpen] =
-    useState(false);
+  const [isCreateQuestionModalOpen, setIsCreateQuestionModalOpen] = useState(false);
 
   //QUESTIONS
   const { data, isLoading, isError } = useQuestionnaireQuery();
@@ -70,7 +57,8 @@ export default function HomeCuestion() {
     });
   }, [questionnaires, searchTerm]);
 
-  console.log("events", filteredQuestionnaires);
+
+
 
   const clearFilters = () => {
     setSearchTerm("");
@@ -162,26 +150,7 @@ export default function HomeCuestion() {
             {/* Categories */}
             <CategoriesWidget></CategoriesWidget>
 
-            {/* ListQuestionnaires */}
-            <div className="bg-white/10 rounded-xl p-4 border border-white/20">
-              <h4 className="text-white font-medium mb-3">Preguntas</h4>
-              <div className="space-y-2 flex flex-col  text-sm">
-                <Button
-                  onClick={() => setIsCreateQuestionModalOpen(true)}
-                  className="relative"
-                >
-                  <FileQuestion className="absolute left-3 h-6 w-6 mr-3" />
-                  Crear nueva pregunta
-                </Button>
-                <Button
-                  onClick={() => setQuestionsListModalOpen(true)}
-                  className="relative"
-                >
-                  <FileQuestion className="absolute left-3 h-6 w-6 mr-3" />
-                  Ver todas las preguntas
-                </Button>
-              </div>
-            </div>
+            
           </div>
         </div>
 
@@ -240,12 +209,7 @@ export default function HomeCuestion() {
         onClose={() => setQuestionsListModalOpen(false)}
       />
 
-      <CreateQuestionModal
-        isOpen={isCreateQuestionModalOpen}
-        onClose={() => {
-          setIsCreateQuestionModalOpen(false);
-        }}
-      ></CreateQuestionModal>
+    
     </div>
   );
 }

@@ -19,6 +19,7 @@ import { Suspense } from "react";
 import QuestionnaireDetailPage from "@/views/questionnaire-details.page";
 import EventView  from "@/views/events-view";
 import AnimatedBackground from "@/common/atoms/animated-background";
+import HomeQuestionsView from "@/views/questions-view";
 
 function AppWithLoading() {
     const { isLoading } = useAppLoading(3000);
@@ -57,6 +58,7 @@ export default function AuthRoutes() {
                             <Route path="admin" element={<Navbar />}>
                                 <Route index element={<HomeCuestion />} />
                                  <Route path="event" element={<EventView />} />
+                                  <Route path="questions" element={<HomeQuestionsView />} />
                                 <Route path="questionnaireDetails" element={<QuestionnaireDetailPage />} />
                                  
                             </Route>

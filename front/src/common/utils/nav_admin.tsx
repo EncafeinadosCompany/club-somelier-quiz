@@ -11,6 +11,11 @@ export const navAdmin: NavItemType[] = [
     title: "Eventos",
     href: "/admin/event",
     icon: <Book className="h-5" />,
+  },
+    {
+    title: "Preguntas",
+    href: "/admin/questions",
+    icon: <Book className="h-5" />,
   }
 
 
