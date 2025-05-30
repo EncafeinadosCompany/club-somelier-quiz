@@ -1,5 +1,3 @@
-//aqui ira las rutas
-
 import App from "@/App";
 import {
     BrowserRouter as Router,
