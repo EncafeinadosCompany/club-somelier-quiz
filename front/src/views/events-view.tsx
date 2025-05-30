@@ -74,26 +74,10 @@ export default function EventsView() {
         className="object-cover absolute h-full w-full"
       />
 
-      {/* Navigation */}
-      <header
-        className={`absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-8 py-6 opacity-100 ${isLoaded ? "animate-fade-in" : ""}`}
-        style={{ animationDelay: "0.2s" }}
-      >
-        <div className="flex items-center gap-4">
-          <Menu className="h-6 w-6 text-white" />
-          <span className="text-2xl font-semibold text-white drop-shadow-lg">Gestor de Eventos</span>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <Settings className="h-6 w-6 text-white drop-shadow-md cursor-pointer" />
-          <div className="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold shadow-md">
-            U
-          </div>
-        </div>
-      </header>
+ 
 
       {/* Main Content */}
-      <main className="relative h-screen w-full pt-20 flex">
+      <main className="relative h-screen w-full pt-5 flex">
         {/* Sidebar */}
         <div
           className={`w-80 h-full bg-white/10 backdrop-blur-lg p-6 shadow-xl border-r border-white/20 rounded-tr-3xl opacity-100 ${isLoaded ? "animate-fade-in" : ""} flex flex-col`}
@@ -315,7 +299,7 @@ export default function EventsView() {
                   </div>
                 </div>
               ) : selectedEvent ? (
-                <div className="h-full flex flex-col overflow-y-auto">
+                <div className="h-full flex flex-col max-h-[85vh] overflow-y-auto">
                   <div className="flex justify-between items-start mb-6">
                     <h4 className="text-lg font-bold text-white">
                       {selectedEvent.name}

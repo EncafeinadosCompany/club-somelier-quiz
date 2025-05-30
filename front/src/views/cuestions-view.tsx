@@ -2,16 +2,13 @@
 
 import { useState, useEffect, useMemo } from "react"
 
-import { Search, Settings, Menu, FileQuestion, Filter, X, Calendar, Plus, Book } from "lucide-react"
-import { Cuestion, GetCuestion } from "@/api/types/cuestion.type"
+import { Search, FileQuestion, Filter, X} from "lucide-react"
+import { Cuestion } from "@/api/types/cuestion.type"
 import { Button } from "@/common/ui/button"
 import { Input } from "@/common/ui/input"
 import CuestionCard from "@/common/molecules/admin/cuestions/cuestions-card.molecule"
-import CreateEventModal from "@/common/molecules/admin/event/create-event-modal.molecule"
 import CuestionDetailModal from "@/common/molecules/admin/cuestions/cuestions-detail-modal.molecule"
-import EventsListModal from "@/common/molecules/admin/event/events-list-modal.molecule"
-import { Event } from "@/api/types/events.types"
-import { Getquestions, question } from "@/api/types/questions.type"
+
 import QuestionsListModal from "@/common/widgets/admin/questions.widget"
 import CreateQuestionModal from "@/common/molecules/admin/Questions/create-question-modal.molecule"
 import { useCuestionsQuery } from "@/api/query/cuestions.queries"
@@ -58,18 +55,6 @@ export default function HomeCuestion() {
     setIsCreateEventModalOpen(true)
   }
 
-  const handleCreateEvent = (eventData: Omit<Event, "id">) => {
-    const newEvent: Event = {
-      ...eventData,
-      id: Date.now(), // Simple ID generation
-    }
-    setEvents((prev) => [...prev, newEvent])
-    setSelectedCuestionForEvent(null)
-  }
-
-  const handleDeleteEvent = (id: number) => {
-    setEvents((prev) => prev.filter((event) => event.id !== id))
-  }
 
 
 
@@ -107,30 +92,8 @@ export default function HomeCuestion() {
 
       />
 
-      {/* Navigation */}
-      <header
-        className={`absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-8 py-6 opacity-100 ${isLoaded ? "animate-fade-in" : ""}`}
-        style={{ animationDelay: "0.2s" }}
-      >
-        <div className="flex items-center gap-4">
-          <Book className="h-6 w-6 text-white" />
-          <span className="text-2xl font-semibold text-white drop-shadow-lg">Gestor de Cuestionarios</span>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <Button onClick={() => setIsEventsListModalOpen(true)} className="bg-green-500 hover:bg-green-600 text-white">
-            <Calendar className="h-4 w-4 mr-2" />
-            Ver Eventos ({events.length})
-          </Button>
-          <Settings className="h-6 w-6 text-white drop-shadow-md cursor-pointer" />
-          <div className="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold shadow-md">
-            U
-          </div>
-        </div>
-      </header>
-
       {/* Main Content */}
-      <main className="relative h-screen w-full pt-20 flex">
+      <main className="relative h-screen w-full pt-5 flex">
         {/* Sidebar */}
         <div
           className={`w-80 h-full bg-white/10 backdrop-blur-lg p-6 shadow-xl border-r border-white/20 rounded-tr-3xl opacity-100 ${isLoaded ? "animate-fade-in" : ""} flex flex-col`}
@@ -282,14 +245,6 @@ export default function HomeCuestion() {
         onClose={() => setSelectedCuestion(null)}
         onCreateEvent={handleCreateEventFromCuestion}
       />
-
-      <EventsListModal
-        isOpen={isEventsListModalOpen}
-        onClose={() => setIsEventsListModalOpen(false)}
-        events={events}
-        onDeleteEvent={handleDeleteEvent}
-      />
-
 
       <QuestionsListModal
         isOpen={isQuestionsListModalOpen}
