@@ -1,7 +1,11 @@
 const { connectToDatabase, sequelize } = require('./config/connection');
+const { initializeWebSockets } = require('./sockets/index');
 const routerApi = require('./routes/index');
 const express = require('express');
 const cors = require('cors');
+
+const { createServer } = require('http');
+const { Server: SocketServer } = require('socket.io');
 
 require('dotenv').config();
 
@@ -10,7 +14,15 @@ class Server {
     this.app = express();
     this.port = process.env.PORT || 3000;
     this.host = process.env.DB_HOST || 'localhost';
+    this.httpServer = createServer(this.app);
 
+    this.io = new SocketServer(this.httpServer, {
+      cors: {
+        origin: "*"
+      }
+    });
+
+    initializeWebSockets(this.io);
     this.middlewares();
     this.routers();
     this.syncDataBase();
@@ -28,7 +40,8 @@ class Server {
   async syncDataBase() {
     try {
       await connectToDatabase();
-      await sequelize.sync({ force: true });
+      require('./models');
+      await sequelize.sync({ alter: true });
 
     } catch (error) {
       console.error('Error connecting to the database:', error.message);
@@ -37,8 +50,8 @@ class Server {
   }
 
   listen() {
-    this.app.listen(this.port, () => {
-      console.log(`\n🚀 Server running at http://${this.host}:${this.port}`);
+    this.httpServer.listen(this.port, () => {
+      console.log(`\n🚀 Server running at http://${this.host}:${this.port}/api/v1`);
     });
   }
 }

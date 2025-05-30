@@ -3,7 +3,7 @@ const { sequelize } = require('../config/connection');
 
 const CATEGORIE_TABLE = 'categories';
 
-const Category = sequelize.define(CATEGORIES_TABLE, {
+const Category = sequelize.define(CATEGORIE_TABLE, {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -12,13 +12,14 @@ const Category = sequelize.define(CATEGORIES_TABLE, {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: true,
   },
   description: {
     type: DataTypes.STRING,
     allowNull: true
   }
 }, {
-  tableName: CATEGORIES_TABLE,
+  tableName: CATEGORIE_TABLE,
   timestamps: true
 });
 

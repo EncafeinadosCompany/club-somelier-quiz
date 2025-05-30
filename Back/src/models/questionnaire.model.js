@@ -1,7 +1,5 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/connection");
-const {ADMIN_TABLE}= require("../models/admin.model")
-
 
 const QUESTIONNAIRE_TABLE = "questionnaires";
 
@@ -16,14 +14,11 @@ const Questionnaire = sequelize.define(
     title: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
-    created_by: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: ADMIN_TABLE,
-        key: "id",
-      },
-      onDelete: "SET NULL",
+    description: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   },
   {

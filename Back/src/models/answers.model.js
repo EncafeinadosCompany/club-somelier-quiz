@@ -1,10 +1,11 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/connection');
-const {EVENT_TABLE}= require('../models/event.model')
-const {QUESTION_TABLE}= require('../models/question.model')
-
+const { EVENT_TABLE } = require('../models/event.model')
+const { QUESTION_TABLE } = require('../models/question.model');
+const { PARTICIPANT_TABLE } = require('./participants.model');
 
 const ANSWER_TABLE = 'answers';
+
 const Answer = sequelize.define(ANSWER_TABLE, {
     id: {
         type: DataTypes.INTEGER,
@@ -45,9 +46,16 @@ const Answer = sequelize.define(ANSWER_TABLE, {
         type: DataTypes.BOOLEAN,
         allowNull: true,
     },
-    response_time: {
-        type: DataTypes.DATE,
+    is_correct: {
+        type: DataTypes.BOOLEAN,
         allowNull: true,
+        defaultValue: false,
+        comment: 'Indicates if the answer is correct'
+    },
+    response_time: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+        comment: 'Response time in seconds with millisecond precision'
     },
     points_awarded: {
         type: DataTypes.INTEGER,
@@ -56,7 +64,14 @@ const Answer = sequelize.define(ANSWER_TABLE, {
     }
 }, {
     tableName: ANSWER_TABLE,
-    timestamps: true
+    timestamps: true,
+    indexes: [
+        {
+            unique: true,
+            fields: ['event_id', 'question_id', 'participant_id'],
+            name: 'unique_answer_per_participant_event_question'
+        }
+    ]
 });
 
 module.exports = { Answer, ANSWER_TABLE };

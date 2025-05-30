@@ -27,4 +27,3 @@ const connectToDatabase = async () => {
 };
 
 module.exports = { sequelize, connectToDatabase };
-require('../models');

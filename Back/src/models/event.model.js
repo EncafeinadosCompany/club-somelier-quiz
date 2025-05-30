@@ -1,7 +1,6 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/connection");
-const {ADMIN_TABLE}= require("../models/admin.model")
-const {QUESTIONNAIRE_TABLE}= require("../models/questionnaire.model")
+const { QUESTIONNAIRE_TABLE } = require("../models/questionnaire.model")
 
 const EVENT_TABLE = "events";
 
@@ -33,21 +32,18 @@ const Event = sequelize.define(
       onDelete: "CASCADE",
     },
     start_time: {
-        type: DataTypes.DATE,
-        allowNull: false
+      type: DataTypes.DATE,
+      allowNull: true
     },
     end_time: {
-       type: DataTypes.DATE,
-        allowNull: false
+      type: DataTypes.DATE,
+      allowNull: true
     },
-    created_by: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: ADMIN_TABLE,
-        key: "id",
-      },
-    },
+    status: {
+      type: DataTypes.ENUM('draft', 'live', 'closed'),
+      defaultValue: 'draft',
+      allowNull: false
+    }
   },
   {
     tableName: EVENT_TABLE,
@@ -55,4 +51,4 @@ const Event = sequelize.define(
   }
 );
 
-module.exports = {Event, EVENT_TABLE}
+module.exports = { Event, EVENT_TABLE }

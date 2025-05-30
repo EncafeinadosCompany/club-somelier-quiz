@@ -34,7 +34,8 @@ const QuestionnaireQuestion = sequelize.define(
     position: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    },
+      defaultValue: 0,
+    }
   },
   {
     tableName: QUESTIONNAIRE_QUESTION_TABLE,

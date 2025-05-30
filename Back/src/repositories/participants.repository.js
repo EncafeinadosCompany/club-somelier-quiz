@@ -1,31 +1,23 @@
-const { User } = require('../models/user.model');
+const { Participant } = require("../models/participants.model");
 
-class UserRepository {
-    async getAll() {
-        return await User.findAll({
-            include: {
-                model: Role,
-                as: 'role', // debe coincidir con el alias usado en belongsTo()
-                // attributes: ['id', 'name'] // opcional: para traer solo campos específicos
-            },
+class ParticipantsRepository {
+  async getAll() {
+    return await Participant.findAll();
+  }
+
+  async getById(id) {
+    return await Participant.findByPk(id)
+}
+
+  async create(data) {
+    return await Participant.create(data);
+  }
+  async findByEmail(email) {
+        return await Participant.findOne({
+            where: { email }
         });
     }
 
-    async getById(id) {
-        return await User.findByPk(id);
-    }
-
-    async create(data) {
-        return await User.create(data);
-    }
-
-    async update(id, data) {
-        return await User.update(data, { where: { id } });
-    }
-
-    async delete(id) {
-        return await User.destroy({ where: { id } });
-    }
 }
 
-module.exports = UserRepository;
+module.exports = ParticipantsRepository;
