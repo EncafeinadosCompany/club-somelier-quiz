@@ -1,4 +1,3 @@
-import { Getcategories } from "./categories.type";
 
 export interface PostCuestion {
     title: string;
@@ -7,11 +6,20 @@ export interface PostCuestion {
 
 
 export interface GetCuestion {
-    id:number;
+    questionnaires: Cuestion[]
+   
+}
+
+
+
+export interface Cuestion {
+     id:number;
     title: string;
-    categorie:  {name:string}[];
+    categories:  {name:string}[];
     description: string;
 }
+
+
 
 
 

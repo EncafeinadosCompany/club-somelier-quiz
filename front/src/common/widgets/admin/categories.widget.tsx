@@ -6,9 +6,6 @@ export const CategoriesWidget = () => {
 
     const { data } = useCategoriesQuery()
 
-console.log(data)
-
-
         return (
             <div className="bg-white/10 rounded-xl p-4 border border-white/20">
                 <div className="flex justify-between">
@@ -24,7 +21,7 @@ console.log(data)
                 <div className="space-y-2 text-sm">
                     {
                         data && data.length === 0 ?
-                            <p>No hay cateogorías</p>
+                            <p>No hay categorías</p>
                             :
                             data?.map(categorie => (
                                 <div key={categorie.id } className="flex justify-between text-white/80">

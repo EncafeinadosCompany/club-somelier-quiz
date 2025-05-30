@@ -1,33 +1,22 @@
 "use client"
 
-import { GetCuestion } from "@/api/types/cuestion.type"
+import { Cuestion } from "@/api/types/cuestion.type"
 import { Button } from "@/common/ui/button"
+import { getCategoryColor } from "@/common/utils/colors"
 import { X, FileText, Tag, Plus } from "lucide-react"
 
 
 interface CuestionDetailModalProps {
-  cuestion: GetCuestion | null
+  cuestion: Cuestion | null
   isOpen: boolean
   onClose: () => void
-  onCreateEvent: (cuestion: GetCuestion) => void
+  onCreateEvent: (cuestion: Cuestion) => void
 }
 
 export default function CuestionDetailModal({ cuestion, isOpen, onClose, onCreateEvent }: CuestionDetailModalProps) {
   if (!isOpen || !cuestion) return null
 
-  const getCategoryColor = (categorie: string) => {
-    const colors = {
-      trabajo: "bg-blue-500",
-      personal: "bg-green-500",
-      educación: "bg-purple-500",
-      salud: "bg-red-500",
-      tecnología: "bg-indigo-500",
-      deporte: "bg-teal-500",
-      entretenimiento: "bg-pink-500",
-      finanzas: "bg-orange-500",
-    }
-    return colors[categorie.toLowerCase() as keyof typeof colors] || "bg-gray-500"
-  }
+
 
   const handleCreateEvent = () => {
     onCreateEvent(cuestion)
@@ -47,9 +36,14 @@ export default function CuestionDetailModal({ cuestion, isOpen, onClose, onCreat
         <div className="space-y-6 mb-8">
           <div className="flex items-center">
             <Tag className="h-5 w-5 mr-3 text-white/60" />
-            <span className={`${getCategoryColor(cuestion.categorie)} px-4 py-2 rounded-full text-white font-medium`}>
-              {cuestion.categorie}
+           {
+            cuestion.categories.map((categorie, index) => (
+
+               <span key={index} className={`${getCategoryColor(categorie.name)} px-4 py-2 rounded-full text-white font-medium`}>
+              {categorie.name}
             </span>
+            ))
+           }
           </div>
 
           <div className="flex items-start">

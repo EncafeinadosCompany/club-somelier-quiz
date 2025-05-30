@@ -1,33 +1,26 @@
 "use client"
 
-import { GetCuestion } from "@/api/types/cuestion.type"
+import { Cuestion } from "@/api/types/cuestion.type"
 import { Button } from "@/common/ui/button"
 import { FileText, Plus } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
 
 interface CuestionCardProps {
-  cuestion: GetCuestion
-  onCreateEvent: (cuestion: GetCuestion) => void
-  onViewDetails: (cuestion: GetCuestion) => void
-}
-
-const getCategoryColor = (categorie: string) => {
-  const colors = {
-    trabajo: "bg-blue-500",
-    personal: "bg-green-500",
-    educación: "bg-purple-500",
-    salud: "bg-red-500",
-    tecnología: "bg-indigo-500",
-    deporte: "bg-teal-500",
-    entretenimiento: "bg-pink-500",
-    finanzas: "bg-orange-500",
-  }
-  return (colors as Record<string, string>)[categorie.toLowerCase()] || "bg-gray-500"
+  cuestion: Cuestion
+  onCreateEvent: (cuestion: Cuestion) => void
+  onViewDetails: (cuestion: Cuestion) => void
 }
 
 
-
+ 
 export default function CuestionCard({ cuestion, onCreateEvent, onViewDetails }: CuestionCardProps) {
+
+  const navigate = useNavigate()
+
+   const handleClick = () => {
+    navigate(`/admin/detailsCuestions?id=${cuestion.id}`)
+  }
 
   return (
     <div className="bg-white/10 backdrop-blur-lg rounded-xl border border-white/20 p-4 sm:p-6 transition-all duration-200 hover:bg-white/20 hover:scale-105 hover:shadow-lg flex flex-col h-full min-h-[280px] max-w-full">
@@ -35,9 +28,9 @@ export default function CuestionCard({ cuestion, onCreateEvent, onViewDetails }:
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
         <h3
           className="text-white font-semibold text-base sm:text-lg leading-tight cursor-pointer hover:text-blue-200 transition-colors flex-1 min-w-0 break-words"
-          onClick={() => onViewDetails(cuestion)}
+          // onClick={() => onViewDetails(cuestion)}
         >
-          {cuestion.title}
+          {cuestion.title} 
         </h3>
         {/* <div
           className={`${getCategoryColor(cuestion.categorie)} px-2 py-1 rounded-full text-xs text-white font-medium self-start sm:self-auto whitespace-nowrap flex-shrink-0`}
@@ -57,7 +50,7 @@ export default function CuestionCard({ cuestion, onCreateEvent, onViewDetails }:
       {/* Buttons */}
       <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-auto">
         <Button
-          onClick={() => onViewDetails(cuestion)}
+          onClick={() => handleClick()}
           variant="outline"
           className="flex-1 bg-white/10 hover:bg-white/20 text-white border-white/20 text-xs sm:text-sm py-2 px-3 min-w-0"
         >

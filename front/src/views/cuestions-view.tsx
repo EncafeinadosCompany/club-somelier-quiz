@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from "react"
 
 import { Search, Settings, Menu, FileQuestion, Filter, X, Calendar, Plus } from "lucide-react"
-import { GetCuestion } from "@/api/types/cuestion.type"
+import { Cuestion, GetCuestion } from "@/api/types/cuestion.type"
 import { Button } from "@/common/ui/button"
 import { Input } from "@/common/ui/input"
 import CuestionCard from "@/common/molecules/admin/cuestions/cuestions-card.molecule"
@@ -20,12 +20,12 @@ import { CategoriesWidget } from "@/common/widgets/admin/categories.widget"
 
 export default function HomeCuestion() {
   const [isLoaded, setIsLoaded] = useState(false)
-  const [cuestions, setCuestions] = useState<GetCuestion[]>([])
+  const [cuestions, setCuestions] = useState<Cuestion[]>([])
   const [events, setEvents] = useState<Event[]>([])
   const [isCreateEventModalOpen, setIsCreateEventModalOpen] = useState(false)
   const [isEventsListModalOpen, setIsEventsListModalOpen] = useState(false)
-  const [selectedCuestion, setSelectedCuestion] = useState<GetCuestion | null>(null)
-  const [selectedCuestionForEvent, setSelectedCuestionForEvent] = useState<GetCuestion | null>(null)
+  const [selectedCuestion, setSelectedCuestion] = useState<Cuestion | null>(null)
+  const [selectedCuestionForEvent, setSelectedCuestionForEvent] = useState<Cuestion | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   
   //QUESTION MODAL
@@ -41,17 +41,6 @@ export default function HomeCuestion() {
     // Aseguramos que isLoaded se establezca a true
     setIsLoaded(true)
 
-    // Sample cuestions
-    const sampleCuestions: GetCuestion[] = [
-      {
-        id: 1,
-        title: "Evaluación de Desempeño Laboral",
-        categorie: [{name:"hola"}],
-        description:
-          "Cuestionario completo para evaluar el rendimiento de los empleados durante el último trimestre. Incluye métricas de productividad, trabajo en equipo y cumplimiento de objetivos.",
-      }
-    ]
-
   
       setCuestions(data || [])
       console.log('ggg', cuestions)
@@ -63,7 +52,7 @@ export default function HomeCuestion() {
   console.log('cuestiossssn', data)
 
 
-  const handleCreateEventFromCuestion = (cuestion: GetCuestion) => {
+  const handleCreateEventFromCuestion = (cuestion: Cuestion) => {
     setSelectedCuestionForEvent(cuestion)
     setIsCreateEventModalOpen(true)
   }
@@ -282,7 +271,7 @@ export default function HomeCuestion() {
           setIsCreateEventModalOpen(false)
           setSelectedCuestionForEvent(null)
         }}
-        onCreateEvent={handleCreateEvent}
+     
         selectedCuestion={selectedCuestionForEvent}
       />
 
