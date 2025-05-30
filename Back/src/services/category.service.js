@@ -14,6 +14,12 @@ class CategoryService {
   }
 
   async createCategory(data) {
+    const existingCategory = await this.categoryRepository.findByName(data.name);
+    if (existingCategory) {
+      const error = new Error('Category with this name already exists');
+      error.status = 409; // Conflict
+      throw error;
+    }
 
     return await this.categoryRepository.create(data);
   }
