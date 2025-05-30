@@ -57,9 +57,13 @@ class QuestionnaireController {
     updateQuestionnaire = async (req, res) => {
         try {
             const updatedQuestionnaire = await this.questionnaireService.update(req.params.id, req.body);
-            if (!updatedQuestionnaire) return res.status(404).json({ error: 'Questionnaire not found' });
-            res.json(updatedQuestionnaire);
+                const questionnaireUpdate= new QuestionnaireAndQuestionsDTO(updatedQuestionnaire)
+                return res.status(200).json(questionnaireUpdate);
+           
         } catch (error) {
+            if (error.status === 404) {
+                return res.status(404).json({ message: error.message });
+            }
             res.status(500).json({ error: 'Internal Server Error' });
         }
     }
