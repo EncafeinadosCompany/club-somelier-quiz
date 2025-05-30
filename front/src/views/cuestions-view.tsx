@@ -55,6 +55,8 @@ export default function HomeCuestion() {
 
   const handleCardClick = (questionnaireId: string) => {
     navigate(`/admin/questionnaireDetails?id=${questionnaireId}`);
+
+    console.log(questionnaireId)
   };
 
   const filteredQuestionnaires = useMemo(() => {
@@ -85,35 +87,6 @@ export default function HomeCuestion() {
         className="object-cover absolute h-full w-full"
       />
       
-
-      {/* Navigation */}
-      <header
-        className={`absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-8 py-6 opacity-100 ${
-          isLoaded ? "animate-fade-in" : ""
-        }`}
-        style={{ animationDelay: "0.2s" }}
-      >
-        <div className="flex items-center gap-4">
-          <Menu className="h-6 w-6 text-white" />
-          <span className="text-2xl font-semibold text-white drop-shadow-lg">
-            Gestor de Cuestionarios
-          </span>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <Button
-            onClick={() => setIsEventsListModalOpen(true)}
-            className="bg-green-500 hover:bg-green-600 text-white"
-          >
-            <Calendar className="h-4 w-4 mr-2" />
-            Ver Eventos ({events.length})
-          </Button>
-          <Settings className="h-6 w-6 text-white drop-shadow-md cursor-pointer" />
-          <div className="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold shadow-md">
-            U
-          </div>
-        </div>
-      </header>
 
       {/* Main Content */}
       <main className="relative h-screen w-full pt-5 flex">

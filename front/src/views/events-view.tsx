@@ -322,7 +322,7 @@ export default function EventsView() {
                     <div className="bg-white p-3 rounded-lg w-full mb-3">
                       <QRCode 
                       width={500}
-                        url={`/client/${selectedEvent.access_code}`} 
+                        url={`/client?code=${selectedEvent.access_code}`} 
                         
                       />
                     </div>
@@ -330,7 +330,7 @@ export default function EventsView() {
                       <Link className="h-4 w-4 text-white/70 mr-2" />
                       <input 
                         type="text" 
-                        value={`${window.location.origin}/client/${selectedEvent.access_code}`}
+                        value={`${window.location.origin}/client?code=${selectedEvent.access_code}`}
                         className="bg-transparent text-white text-sm flex-1 outline-none"
                         readOnly
                       />
@@ -338,7 +338,7 @@ export default function EventsView() {
                         size="sm" 
                         variant="ghost" 
                         className="h-8 px-2 text-white/70 hover:text-white hover:bg-white/10"
-                        onClick={() => copyAccessCode(`${window.location.origin}/client/${selectedEvent.access_code}`)}
+                        onClick={() => copyAccessCode(`${window.location.origin}/client?code=${selectedEvent.access_code}`)}
                       >
                         <Copy className="h-4 w-4" />
                       </Button>
@@ -396,7 +396,7 @@ export default function EventsView() {
               }}
               initialData={selectedEvent}
               isEditing={true}
-              selectedCuestion={selectedEvent?.questionnaire}
+              selectedCuestion={selectedEvent?.questionnaire }
             />
     </div>
   )

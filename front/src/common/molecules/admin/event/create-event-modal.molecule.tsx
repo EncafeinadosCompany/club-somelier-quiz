@@ -15,7 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/common/ui/form"
-import { Cuestion } from "@/api/types/cuestion.type"
+
 import { EventDetail } from "@/api/types/events.types"
 import { GetQuestionnaire } from "@/api/types/quetionnaire.type"
 
