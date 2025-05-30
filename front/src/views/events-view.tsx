@@ -12,8 +12,9 @@ import { Skeleton } from "@/common/ui/skeleton"
 import { Card } from "@/common/ui/card"
 import toast from "react-hot-toast"
 import { QRCode } from "@/common/atoms/QRCode"
-import EventFormModal from "@/common/molecules/admin/event/create-event-modal.molecule"
+
 import { useNavigate } from "react-router-dom"
+import EventFormModal from "@/common/widgets/admin/events/events-form.widget"
 
 
 export default function EventsView() {

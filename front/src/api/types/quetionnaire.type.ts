@@ -12,7 +12,7 @@ export interface GetQuestionnaire {
     id: number;
     title: string;
     description: string;
-    categories: { name: string }[];
+    categories: { id: number, name: string }[];
     questions?: QuestionnaireQuestion[];
     createdAt?: string;
     updatedAt?: string;
@@ -22,7 +22,7 @@ export interface ListQuestionnaires {
     id: number;
     title: string;
     description: string;
-    categories: { name: string }[];
+    categories: { id: number, name: string }[];
 }
 
 export interface PostQuestionnaire {

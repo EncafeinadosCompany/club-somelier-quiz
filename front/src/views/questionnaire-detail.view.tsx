@@ -12,7 +12,8 @@ import {
 } from "lucide-react";
 import { GetQuestionnaire } from "@/api/types/quetionnaire.type";
 import AnimatedBackground from "@/common/atoms/animated-background";
-import EventFormModal from "@/common/molecules/admin/event/create-event-modal.molecule";
+import EventFormModal from "@/common/widgets/admin/events/events-form.widget";
+
 
 interface QuestionnaireDetailProps {
   useQuestionnaireByIDQuery: (id: string) => {

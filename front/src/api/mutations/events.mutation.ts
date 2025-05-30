@@ -1,8 +1,8 @@
 import AuthClient from "@/api/client/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
-import toast from "react-hot-toast";
 import { PostEvent, EventDetail } from "@/api/types/events.types";
+import toast from "react-hot-toast";
 
 const authClient = new AuthClient();
 

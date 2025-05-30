@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useNavigate } from "react-router-dom"
@@ -51,8 +51,7 @@ import { question } from "@/api/types/questions.type"
 import { GetQuestionnaire } from "@/api/types/quetionnaire.type"
 import { QuestionnaireFormData } from "@/api/schemas/quetionnaire.schemas"
 
-// Sortable question item component
-const SortableQuestionItem = ({ 
+const SortableQuestionItem = React.memo(({ 
   question, 
   index, 
   onRemove 
@@ -70,15 +69,14 @@ const SortableQuestionItem = ({
     isDragging
   } = useSortable({ 
     id: question.id.toString(),
-    data: question
   });
 
-  const style = {
+  const style = transform ? {
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
     zIndex: isDragging ? 10 : 1,
-  };
+  } : undefined;
 
   return (
     <div
@@ -119,8 +117,10 @@ const SortableQuestionItem = ({
       </div>
     </div>
   );
-};
+});
 
+// Add a display name
+SortableQuestionItem.displayName = 'SortableQuestionItem';
 interface QuestionnaireFormProps {
   initialData?: GetQuestionnaire | null;
   isEditing?: boolean;
@@ -170,31 +170,34 @@ export default function QuestionnaireFormView({ initialData, isEditing = false }
 
   // Load initial data if in edit mode
   useEffect(() => {
-    if (initialData && isEditing) {
-      form.reset({
-        title: initialData.title,
-        description: initialData.description,
-        // categories: initialData.categories.map(cat => typeof cat.id === 'number' ? cat.id : parseInt(cat.id.toString())),
-        questions: initialData.questions?.map(q => q.id) || []
+  if (initialData && isEditing && allQuestions.length > 0) {
+    // Only reset the form if initialData or allQuestions change
+    form.reset({
+      title: initialData.title,
+      description: initialData.description,
+      categories: initialData.categories.map(cat => 
+        typeof cat.id === 'number' ? cat.id : parseInt(cat.id)
+      ),
+      questions: initialData.questions?.map(q => q.id) || []
+    });
+    
+    // Populate selected questions array with full question objects
+    if (initialData.questions) {
+      const questions = initialData.questions.map(q => {
+        const fullQuestion = allQuestions.find(full => full.id === q.id);
+        return fullQuestion || {
+          id: q.id,
+          question: q.question,
+          response: q.response,
+          level: q.levelName || q.levelName,
+          categories: []
+        };
       });
-      
-      // Populate selected questions array with full question objects
-      if (initialData.questions && allQuestions.length > 0) {
-        const questions = initialData.questions.map(q => {
-          const fullQuestion = allQuestions.find(full => full.id === q.id);
-          return fullQuestion || {
-            id: q.id,
-            question: q.question,
-            response: q.response,
-            level: q.levelName,
-            categories: []
-          };
-        });
-        setSelectedQuestions(questions);
-      }
+      setSelectedQuestions(questions);
     }
-    setIsLoaded(true);
-  }, [initialData, isEditing, allQuestions]);
+  }
+  setIsLoaded(true);
+}, [initialData, isEditing, allQuestions.length]); 
 
   // Filter questions based on search and filters
   const filteredQuestions = useMemo(() => {
@@ -342,7 +345,7 @@ export default function QuestionnaireFormView({ initialData, isEditing = false }
           </div>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-[80vh]">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col  max-h-[70vh]">
               <div className="space-y-4 overflow-y-auto flex-1 pr-2">
                 {/* Title Field */}
                 <FormField
@@ -495,7 +498,7 @@ export default function QuestionnaireFormView({ initialData, isEditing = false }
 
         {/* Questions Selection Panel */}
         <div
-          className={`w-1/2 h-full flex flex-col opacity-100 ${
+          className={`w-1/2 max-h-[82vh] overflow-y-auto flex flex-col opacity-100 ${
             isLoaded ? "animate-fade-in" : ""
           }`}
           style={{ animationDelay: "0.6s" }}
@@ -510,9 +513,7 @@ export default function QuestionnaireFormView({ initialData, isEditing = false }
                 <TabsTrigger value="questions" className="text-white data-[state=active]:bg-white/20">
                   Todas las Preguntas
                 </TabsTrigger>
-                <TabsTrigger value="filtered" className="text-white data-[state=active]:bg-white/20">
-                  Preguntas por Categoría
-                </TabsTrigger>
+                
               </TabsList>
               
               <TabsContent value="questions" className="flex-1 flex flex-col mt-4">

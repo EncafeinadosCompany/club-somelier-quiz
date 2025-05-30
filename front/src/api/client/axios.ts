@@ -4,64 +4,76 @@ export default class AuthClient {
 
     private client: AxiosInstance;
 
-    constructor () {
+    constructor() {
         this.client = axios.create({
             baseURL: import.meta.env.VITE_API_URL,
-            headers:{
+            headers: {
                 'Content-Type': 'application/json'
             }
         })
-    this.client.interceptors.request.use(
-        (config) => {
-            const token = localStorage.getItem('token');
-            if (token) {
-                config.headers['Authorization'] = `Bearer ${token}`;
+        this.client.interceptors.request.use(
+            (config) => {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    config.headers['Authorization'] = `Bearer ${token}`;
+                }
+                return config;
+            },
+            (error) => {
+                return Promise.reject(error);
             }
-            return config;
-        },
-        (error) => {
-            return Promise.reject(error);
-        }
-    )
-    
+        )
+
     }
-   public async get<T>(url:string, config?:AxiosRequestConfig): Promise<T>{
-       try{
-        const response = await this.client.get<T>(url, config);
-        return response.data;
-       }catch(error){
-        console.log(`GET ${url}`);
-        throw error;
-       }
+    public async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+        try {
+            const response = await this.client.get<T>(url, config);
+            return response.data;
+        } catch (error) {
+            console.log(`GET ${url}`);
+            throw error;
+        }
     }
 
-    public async post<T>(url:string , data:any, config?:AxiosRequestConfig): Promise<T>{
-        try{
+    public async post<T>(url: string, data: any, config?: AxiosRequestConfig): Promise<T> {
+        try {
             const response = await this.client.post<T>(url, data, config);
             return response.data;
-        }catch(error){
+        } catch (error) {
             console.log(`POST ${url}`);
             throw error;
         }
     }
 
-    public async put<T>(url:string, data?:any, config?:AxiosRequestConfig):Promise<T>{
-        try{
+    public async put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+        try {
             const response = await this.client.put<T>(url, data, config);
             return response.data;
-        }catch(error){
+        } catch (error) {
             console.log(`PUT ${url}`);
             throw error;
         }
     }
 
-    public async delete<T>(url:string, config?:AxiosRequestConfig):Promise<T>{
-        try{
+    public async patch<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+        try {
+            const response = await this.client.patch<T>(url, data, config);
+            return response.data;
+        } catch (error) {
+            console.log(`PATCH ${url}`);
+            throw error;
+        }
+    }
+
+    public async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+        try {
             const response = await this.client.delete<T>(url, config);
             return response.data;
-        }catch(error){
+        } catch (error) {
             console.log(`DELETE ${url}`);
             throw error;
         }
     }
-   }
+
+
+}
