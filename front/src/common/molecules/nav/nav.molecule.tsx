@@ -60,8 +60,16 @@ export const NavGeneral = ({
   const location = useLocation();
 
   const isRouteActive = (href: string) => {
-    return location.pathname === href || location.pathname.startsWith(href + '/');
+   if (href === "/admin") {
+      return location.pathname === "/admin";
+    }
+    
+    // For other routes, check exact match or if it's a sub-route
+    return location.pathname === href || 
+      (location.pathname.startsWith(href + "/") && href !== "/admin");
   };
+  
+  
 
   const closeNav = () => setIsExpanded(false);
 

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
-import { Search, Settings, Menu, Calendar, Filter, X, Eye, QrCode, Clock, Link, Copy } from "lucide-react"
+import { Search, Settings, Menu, Calendar, Filter, X, Eye, QrCode, Clock, Link, Copy, Play } from "lucide-react"
 
 import { Button } from "@/common/ui/button"
 import { Input } from "@/common/ui/input"
@@ -13,6 +13,7 @@ import { Card } from "@/common/ui/card"
 import toast from "react-hot-toast"
 import { QRCode } from "@/common/atoms/QRCode"
 import EventFormModal from "@/common/molecules/admin/event/create-event-modal.molecule"
+import { useNavigate } from "react-router-dom"
 
 
 export default function EventsView() {
@@ -20,6 +21,7 @@ export default function EventsView() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedEventId, setSelectedEventId] = useState<number | null>(null)
   const [IsCreateEventModalOpen,setIsCreateEventModalOpen]= useState(false)
+  const navigate = useNavigate()
   // Fetch all events
   const { data: events = [], isLoading, isError } = useEventsQuery()
   
@@ -63,6 +65,11 @@ export default function EventsView() {
       case 'cancelled': return 'bg-red-500'
       default: return 'bg-gray-500'
     }
+  }
+
+
+  const redirect =(code:string) =>{
+    navigate(`/admin/control?accesscode=${code}`)
   }
 
   return (
@@ -238,6 +245,15 @@ export default function EventsView() {
                       >
                         <Eye className="h-4 w-4 mr-1" />
                         Editar
+                      </Button>
+                        <Button 
+                        onClick={()=>redirect(event.access_code)}
+                        size="sm" 
+                        variant="outline" 
+                        className="bg-white/10 border-white/20 text-white"
+                      >
+                        <Play className="h-4 w-4 mr-1" />
+                        Iniciar Evento
                       </Button>
                       <Button 
                         size="sm" 

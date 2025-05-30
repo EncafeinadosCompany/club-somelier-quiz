@@ -21,6 +21,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { CheckCircle, XCircle, Tag, Save, X } from "lucide-react"
 import { questionFormSchema, QuestionFormData } from "@/api/schemas/questions.schema"
 import { useCategoriesQuery } from "@/api/query/category.queries"
+import { useNivelesQuery } from "@/api/query/level.queries"
 import { question } from "@/api/types/questions.type"
 
 interface QuestionFormProps {
@@ -39,19 +40,15 @@ export function QuestionForm({
   isSubmitting = false
 }: QuestionFormProps) {
   const { data: categories = [], isLoading: isLoadingCategories } = useCategoriesQuery();
+  const { data: niveles = [], isLoading: isLoadingNiveles } = useNivelesQuery();
   
   // Helper to get level_id from level name
   const getLevelIdFromName = (levelName?: string): number => {
     if (!levelName) return 1;
     
-    // Map level names to IDs
-    const levelMap: Record<string, number> = {
-      "Básico": 1,
-      "Intermedio": 2,
-      "Avanzado": 3,
-      "Experto": 4
-    };
-    return levelMap[levelName] || 1;
+    // Find the level ID from the fetched niveles data
+    const foundLevel = niveles.find(nivel => nivel.name === levelName);
+    return foundLevel?.id || 1;
   };
 
   // Form setup with zod schema
@@ -65,12 +62,12 @@ export function QuestionForm({
     } : {
       question: "",
       response: false,
-      level_id: 1,
+      level_id: niveles[0]?.id || 1,
       categories: []
     }
   });
 
-  // Reset form when initialData changes
+  // Reset form when initialData or niveles change
   useEffect(() => {
     if (initialData) {
       form.reset({
@@ -83,11 +80,11 @@ export function QuestionForm({
       form.reset({
         question: "",
         response: false,
-        level_id: 1,
+        level_id: niveles[0]?.id || 1,
         categories: []
       });
     }
-  }, [form, initialData]);
+  }, [form, initialData, niveles]);
 
   const handleSubmit = (data: QuestionFormData) => {
     onSubmit(data);
@@ -161,7 +158,7 @@ export function QuestionForm({
                   Nivel de dificultad
                 </FormLabel>
                 <Select
-                  value={field.value.toString()}
+                  value={field.value?.toString()}
                   onValueChange={(value) => field.onChange(parseInt(value))}
                 >
                   <FormControl>
@@ -170,10 +167,15 @@ export function QuestionForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="1">Básico</SelectItem>
-                    <SelectItem value="2">Intermedio</SelectItem>
-                    <SelectItem value="3">Avanzado</SelectItem>
-                    <SelectItem value="4">Experto</SelectItem>
+                    {isLoadingNiveles ? (
+                      <SelectItem value="loading" disabled>Cargando niveles...</SelectItem>
+                    ) : (
+                      niveles.map((nivel) => (
+                        <SelectItem key={nivel.id} value={nivel.id?.toString() || ""}>
+                          {nivel.name}
+                        </SelectItem>
+                      ))
+                    )}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -240,7 +242,7 @@ export function QuestionForm({
           <Button
             type="submit"
             className="flex-1 bg-blue-500 hover:bg-blue-600 text-white"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isLoadingNiveles}
           >
             <Save className="h-4 w-4 mr-2" />
             {isEditing ? "Guardar Cambios" : "Crear Pregunta"}
