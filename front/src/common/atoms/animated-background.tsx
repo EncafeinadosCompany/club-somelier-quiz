@@ -49,7 +49,7 @@ export default function AnimatedBackground() {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
       {/* Gradiente de fondo principal */}
-      <div className="absolute inset-0 bg-gradient-to-br from-amber-600 via-orange-300 to-red-400" />
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900" />
 
       {/* Gradiente superpuesto para profundidad */}
       <div className="absolute inset-0 bg-gradient-to-t from-amber-100/30 via-transparent to-orange-100/20" />
@@ -74,7 +74,7 @@ export default function AnimatedBackground() {
         >
           <icon.Icon
             size={icon.size}
-            className="text-amber-800/50 animate-scale-breath animate-gentle-sway"
+            className="text-white animate-scale-breath animate-gentle-sway"
             style={{
               animationDuration: `${icon.duration * 0.8}s, ${icon.duration * 1.2}s`,
               animationDelay: `${icon.scaleDelay}s, ${icon.moveDelay}s`,

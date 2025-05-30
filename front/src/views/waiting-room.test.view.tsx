@@ -5,7 +5,7 @@ import { MainLayout } from '../common/widgets/MainLayout';
 import { CheckCircle, AlertCircle, BookOpen, Clock, RefreshCw } from 'lucide-react';
 import { useQuestionnaire } from '../api/query/quiz.queries';
 import { Participant } from '@/api/types/participant.type';
-import { useEventSocket } from '@/common/hooks/useEventSocket';
+import { useEventSocketParticipant } from '@/common/hooks/useEventSocket';
 
 interface LocationState {
     userData: Participant;
@@ -38,7 +38,8 @@ export function WaitingViewTest() {
     } = useQuestionnaire(questionnaireId!);
 
     /***** (3) Conexión al socket una vez tenemos IDs *********/
-    const socket = useEventSocket(accessCode, participantId);
+    const socket = useEventSocketParticipant(accessCode, participantId);
+    console.log('🔌 Conectando al socket con:', { accessCode, participantId });
 
     /***** (4) Navegar cuando el admin inicie *********/
     useEffect(() => {
