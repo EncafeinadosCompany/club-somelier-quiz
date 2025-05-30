@@ -17,10 +17,12 @@ import { QuizLoader } from "@/common/atoms/QuizLoader";
 import { useAppLoading } from "@/common/hooks/useAppLoading";
 import { Suspense } from "react";
 import QuestionnaireDetailPage from "@/views/questionnaire-details.page";
-import EventView  from "@/views/events-view";
+import EventView from "@/views/events-view";
 import AnimatedBackground from "@/common/atoms/animated-background";
 import HomeQuestionsView from "@/views/questions-view";
 import { WaitingViewTest } from "@/views/waiting-room.test.view";
+import QuestionnaireFormView from "@/common/widgets/admin/quetionnaire/form-quetionnaire.widgest";
+import QuestionnaireEditContainer from "@/views/questionnaire.view";
 
 function AppWithLoading() {
     const { isLoading } = useAppLoading(3000);
@@ -50,19 +52,21 @@ export default function AuthRoutes() {
                 <Routes>
                     <Route path="/" element={<AppWithLoading />}>
                         <Route path="404" element={<AnimatedBackground />} />
-                        
-                        <Route index element={<HomeView />} />             
-                        <Route path="client/:questionnaireId" element={<HomeView />} />                        
+
+                        <Route index element={<HomeView />} />
+                        <Route path="client/:questionnaireId" element={<HomeView />} />
                         <Route path="waiting" element={<WaitingViewTest />} />
-                        <Route path="questions" element={<QuestionsView />} />   
+                        <Route path="questions" element={<QuestionsView />} />
                         {/* <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}> */}
-                            <Route path="admin" element={<Navbar />}>
-                                <Route index element={<HomeCuestion />} />
-                                 <Route path="event" element={<EventView />} />
-                                  <Route path="questions" element={<HomeQuestionsView />} />
-                                <Route path="questionnaireDetails" element={<QuestionnaireDetailPage />} />
-                                 
-                            </Route>
+                        <Route path="admin" element={<Navbar />}>
+                            <Route index element={<HomeCuestion />} />
+                            <Route path="event" element={<EventView />} />
+                            <Route path="questions" element={<HomeQuestionsView />} />
+                            <Route path="questionnaireDetails" element={<QuestionnaireDetailPage />} />
+                            <Route path="questionnaire/create" element={<QuestionnaireFormView />} />
+                            <Route path="questionnaire/edit/:id" element={<QuestionnaireEditContainer />} />
+
+                        </Route>
                         {/* </Route> */}
                     </Route>
 
