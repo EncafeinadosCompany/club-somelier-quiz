@@ -17,7 +17,6 @@ export const useCategoriesQuery = () => {
         if (!Array.isArray(questionData)) {
           return [];
         }
-        
         return questionData;
       } catch (error) {
         throw error; 

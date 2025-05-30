@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { MainLayout } from '../common/widgets/MainLayout';
 import { WelcomeForm } from '../common/widgets/WelcomeForm';
 import { motion } from 'framer-motion';
@@ -13,7 +13,9 @@ export function HomeView() {
   const [questionnaireId, setQuestionnaireId] = useState<number | null>(null);
   const [backendErrorMessage, setBackendErrorMessage] = useState<string>('');
   const navigate = useNavigate();
-  const { questionnaireId: eventCode } = useParams<{ questionnaireId: string }>();
+  
+  const [searchParams] = useSearchParams();
+  const eventCode = searchParams.get('code');
   
   const { 
     mutate: registerParticipant, 

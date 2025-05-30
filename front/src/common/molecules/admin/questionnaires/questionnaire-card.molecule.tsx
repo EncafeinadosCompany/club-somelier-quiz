@@ -1,9 +1,9 @@
 "use client";
 import { ListQuestionnaires } from "@/api/types/quetionnaire.type";
-import { Card } from "@/common/ui/card";
+
 import { motion } from "framer-motion";
-import { ArrowRight, FileText, HelpCircle } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { ArrowRight, FileText} from "lucide-react";
+
 
 interface QuestionnaireCardProps {
   questionnaire: ListQuestionnaires;

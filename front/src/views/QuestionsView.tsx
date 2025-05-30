@@ -26,7 +26,6 @@ export function QuestionsView() {
   const questionnaireId = locationState?.questionnaireId || 1;
   const participantId = locationState?.participantId || localStorage.getItem('participantId') || `participant-${Date.now()}`;
 
-  // Obtener el cuestionario real con el ID dinámico
   const { data: questionnaire, isLoading, error } = useQuestionnaire(questionnaireId);
   const submitAnswersMutation = useSubmitQuizAnswers();
 

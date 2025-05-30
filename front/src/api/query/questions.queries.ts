@@ -41,13 +41,12 @@ export const useQuestionByIDQuery = (id: number | null) => {
         
         const response = await authClient.get<question>(`/questions/${id}`);
         
-        // Return the response directly
         return response;
       } catch (error) {
         throw error; 
       }
     },
-    enabled: !!id, // Only run the query if an ID is provided
+    enabled: !!id,
     refetchOnWindowFocus: true,
     retry: 1
   });

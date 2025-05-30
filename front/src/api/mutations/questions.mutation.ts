@@ -6,9 +6,6 @@ import { Postquestion, question } from "@/api/types/questions.type";
 
 const authClient = new AuthClient();
 
-/**
- * Mutation hook for creating a new question
- */
 export const useCreateQuestionMutation = () => {
     const queryClient = useQueryClient();
 

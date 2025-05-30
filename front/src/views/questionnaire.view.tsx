@@ -13,6 +13,7 @@ import QuestionnaireFormView from '@/common/widgets/admin/quetionnaire/form-quet
 export default function QuestionnaireEditContainer() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  console.log(id)
   const { data: questionnaire, isLoading, isError } = useQuestionnaireByIDQuery(id || '0');
   
   if (isLoading) {

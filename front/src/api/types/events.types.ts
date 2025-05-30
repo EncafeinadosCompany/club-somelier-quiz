@@ -1,13 +1,11 @@
 import { GetQuestionnaire } from "./quetionnaire.type";
 
-export interface PostEvent{
+export interface PostEvent {
   name: string,
   start_time: string,
-  questionnaire_id:number
+  questionnaire_id: number
   end_time: string
 }
-
-
 
 export interface EventDetail {
   id: number;
