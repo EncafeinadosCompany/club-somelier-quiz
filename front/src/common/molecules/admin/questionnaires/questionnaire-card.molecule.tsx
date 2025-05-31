@@ -24,7 +24,7 @@ export default function QuestionnaireCard({
       onClick={onClick}
       className="group cursor-pointer relative"
     >
-      <div className="bg-white/90 backdrop-blur-xl rounded-2xl border border-white/40 shadow-xl hover:shadow-2xl p-6 transition-all duration-300 hover:bg-white/95 h-full min-h-[280px] flex flex-col overflow-hidden">
+      <div className="bg-white/30 backdrop-blur-xl rounded-2xl border border-white/40 shadow-xl hover:shadow-2xl p-6 transition-all duration-300 hover:bg-white/50 h-full min-h-[280px] flex flex-col overflow-hidden">
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="p-3 bg-gradient-to-br from-amber-100 to-orange-100 rounded-2xl shadow-lg group-hover:shadow-xl transition-shadow">
@@ -40,13 +40,13 @@ export default function QuestionnaireCard({
         </div>
 
         {/* Title */}
-        <h3 className="text-gray-800 font-bold text-lg mb-3 leading-tight group-hover:text-amber-700 transition-colors line-clamp-2">
+        <h3 className="text-gray-200 font-bold text-lg mb-3 leading-tight group-hover:text-amber-700 transition-colors line-clamp-2">
           {questionnaire.title}
         </h3>
 
         {/* Description */}
         <div className="flex-1 mb-4">
-          <p className="text-gray-600 text-sm leading-relaxed line-clamp-4">
+          <p className="text-amber-100/60 text-sm leading-relaxed line-clamp-4">
             {questionnaire.description}
           </p>
         </div>

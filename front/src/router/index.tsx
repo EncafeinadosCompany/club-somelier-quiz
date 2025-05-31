@@ -1,23 +1,23 @@
 import App from "@/App";
 import {BrowserRouter as Router,Route,Routes,Navigate} from "react-router-dom";
-import { HomeView } from "@/views/HomeView";
-import { QuestionsView } from "@/views/QuestionsView";
+import { QuestionsView } from "@/views/clients/question/questions-client.view";
 import { NotFound } from "@/common/utils/404";
 import Navbar from "@/common/widgets/admin/nav_widget";
-import HomeCuestion from "@/views/cuestions-view";
+import HomeCuestion from "@/views/admin/questionnaire/questionnaire-view";
 import { QuizLoader } from "@/common/atoms/QuizLoader";
 import { useAppLoading } from "@/common/hooks/useAppLoading";
 import { Suspense } from "react";
-import QuestionnaireDetailPage from "@/views/questionnaire-details.page";
-import EventView from "@/views/events-view";
-import HomeQuestionsView from "@/views/questions-view";
-import { WaitingViewTest } from "@/views/waiting-room.test.view";
+import QuestionnaireDetailPage from "@/views/admin/questionnaire/questionnaire-details.view";
+import EventView from "@/views/admin/event/events-view";
+import HomeQuestionsView from "@/views/admin/question/questions-view";
+import { WaitingViewTest } from "@/views/clients/question/waiting-room.test.view";
 import QuestionnaireFormView from "@/common/widgets/admin/quetionnaire/form-quetionnaire.widgest";
-import QuestionnaireEditContainer from "@/views/questionnaire.view";
-import AdminControlView from "@/views/admin-control.view";
-import LoginPage from "@/views/login-view";
-import LandingPage from "@/views/landing-view";
-import ContactPage from "@/views/contact-view";
+import QuestionnaireEditContainer from "@/views/admin/questionnaire/questionnaire-edit.view";
+import AdminControlView from "@/views/admin/questionnaire/questionnaire-control.view";
+import LoginPage from "@/views/home/login-view";
+import LandingPage from "@/views/home/landing-view";
+import ContactPage from "@/views/home/contact-view";
+import { HomeView } from "@/views/home/home-view";
 
 
 
@@ -49,9 +49,8 @@ export default function AuthRoutes() {
                 <Routes>
                     <Route path="/" element={<AppWithLoading />}>
                         <Route path="404" element={<NotFound />} />
-
                         <Route index element={<HomeView />} />
-        <Route path="client" element={<HomeView />} />
+                        <Route path="client" element={<HomeView />} />
                         <Route path="waiting" element={<WaitingViewTest />} />
                         <Route path="questions" element={<QuestionsView />} />
 

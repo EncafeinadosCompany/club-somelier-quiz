@@ -15,6 +15,8 @@ import { QRCode } from "@/common/atoms/QRCode"
 
 import { useNavigate } from "react-router-dom"
 import EventFormModal from "@/common/widgets/admin/events/events-form.widget"
+import AnimatedBackground from "@/common/atoms/animated-background"
+import clubSomelier from "@/assets/clubSomelier.png"
 
 
 export default function EventsView() {
@@ -22,6 +24,7 @@ export default function EventsView() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedEventId, setSelectedEventId] = useState<number | null>(null)
   const [IsCreateEventModalOpen, setIsCreateEventModalOpen] = useState(false)
+  
   const navigate = useNavigate()
   // Fetch all events
   const { data: events = [], isLoading, isError } = useEventsQuery()
@@ -36,9 +39,6 @@ export default function EventsView() {
   useEffect(() => {
     setIsLoaded(true)
   }, [])
-
-
-  console.log(events)
 
   // Filter events by name
   const filteredEvents = useMemo(() => {
@@ -75,11 +75,14 @@ export default function EventsView() {
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
       {/* Background Image */}
-      <img
+      {/* <img
         src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop"
         alt="Beautiful mountain landscape"
         className="object-cover absolute h-full w-full"
-      />
+      /> */}
+      <AnimatedBackground />
+      
+      
 
       {/* Main Content */}
       <main className="relative h-screen w-full pt-5 flex">
@@ -98,13 +101,13 @@ export default function EventsView() {
             <div className="mb-4">
               <label className="block text-white/80 text-sm font-medium mb-2">Buscar eventos</label>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/70" />
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                 <Input
                   type="text"
                   placeholder="Buscar por nombre..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50 pl-10"
+                  className="bg-white/10 border-white/20 text-gray-600 placeholder:text-gray-400 pl-10"
                 />
               </div>
             </div>
@@ -194,7 +197,7 @@ export default function EventsView() {
                   <div
                     key={event.id}
                     onClick={() => setSelectedEventId(event.id)}
-                    className={`bg-white/10 backdrop-blur-lg rounded-xl border cursor-pointer 
+                    className={`bg-white/50 backdrop-blur-lg rounded-xl border cursor-pointer 
                       ${selectedEventId === event.id ? 'border-blue-400 bg-white/20' : 'border-white/20'} 
                       p-4 hover:bg-white/20 transition-all duration-200`}
                   >
@@ -249,7 +252,7 @@ export default function EventsView() {
                         onClick={() => redirect(event.access_code)}
                         size="sm"
                         variant="outline"
-                        className="bg-white/10 border-white/20 text-white"
+                        className="bg-green-400/50 hover:bg-green-400/70 border-white/20 text-white"
                       >
                         <Play className="h-4 w-4 mr-1" />
                         Iniciar Evento

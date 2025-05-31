@@ -1,24 +1,21 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import {FileQuestion,Search,Filter,X,} from "lucide-react";
+import { FileQuestion, Search, Filter, X, } from "lucide-react";
 import { Button } from "@/common/ui/button";
 import { Input } from "@/common/ui/input";
-import clubSomelier from '@/assets/clubSomelier.png'
-
 
 import { CategoriesWidget } from "@/common/widgets/admin/quetionnaire/categories.widget";
-import {ListQuestionnaires} from "@/api/types/quetionnaire.type";
+import { ListQuestionnaires } from "@/api/types/quetionnaire.type";
 import { useQuestionnaireQuery } from "@/api/query/cuestions.queries";
 import QuestionnaireCard from "@/common/molecules/admin/questionnaires/questionnaire-card.molecule";
 import { useNavigate } from "react-router-dom";
+import AnimatedBackground from "@/common/atoms/animated-background";
+import clubSomelier from "@/assets/clubSomelier.png"
 
 export default function HomeCuestion() {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [questionnaires, setQuestionnaires] = useState<ListQuestionnaires[]>(
-    []
-  );
-  const [events, setEvents] = useState<Event[]>([]);
+  const [questionnaires, setQuestionnaires] = useState<ListQuestionnaires[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
@@ -27,38 +24,38 @@ export default function HomeCuestion() {
 
   useEffect(() => {
     setIsLoaded(true);
-
     setQuestionnaires(data || []);
-    console.log("ggg", questionnaires);
   }, [data]);
-
-  console.log("cuestiossssn", data);
-
 
 
   const handleCardClick = (questionnaireId: string) => {
     navigate(`/admin/questionnaireDetails?id=${questionnaireId}`);
-
-    console.log(questionnaireId)
   };
 
   const filteredQuestionnaires = useMemo(() => {
     return questionnaires.filter((cuestion) => {
       const matchesSearch =
         cuestion.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        cuestion.description.toLowerCase().includes(searchTerm.toLowerCase());
-      // cuestion.categorie.map.toLowerCase().includes(searchTerm.toLowerCase())
+        cuestion.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (cuestion.categories
+          .map((cat) => cat.name)
+          .join(" ")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()));
 
       return matchesSearch;
     });
   }, [questionnaires, searchTerm]);
 
 
-
-
   const clearFilters = () => {
     setSearchTerm("");
   };
+
+
+  const OncreateQuestionnarie = ()=>{
+    navigate("/admin/questionnaire/create")
+  }
 
   const hasActiveFilters = searchTerm;
 
@@ -66,19 +63,22 @@ export default function HomeCuestion() {
     <div className="relative min-h-screen w-full overflow-hidden">
       {/* Background Image */}
       <img
-        src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop"
+        src={clubSomelier}
         alt="Beautiful mountain landscape"
         className="object-cover absolute h-full w-full"
       />
-      
+      {/* <AnimatedBackground /> */}
+
+    <div className="w-fit z-100  right-2 top-2 flex absolute ">
+      <Button onClick={()=> OncreateQuestionnarie()} className="rounded-lg bg-amber-100 hover:text-red-800 hover:bg-white/40">Crear Cuestionario</Button>
+    </div>
 
       {/* Main Content */}
       <main className="relative h-screen w-full pt-5 flex">
         {/* Sidebar */}
         <div
-          className={`w-80 h-full bg-white/10 backdrop-blur-lg p-6 shadow-xl border-r border-white/20 rounded-tr-3xl opacity-100 ${
-            isLoaded ? "animate-fade-in" : ""
-          } flex flex-col`}
+          className={`w-80 h-full bg-white/10 backdrop-blur-lg p-6 shadow-xl border-r border-white/20 rounded-tr-3xl opacity-100 ${isLoaded ? "animate-fade-in" : ""
+            } flex flex-col`}
           style={{ animationDelay: "0.4s" }}
         >
           <div className="mb-6">
@@ -134,27 +134,19 @@ export default function HomeCuestion() {
                     {filteredQuestionnaires.length}
                   </span>
                 </div>
-                <div className="flex justify-between">
-                  <span>Eventos creados:</span>
-                  <span className="font-medium text-white">
-                    {events.length}
-                  </span>
-                </div>
+
               </div>
             </div>
 
             {/* Categories */}
-            <CategoriesWidget></CategoriesWidget>
-
-            
+            <CategoriesWidget />
           </div>
         </div>
 
         {/* Questionnaires List */}
         <div
-          className={`flex-1 flex flex-col opacity-100 ${
-            isLoaded ? "animate-fade-in" : ""
-          }`}
+          className={`flex-1 flex flex-col opacity-100 ${isLoaded ? "animate-fade-in" : ""
+            }`}
           style={{ animationDelay: "0.6s" }}
         >
           <div className="p-6">

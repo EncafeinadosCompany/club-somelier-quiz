@@ -1,11 +1,13 @@
 import { useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { MainLayout } from '../common/widgets/clients/main-layout.widget';
+
 import { CheckCircle, AlertCircle, BookOpen, Clock, RefreshCw } from 'lucide-react';
-import { useQuestionnaire } from '../api/query/quiz.queries';
+
 import { Participant } from '@/api/types/participant.type';
 import { useEventSocketParticipant } from '@/common/hooks/useEventSocket';
+import { useQuestionnaire } from '@/api/query/quiz.queries';
+import { MainLayout } from '@/common/widgets/clients/main-layout.widget';
 
 interface LocationState {
     userData: Participant;

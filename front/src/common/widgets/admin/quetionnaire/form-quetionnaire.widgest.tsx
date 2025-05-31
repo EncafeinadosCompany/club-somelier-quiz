@@ -26,7 +26,8 @@ import { QuestionnaireFormData } from "@/api/schemas/quetionnaire.schemas"
 import { SortableQuestionItem } from "@/common/molecules/admin/questionnaires/sortable-question-item.molecule"
 import FormQuestionnaires from "@/common/molecules/admin/questionnaires/form-questionnaires.molecule"
 import SectionPanel from "@/common/molecules/admin/questionnaires/sections-panel.molecule"
-import clubSomelier from '@/assets/clubSomelier.png'
+import AnimatedBackground from "@/common/atoms/animated-background"
+// import clubSomelier from '@/assets/clubSomelier.png'
 
 // Add a display name
 SortableQuestionItem.displayName = 'SortableQuestionItem';
@@ -109,24 +110,40 @@ export default function QuestionnaireFormView({ initialData, isEditing = false }
   }, [initialData, isEditing, allQuestions.length]);
 
   // Filter questions based on search and filters
-  const filteredQuestions = useMemo(() => {
-    return allQuestions.filter(q => {
-      // Text search
-      const matchesSearch = q.question.toLowerCase().includes(searchTerm.toLowerCase());
+ const filteredQuestions = useMemo(() => {
+  return allQuestions.filter(q => {
+    // Text search
+    const matchesSearch = q.question.toLowerCase().includes(searchTerm.toLowerCase());
 
-      // Category filter
-      const matchesCategory = categoryFilter === null ||
-        q.categories.some(cat => cat.id === categoryFilter);
+    // Category filter
+    const matchesCategory = categoryFilter === null ||
+      q.categories.some(cat => cat.id === categoryFilter);
 
-      // Level filter
-      const matchesLevel = levelFilter === null || q.level === levelFilter;
+    // Level filter - MODIFICADO para mostrar niveles acumulativos
+    const matchesLevel = () => {
+      if (levelFilter === null) return true;
+      
+      // Obtener el nivel numérico de la pregunta actual
+      const questionLevelObj = niveles.find(n => n.name === q.level);
+      if (!questionLevelObj) return false;
+      const questionLevelNumber = questionLevelObj.id;
+      
+      // Obtener el nivel numérico seleccionado en el filtro
+      const selectedLevelObj = niveles.find(n => n.name === levelFilter);
+      if (!selectedLevelObj) return false;
+      const selectedLevelNumber = selectedLevelObj.id;
+      
+      // Incluir si el nivel de la pregunta es menor o igual al seleccionado
+      if (typeof questionLevelNumber === "undefined" || typeof selectedLevelNumber === "undefined") return false;
+      return questionLevelNumber <= selectedLevelNumber;
+    };
 
-      // Already selected filter (exclude already selected questions)
-      const isNotSelected = !selectedQuestions.some(selected => selected.id === q.id);
+    // Already selected filter (exclude already selected questions)
+    const isNotSelected = !selectedQuestions.some(selected => selected.id === q.id);
 
-      return matchesSearch && matchesCategory && matchesLevel && isNotSelected;
-    });
-  }, [allQuestions, searchTerm, categoryFilter, levelFilter, selectedQuestions]);
+    return matchesSearch && matchesCategory && matchesLevel() && isNotSelected;
+  });
+}, [allQuestions, searchTerm, categoryFilter, levelFilter, niveles, selectedQuestions]);
 
   // Handle drag end for reordering
   const handleDragEnd = (event: DragEndEvent) => {
@@ -214,11 +231,7 @@ export default function QuestionnaireFormView({ initialData, isEditing = false }
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
       {/* Background Image */}
-      <img
-        src={clubSomelier }
-        alt="Beautiful mountain landscape"
-        className="object-cover absolute h-full w-full"
-      />
+      <AnimatedBackground />
 
       {/* Main Content */}
       <main className="relative h-screen w-full pt-5 flex overflow-hidden">

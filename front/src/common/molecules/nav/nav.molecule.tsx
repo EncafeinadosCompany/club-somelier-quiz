@@ -74,9 +74,9 @@ export const NavGeneral = ({
   const closeNav = () => setIsExpanded(false);
 
   return (
-    <div className="flex flex-col h-full min-h-screen w-full">
+    <div className="flex flex-col h-full min-h-screen w-full bg-[#110202]">
       {/* Header - Always visible */}
-      <header className="sticky top-0 z-30 bg-black/80 backdrop-blur-lg border-b border-white/10 px-4 py-3 flex items-center justify-between">
+      <header className="sticky top-0 z-30 bg-white/10 backdrop-blur-lg border-b border-white/20 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-3">
         <Button
           variant="ghost" 
@@ -195,6 +195,7 @@ export const NavGeneral = ({
 
       {/* Main Content */}
       <main className="flex-1 pb-16">
+        
         <Outlet />
       </main>
     </div>

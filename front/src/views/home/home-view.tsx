@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { MainLayout } from '../common/widgets/clients/main-layout.widget';
-import { WelcomeForm } from '../common/widgets/clients/welcome-form.widget';
+import { MainLayout } from '@/common/widgets/clients/main-layout.widget';
+import { WelcomeForm } from '@/common/widgets/clients/welcome-form.widget';
 import { motion } from 'framer-motion';
-import { useQuestionnaire } from '../api/query/quiz.queries';
-import { useEventByCodeQuery } from '../api/query/events.queries';
-import { useRegisterParticipant } from '../api/mutations/participant.mutation';
-import { Participant } from '../api/types/participant.type';
+import { useQuestionnaire } from '@/api/query/quiz.queries';
+import { useEventByCodeQuery } from '@/api/query/events.queries';
+import { useRegisterParticipant } from '@/api/mutations/participant.mutation';
+import { Participant } from '@/api/types/participant.type';
 
 export function HomeView() {
   const [userData, setUserData] = useState<Participant | null>(null);

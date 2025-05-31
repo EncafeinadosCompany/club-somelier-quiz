@@ -1,16 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import {
-    Play,
-    SkipForward,
-    Square,
-    Users,
-    CheckCircle,
-    Clock,
-    BookOpen,
-    AlertCircle,
-    Wifi,
-    WifiOff
-} from 'lucide-react';
+import {Play,SkipForward,Square,Users,CheckCircle,Clock,BookOpen,AlertCircle,Wifi,WifiOff} from 'lucide-react';
 import { useEventSocketAdmin } from '@/common/hooks/useEventSocket';
 import { useSearchParams } from 'react-router-dom';
 import AnimatedBackground from '@/common/atoms/animated-background';
@@ -22,17 +11,7 @@ export default function AdminControlView() {
 
     const [timeElapsed, setTimeElapsed] = useState(0);
     const [connectedParticipants, setConnectedParticipants] = useState(8);
-
-    const {
-        isConnected,
-        eventStarted,
-        currentQuestion,
-        noMoreQuestions,
-        eventEnded,
-        startEvent,
-        nextQuestion,
-        endEvent
-    } = useEventSocketAdmin(accessCode);
+    const {isConnected,eventStarted,currentQuestion,noMoreQuestions,eventEnded,startEvent,nextQuestion,endEvent} = useEventSocketAdmin(accessCode);
 
     useEffect(() => {
         let interval: string | number | NodeJS.Timeout | undefined;

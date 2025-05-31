@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import AuthClient from "@/api/client/axios";
-import { GetQuestionnaire, ListQuestionnaires } from "../types/quetionnaire.type";
+import { GetQuestionnaire, ListQuestionnaires } from "@/api/types/quetionnaire.type";
 
 
 const authClient = new AuthClient();

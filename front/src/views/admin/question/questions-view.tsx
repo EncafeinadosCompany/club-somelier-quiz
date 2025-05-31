@@ -17,6 +17,7 @@ import { QuestionFormData } from "@/api/schemas/questions.schema"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/common/ui/alert-dialog"
 import { CheckCircle, XCircle } from "lucide-react"
 import { useNivelesQuery } from "@/api/query/level.queries"
+import AnimatedBackground from "@/common/atoms/animated-background"
 
 export default function QuestionsView() {
     const [isLoaded, setIsLoaded] = useState(false)
@@ -125,11 +126,13 @@ export default function QuestionsView() {
     return (
         <div className="relative min-h-screen w-full overflow-hidden">
             {/* Background Image */}
-            <img
+            {/* <img
                 src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop"
                 alt="Beautiful mountain landscape"
                 className="object-cover absolute h-full w-full"
-            />
+            /> */}
+                        <AnimatedBackground />
+            
 
             {/* Main Content */}
             <main className="relative h-[92vh] w-full pt-5 flex">
@@ -148,13 +151,13 @@ export default function QuestionsView() {
                         <div className="mb-4">
                             <label className="block text-white/80 text-sm font-medium mb-2">Buscar preguntas</label>
                             <div className="relative">
-                                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/70" />
+                                <Search className="absolute left-1 top-1/2 h-4 w-4 z-30 -translate-y-1/2 text-gray-500" />
                                 <Input
                                     type="text"
                                     placeholder="Buscar por texto..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50 pl-10"
+                                    className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 pl-6 "
                                 />
                             </div>
                         </div>
@@ -416,14 +419,14 @@ export default function QuestionsView() {
                             ) : selectedQuestion ? (
                                 <div className="h-full flex flex-col">
                                     <div className="flex justify-between items-start mb-6">
-                                        <h2 className="text-xl font-bold text-white">
-                                            Detalles de la Pregunta
-                                        </h2>
+                                        <h3 className="text-xl font-bold text-white">
+                                            Detalles
+                                        </h3>
                                         <div className="flex space-x-2">
                                             <Button
                                                 onClick={() => setDeleteDialogOpen(true)}
                                                 variant="outline"
-                                                className="bg-red-500/20 hover:bg-red-500/30 text-white border-red-500/30"
+                                                className="bg-red-500/50 hover:bg-red-500/30 text-white border-red-500/30"
                                             >
                                                 <Trash2 className="h-4 w-4 mr-2" />
                                                 Eliminar
@@ -449,12 +452,12 @@ export default function QuestionsView() {
                                             <div className="flex items-center space-x-2">
                                                 {selectedQuestion.response ? (
                                                     <>
-                                                        <CheckCircle className="h-5 w-5 text-green-400" />
+                                                        <CheckCircle className="h-10 w-10 text-green-400" />
                                                         <span className="text-white">Realidad</span>
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <XCircle className="h-5 w-5 text-red-400" />
+                                                        <XCircle className="h-10 w-10 text-red-400" />
                                                         <span className="text-white">Mito</span>
                                                     </>
                                                 )}

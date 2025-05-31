@@ -1,33 +1,18 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "react-router-dom";
-import {
-  FileText,
-  Plus,
-  Save,
-  Calendar,
-  Trash2,
-  Edit3,
-  HelpCircle,
-} from "lucide-react";
+import {FileText,Plus,Save,Calendar,Trash2,Edit3,HelpCircle} from "lucide-react";
 import { GetQuestionnaire } from "@/api/types/quetionnaire.type";
 import AnimatedBackground from "@/common/atoms/animated-background";
 import EventFormModal from "@/common/widgets/admin/events/events-form.widget";
 
 
 interface QuestionnaireDetailProps {
-  useQuestionnaireByIDQuery: (id: string) => {
-    data: GetQuestionnaire | undefined;
-  };
+  useQuestionnaireByIDQuery: (id: string) => { data: GetQuestionnaire | undefined};
   onSave?: (draft: GetQuestionnaire) => void;
-  onCreateEvent?: (draft: GetQuestionnaire) => void;
 }
 
-export default function QuestionnaireDetail({
-  useQuestionnaireByIDQuery,
-  onSave,
-  onCreateEvent,
-}: QuestionnaireDetailProps) {
+export default function QuestionnaireDetail({useQuestionnaireByIDQuery,onSave}:QuestionnaireDetailProps) {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
 
@@ -90,10 +75,7 @@ export default function QuestionnaireDetail({
     onSave?.(draft);
   };
 
-  const handleCreateEvent = () => {
-    if (!draft) return;
-    onCreateEvent?.(draft);
-  };
+
 
   const toggleEdit = (field: "title" | "description") => {
     setIsEditing((prev) => ({ ...prev, [field]: !prev[field] }));
@@ -122,18 +104,21 @@ export default function QuestionnaireDetail({
 
   return (
 
-    <div className="h-full w-full flex flex-col">
-      <div className="flex-1 flex max-h-[90vh]  overflow-y-auto flex-col p-4 sm:p-6 lg:p-8 xl:p-3 min-h-0">
+    <div className="h-full w-full flex flex-col ">
+       
 
-        <AnimatedBackground />
+      <div className="flex-1 flex max-h-[90vh] mx-auto xl:min-w-7xl overflow-y-auto flex-col p-4 sm:p-6 lg:p-8 xl:p-3 min-h-0">
+
 
         {/* Header Card - Fixed */}
+        
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-white/95 backdrop-blur-xl rounded-xl shadow-lg border border-white/30 p-4 mb-2 flex-shrink-0"
+          className="bg-white/30 backdrop-blur-xl rounded-xl shadow-lg border border-white/30 p-4 mb-2 flex-shrink-0"
         >
+          
           {/* Title Section */}
           <div className="flex items-center gap-2 mb-1">
             <div className="p-1 bg-gradient-to-br from-amber-100 mb-2 to-orange-100 rounded-md shadow-sm flex-shrink-0">
@@ -151,14 +136,14 @@ export default function QuestionnaireDetail({
                 />
               ) : (
                 <div className="flex items-center gap-1">
-                  <h3 className="text-sm font-bold text-gray-800 leading-tight flex-1 min-w-0 break-words">
+                  <h3 className="text-sm font-bold text-gray-200 leading-tight flex-1 min-w-0 break-words">
                     {draft.title}
                   </h3>
                   <button
                     onClick={() => toggleEdit("title")}
                     className="hover:bg-gray-100 rounded transition-colors opacity-60 hover:opacity-100 flex-shrink-0"
                   >
-                    <Edit3 className="h-5 w-5 text-gray-600" />
+                    <Edit3 className="h-5 w-5 text-gray-200" />
                   </button>
                 </div>
               )}
@@ -184,9 +169,9 @@ export default function QuestionnaireDetail({
                 </p>
                 <button
                   onClick={() => toggleEdit("description")}
-                  className="hover:bg-white/60 rounded transition-colors opacity-60 hover:opacity-100 flex-shrink-0"
+                  className="hover:bg-blue-300 rounded transition-colors opacity-60 hover:opacity-100 flex-shrink-0"
                 >
-                  <Edit3 className="h-4 w-4 text-gray-600" />
+                  <Edit3 className="h-4 w-4 text-gray-700" />
                 </button>
               </div>
             )}
@@ -198,12 +183,12 @@ export default function QuestionnaireDetail({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl border border-white/30 mb-4 sm:mb-6 flex-1 flex flex-col min-h-0"
+          className="bg-white/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl border border-white/30 mb-4 sm:mb-6 flex-1 flex flex-col min-h-0"
         >
           {/* Questions Header - Fixed */}
           <div className="h-20 flex flex-col sm:flex-row items-start sm:items-center justify-between sm:p-6 lg:p-6 border-b border-gray-200/50 flex-shrink-0">
             <div>
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-800">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-200">
                 Preguntas del Cuestionario
               </h3>
 
@@ -238,7 +223,7 @@ export default function QuestionnaireDetail({
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 20 }}
                     transition={{ duration: 0.3 }}
-                    className="group bg-gradient-to-r from-white to-gray-50/50 border border-gray-200/60 rounded-xl sm:rounded-2xl p-3 sm:p-5 hover:shadow-lg transition-all duration-300"
+                    className="group bg-gradient-to-r from-white/50 to-gray-50/50 border border-gray-200/60 rounded-xl sm:rounded-2xl p-3 sm:p-5 hover:shadow-lg transition-all duration-300"
                   >
                     <div className="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-4">
                       <div className="h-2 w-full min-w-0">

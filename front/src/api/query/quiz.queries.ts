@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { QuizSession, QuizStatus, Questionnaire, QuizSubmission, QuizResult } from '../types/quiz.types';
-import AuthClient from '../client/axios';
+import AuthClient from '@/api/client/axios';
 
 const apiClient = new AuthClient();
 
@@ -11,10 +11,10 @@ export function useQuestionnaire(questionnaireId: number) {
       const response = await apiClient.get<Questionnaire>(`/questionnaires/${questionnaireId}`);
       return response;
     },
-    // staleTime: 5 * 60 * 1000,
-    // gcTime: 10 * 60 * 1000,
-    // enabled: !!questionnaireId,
-    // retry: 1,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    enabled: !!questionnaireId,
+    retry: 1,
   });
 }
 

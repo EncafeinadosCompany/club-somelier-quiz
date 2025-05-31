@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { MainLayout } from '../common/widgets/clients/main-layout.widget';
-import { QuestionCard } from '../common/atoms/QuestionCard';
-import { AnswerButtons } from '../common/molecules/AnswerButtons';
-import { useQuestionnaire } from '../api/query/quiz.queries';
+import { useQuestionnaire } from '@/api/query/quiz.queries';
+import { MainLayout } from '@/common/widgets/clients/main-layout.widget';
+import { useEventSocketParticipant } from '@/common/hooks/useEventSocket';
+import { QuestionCard } from '@/common/atoms/QuestionCard';
 import { CheckCircle, XCircle } from 'lucide-react';
-import { useEventSocketParticipant } from '../common/hooks/useEventSocket';
+import { AnswerButtons } from '@/common/molecules/AnswerButtons';
+
 
 interface LocationState {
   questionnaireId: number;

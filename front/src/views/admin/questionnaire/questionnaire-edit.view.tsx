@@ -1,9 +1,3 @@
-// Add this to your router configuration
-
-
-// And create a container component for edit mode:
-// filepath: c:\Hackathon-2025\front\src\containers\questionnaire-edit-container.tsx
-import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import { Skeleton } from '@/common/ui/skeleton';
@@ -13,7 +7,6 @@ import QuestionnaireFormView from '@/common/widgets/admin/quetionnaire/form-quet
 export default function QuestionnaireEditContainer() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  console.log(id)
   const { data: questionnaire, isLoading, isError } = useQuestionnaireByIDQuery(id || '0');
   
   if (isLoading) {

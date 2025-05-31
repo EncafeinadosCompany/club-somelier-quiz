@@ -1,7 +1,6 @@
-import { Button } from "@/common/ui/button"
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/common/ui/card"
-import { MainLayout } from "@/common/widgets/clients/main-layout.widget"
-import { Calendar, Clock, MapPin, ChevronRight, ChevronLeft, User } from "lucide-react"
+import { Calendar, Clock, MapPin} from "lucide-react"
 import { NavbarLandind } from "@/common/molecules/nav/nav-landing.molecule"
 import { Footer } from "@/common/molecules/footer.molecule"
 

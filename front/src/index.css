@@ -166,13 +166,13 @@ a:hover {
 input, textarea, select {
   font-family: inherit;
   font-size: 16px; /* Prevenir zoom en iOS */
-  padding: 0.75rem;
-  border: 1px solid var(--border-primary);
-  border-radius: 8px;
+  /* padding: 0.75rem; */
+  /* border: 1px solid var(--border-primary); */
+  /* border-radius: 8px; */
   background: var(--surface-primary);
   color: var(--text-primary);
   transition: border-color 0.2s ease;
-  min-height: 44px;
+  /* min-height: 44px; */
 }
 
 input:focus, textarea:focus, select:focus {

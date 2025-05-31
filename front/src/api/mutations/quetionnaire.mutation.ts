@@ -31,7 +31,8 @@ export const useCreateQuestionnaireMutation = () => {
         onSuccess: () => {
             const loadingToast = toast.loading('Creando cuestionario...', { id: "loading-create-questionnaire" });
             toast.success('¡Cuestionario creado con éxito!', { id: loadingToast });
-            queryClient.invalidateQueries({ queryKey: ['questionnaires'] });
+            queryClient.invalidateQueries({ queryKey: ['Questionnaires'] });
+
         },
         onError: (error: any) => {
             if (error?.statusCode !== 409) {
@@ -70,11 +71,11 @@ export const useUpdateQuestionnaireMutation = () => {
 
             // Invalidate both the list and the specific questionnaire
             if (data && data.id) {
-                queryClient.invalidateQueries({ queryKey: ['questionnaire', data.id] });
+                queryClient.invalidateQueries({ queryKey: ['Questionnaire', data.id] });
             }
             
             // Always invalidate the questionnaires list
-            queryClient.invalidateQueries({ queryKey: ['questionnaires'] });
+            queryClient.invalidateQueries({ queryKey: ['Questionnaires'] });
         },
         onError: (error: any) => {
             toast.error(error.message || 'Error al actualizar el cuestionario');
