@@ -13,7 +13,7 @@ import { MainLayout } from "@/common/widgets/clients/main-layout.widget"
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
-    email: "",  // Cambio de username a email
+    email: "", 
     password: "",
   })
 
@@ -22,13 +22,11 @@ export default function LoginPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Validaciones básicas
     if (!formData.email.trim()) {
       alert('Por favor ingresa tu email')
       return
     }
     
-    // Validación básica de email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(formData.email)) {
       alert('Por favor ingresa un email válido')
@@ -40,7 +38,6 @@ export default function LoginPage() {
       return
     }
 
-    // Ejecutar la mutación
     loginMutation.mutate(formData)
   }
 
