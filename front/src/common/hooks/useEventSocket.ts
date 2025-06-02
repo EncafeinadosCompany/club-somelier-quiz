@@ -12,7 +12,7 @@ export function useEventSocketParticipant(
     const [eventEnded, setEventEnded] = useState(false);
     const [results, setResults] = useState<any[]>([]);
     const [isConnected, setIsConnected] = useState(false);
-
+    
     useEffect(() => {
         if (!accessCode || !participantId) return;
 
@@ -20,13 +20,22 @@ export function useEventSocketParticipant(
         participantSocket.emit("join_event", { accessCode, participantId });
 
         /* listeners ------------ */
-        const onJoined = () => setIsConnected(true);
-        const onStarted = () => setEventStarted(true);
-        const onShow = (q: any) => {
-            setCurrentQuestion(q);
-            setAnswerAck(null);           // limpiamos feedback anterior
+        const onJoined = () => {
+            setIsConnected(true);
+            // Solicitar la pregunta actual inmediatamente al unirse
+            participantSocket.emit("request_current_question", { accessCode });
         };
+        
+        const onStarted = () => setEventStarted(true);
+        
+        const onShow = (q: any) => {
+            console.log("📝 Recibida pregunta:", q);
+            setCurrentQuestion(q);
+            setAnswerAck(null);
+        };
+        
         const onNoMore = () => setNoMore(true);
+        
         const onResults = (scores: any[]) => {
             console.log("🥇 Resultados:", scores);
             setResults(scores);
@@ -58,6 +67,12 @@ export function useEventSocketParticipant(
         participantSocket.emit('submit_answer', { questionId, answer });
     };
 
+    const requestCurrentQuestion = () => {
+        if (isConnected && accessCode) {
+            participantSocket.emit("request_current_question", { accessCode });
+        }
+    };
+
     return {
         socket: participantSocket,
         eventStarted,
@@ -67,7 +82,8 @@ export function useEventSocketParticipant(
         eventEnded,
         results,
         isConnected,
-        submitAnswer
+        submitAnswer,
+        requestCurrentQuestion
     };
 }
 

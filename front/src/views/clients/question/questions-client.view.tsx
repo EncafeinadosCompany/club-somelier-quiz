@@ -8,7 +8,6 @@ import { QuestionCard } from '@/common/atoms/QuestionCard';
 import { CheckCircle, XCircle } from 'lucide-react';
 import { AnswerButtons } from '@/common/molecules/AnswerButtons';
 
-
 interface LocationState {
   questionnaireId: number;
   participantId: string;
@@ -20,33 +19,57 @@ export function QuestionsView() {
   const navigate = useNavigate();
   const { questionnaireId, participantId, accessCode } = state as LocationState;
 
-  const { data: questionnaire } = useQuestionnaire(questionnaireId);  const {
+  const { data: questionnaire } = useQuestionnaire(questionnaireId);
+  
+  const {
     currentQuestion,
     answerAck,
     submitAnswer,
     noMoreQuestions,
     eventEnded,
     results,
-    eventStarted
+    eventStarted,
+    isConnected,
+    requestCurrentQuestion
   } = useEventSocketParticipant(accessCode, participantId);
+  
   const [showFeedback, setShowFeedback] = useState(false);
   const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
   const [hasAnsweredCurrentQuestion, setHasAnsweredCurrentQuestion] = useState(false);
   const [currentQuestionId, setCurrentQuestionId] = useState<number | null>(null);
+  const [isRequestingCurrentState, setIsRequestingCurrentState] = useState(false);
   
-  // Añadimos un registro de preguntas respondidas
+  // Registro de preguntas respondidas
   const answeredQuestions = useRef<Set<number>>(new Set());
 
+  // Solicitar la pregunta actual cuando estamos conectados pero no tenemos pregunta
+  useEffect(() => {
+    if (isConnected && eventStarted && !currentQuestion && !isRequestingCurrentState) {
+      setIsRequestingCurrentState(true);
+      requestCurrentQuestion();
+      
+      const timeout = setTimeout(() => {
+        setIsRequestingCurrentState(false);
+      }, 5000);
+      
+      return () => clearTimeout(timeout);
+    }
+  }, [isConnected, eventStarted, currentQuestion, requestCurrentQuestion]);
+
+  // Validación de parámetros de ruta
   useEffect(() => {
     if (!questionnaireId || !participantId || !accessCode) {
       navigate('/', { replace: true });
     }
-  }, [questionnaireId, participantId, accessCode, navigate]);  useEffect(() => {
+  }, [questionnaireId, participantId, accessCode, navigate]);
+  
+  // Manejo de confirmación de respuesta
+  useEffect(() => {
     if (answerAck && currentQuestionId) {
       setIsWaitingForResponse(false);
       setHasAnsweredCurrentQuestion(true);
       
-      // Guardamos la pregunta en nuestro registro de respondidas
+      // Guardar la pregunta en el registro de respondidas
       answeredQuestions.current.add(currentQuestionId);
       
       setShowFeedback(true);
@@ -56,13 +79,12 @@ export function QuestionsView() {
     }
   }, [answerAck, currentQuestionId]);
 
-  // Reset states when a new question arrives
+  // Reset de estados cuando llega una nueva pregunta
   useEffect(() => {
     if (currentQuestion && currentQuestion.questionId !== currentQuestionId) {
-      // Actualizamos el ID de la pregunta actual
       setCurrentQuestionId(currentQuestion.questionId);
       
-      // Verificamos si ya respondimos esta pregunta antes
+      // Verificar si ya respondimos esta pregunta antes
       const alreadyAnswered = answeredQuestions.current.has(currentQuestion.questionId);
       
       setIsWaitingForResponse(false);
@@ -70,6 +92,8 @@ export function QuestionsView() {
       setHasAnsweredCurrentQuestion(alreadyAnswered);
     }
   }, [currentQuestion, currentQuestionId]);
+  
+  // Manejo de respuesta del usuario
   const handleAnswer = (answer: boolean) => {
     if (!currentQuestion || hasAnsweredCurrentQuestion || 
         answeredQuestions.current.has(currentQuestion.questionId)) return;
@@ -78,6 +102,7 @@ export function QuestionsView() {
     submitAnswer(currentQuestion.questionId, answer);
   };
 
+  // Estados de carga y espera
   if (!questionnaire) {
     return (
       <MainLayout backgroundVariant="gradient">
@@ -91,7 +116,6 @@ export function QuestionsView() {
     );
   }
 
-  // Event has started but no question yet
   if (eventStarted && !currentQuestion) {
     return (
       <MainLayout backgroundVariant="gradient">
@@ -102,15 +126,29 @@ export function QuestionsView() {
               ¡El evento ha comenzado!
             </h2>
             <p className="text-[var(--text-secondary)]">
-              Esperando la primera pregunta del administrador...
+              {isRequestingCurrentState 
+                ? "Conectando a la pregunta actual..." 
+                : "Esperando la siguiente pregunta..."}
             </p>
+            
+            {!isRequestingCurrentState && (
+              <button 
+                onClick={() => {
+                  setIsRequestingCurrentState(true);
+                  requestCurrentQuestion();
+                  setTimeout(() => setIsRequestingCurrentState(false), 5000);
+                }}
+                className="mx-auto mt-4 px-4 py-2 bg-[var(--accent-primary)] text-white rounded-lg hover:bg-[var(--accent-primary)]/80 transition-colors"
+              >
+                Conectar con el evento
+              </button>
+            )}
           </div>
         </div>
       </MainLayout>
     );
   }
 
-  // No event started yet or no question
   if (!currentQuestion) {
     return (
       <MainLayout backgroundVariant="gradient">
@@ -144,11 +182,6 @@ export function QuestionsView() {
             <p className="text-sm text-[var(--text-secondary)]">
               {questionnaire.description}
             </p>
-            <div className="flex justify-center mt-2">
-              <span className="bg-[var(--accent-primary)]/20 px-2 py-1 rounded-full text-xs">
-                {currentQuestion.levelName}
-              </span>
-            </div>
           </motion.div>
 
           <QuestionCard
@@ -162,7 +195,6 @@ export function QuestionsView() {
             disabled={showFeedback || isWaitingForResponse || hasAnsweredCurrentQuestion}
           />
 
-          {/* State when user has answered but feedback is hidden */}
           {hasAnsweredCurrentQuestion && !showFeedback && !isWaitingForResponse && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
