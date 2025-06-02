@@ -21,16 +21,22 @@ export function AnswerButtons({
   const [showButtons, setShowButtons] = useState(false);
 
   useEffect(() => {
-    if (!isWaiting) {
-      const timer = setTimeout(() => {
+    let timer: NodeJS.Timeout | undefined;
+    
+    // Solo iniciar el temporizador si los botones deben ser visibles
+    if (!isWaiting && isVisible && !disabled) {
+      timer = setTimeout(() => {
         setShowButtons(true);
-      }, 800); 
-
-      return () => clearTimeout(timer);
+      }, 800);
     } else {
+      // Si no deben ser visibles, asegurarnos que estén ocultos
       setShowButtons(false);
     }
-  }, [isWaiting]);
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [isWaiting, isVisible, disabled]);
 
   const handleAnswer = (answer: boolean) => {
     setShowButtons(false);

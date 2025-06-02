@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useQuestionnaire } from '@/api/query/quiz.queries';
@@ -33,33 +33,47 @@ export function QuestionsView() {
   const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
   const [hasAnsweredCurrentQuestion, setHasAnsweredCurrentQuestion] = useState(false);
   const [currentQuestionId, setCurrentQuestionId] = useState<number | null>(null);
+  
+  // Añadimos un registro de preguntas respondidas
+  const answeredQuestions = useRef<Set<number>>(new Set());
 
   useEffect(() => {
     if (!questionnaireId || !participantId || !accessCode) {
       navigate('/', { replace: true });
     }
   }, [questionnaireId, participantId, accessCode, navigate]);  useEffect(() => {
-    if (answerAck) {
+    if (answerAck && currentQuestionId) {
       setIsWaitingForResponse(false);
       setHasAnsweredCurrentQuestion(true);
+      
+      // Guardamos la pregunta en nuestro registro de respondidas
+      answeredQuestions.current.add(currentQuestionId);
+      
       setShowFeedback(true);
       setTimeout(() => {
         setShowFeedback(false);
       }, 2000);
     }
-  }, [answerAck]);
+  }, [answerAck, currentQuestionId]);
 
   // Reset states when a new question arrives
   useEffect(() => {
     if (currentQuestion && currentQuestion.questionId !== currentQuestionId) {
+      // Actualizamos el ID de la pregunta actual
       setCurrentQuestionId(currentQuestion.questionId);
+      
+      // Verificamos si ya respondimos esta pregunta antes
+      const alreadyAnswered = answeredQuestions.current.has(currentQuestion.questionId);
+      
       setIsWaitingForResponse(false);
       setShowFeedback(false);
-      setHasAnsweredCurrentQuestion(false);
+      setHasAnsweredCurrentQuestion(alreadyAnswered);
     }
   }, [currentQuestion, currentQuestionId]);
   const handleAnswer = (answer: boolean) => {
-    if (!currentQuestion || hasAnsweredCurrentQuestion) return;
+    if (!currentQuestion || hasAnsweredCurrentQuestion || 
+        answeredQuestions.current.has(currentQuestion.questionId)) return;
+    
     setIsWaitingForResponse(true);
     submitAnswer(currentQuestion.questionId, answer);
   };
