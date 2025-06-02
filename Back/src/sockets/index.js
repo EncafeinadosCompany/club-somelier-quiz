@@ -75,34 +75,93 @@ function initializeWebSockets(io) {
 
     /* ========== PARTICIPANTE: SUBMIT ANSWER ========== */
     socket.on("submit_answer", async ({ questionId, answer }) => {
-      const { accessCode, participantId } = socket.data;
-      const live = liveEvents.get(accessCode);
-      if (!live) return;
+      try {
+        const { accessCode, participantId } = socket.data;
+        const live = liveEvents.get(accessCode);
+        if (!live) return;
 
-      const elapsedMs = Date.now() - live.questionStart;
-      const question = live.questions[live.currentIdx];
+        const existingAnswer = await Answer.findOne({
+          where: {
+            event_id: live.eventId,
+            question_id: questionId,
+            participant_id: participantId,
+          },
+        });
 
-      const is_correct = answer === question.response;
-      const basePts = await Level.findByPk(question.level_id).then(
-        (l) => l.points
-      );
-      const k = 1;
-      const seconds = elapsedMs / 1000;
-      const score = is_correct ? Math.max(basePts - k * seconds, 0) : 0;
+        if (existingAnswer) {
+          console.log(
+            `Respuesta duplicada detectada: participante ${participantId}, pregunta ${questionId}`
+          );
+          return socket.emit("answer_ack", {
+            is_correct: existingAnswer.is_correct,
+            score: existingAnswer.points_awarded,
+          });
+        }
 
-      const roundedScore = Math.round(score * 10) / 10;
+        const elapsedMs = Date.now() - live.questionStart;
+        const question = live.questions[live.currentIdx];
 
-      await Answer.create({
-        event_id: live.eventId,
-        question_id: questionId,
-        participant_id: participantId,
-        response: answer,
-        is_correct,
-        response_time: seconds,
-        points_awarded: roundedScore,
-      });
+        const is_correct = answer === question.response;
+        const basePts = await Level.findByPk(question.level_id).then(
+          (l) => l.points
+        );
+        const k = 1;
+        const seconds = elapsedMs / 1000;
+        const score = is_correct ? Math.max(basePts - k * seconds, 0) : 0;
 
-      socket.emit("answer_ack", { is_correct, score });
+        const roundedScore = Math.round(score * 10) / 10;
+
+        await Answer.create({
+          event_id: live.eventId,
+          question_id: questionId,
+          participant_id: participantId,
+          response: answer,
+          is_correct,
+          response_time: seconds,
+          points_awarded: roundedScore,
+        });
+
+        socket.emit("answer_ack", { is_correct, score });
+      } catch (error) {
+        console.error("Error al procesar respuesta:", error.name);
+
+        if (error.name === "SequelizeUniqueConstraintError") {
+          try {
+            const { accessCode, participantId } = socket.data;
+            const live = liveEvents.get(accessCode);
+
+            if (live) {
+              const existingAnswer = await Answer.findOne({
+                where: {
+                  event_id: live.eventId,
+                  question_id: questionId,
+                  participant_id: participantId,
+                },
+              });
+
+              if (existingAnswer) {
+                return socket.emit("answer_ack", {
+                  is_correct: existingAnswer.is_correct,
+                  score: existingAnswer.points_awarded,
+                });
+              }
+            }
+          } catch (secondaryError) {
+            console.error(
+              "Error secundario al recuperar respuesta existente:",
+              secondaryError
+            );
+          }
+
+          socket.emit("answer_ack", {
+            is_correct: false,
+            score: 0,
+            duplicate: true,
+          });
+        } else {
+          socket.emit("error", "Hubo un problema al procesar tu respuesta");
+        }
+      }
     });
 
     /* ========== ADMIN: END EVENT ========== */
@@ -145,7 +204,11 @@ function initializeWebSockets(io) {
     socket.on("request_current_question", ({ accessCode }) => {
       const live = liveEvents.get(accessCode);
 
-      if (live && live.currentIdx >= 0 && live.currentIdx < live.questions.length) {
+      if (
+        live &&
+        live.currentIdx >= 0 &&
+        live.currentIdx < live.questions.length
+      ) {
         const q = live.questions[live.currentIdx];
         socket.emit("show_question", {
           questionId: q.id,
@@ -157,31 +220,31 @@ function initializeWebSockets(io) {
     });
 
     /* ========== PARTICIPANTE: REQUEST ALL PREVIOUS QUESTIONS ========== */
-socket.on("request_previous_questions", ({ accessCode }) => {
-  const live = liveEvents.get(accessCode);
-  if (!live) return;
+    socket.on("request_previous_questions", ({ accessCode }) => {
+      const live = liveEvents.get(accessCode);
+      if (!live) return;
 
-  // Solo enviar si el evento ya ha comenzado y hay al menos una pregunta
-  if (live.currentIdx >= 0) {
-    // Crear un array con todas las preguntas mostradas hasta ahora
-    const previousQuestions = [];
-    
-    for (let i = 0; i <= live.currentIdx; i++) {
-      const q = live.questions[i];
-      previousQuestions.push({
-        questionId: q.id,
-        position: i + 1,
-        total: live.questions.length,
-        text: q.question,
-      });
-    }
-    
-    socket.emit("previous_questions", {
-      questions: previousQuestions,
-      currentIndex: live.currentIdx
+      // Solo enviar si el evento ya ha comenzado y hay al menos una pregunta
+      if (live.currentIdx >= 0) {
+        // Crear un array con todas las preguntas mostradas hasta ahora
+        const previousQuestions = [];
+
+        for (let i = 0; i <= live.currentIdx; i++) {
+          const q = live.questions[i];
+          previousQuestions.push({
+            questionId: q.id,
+            position: i + 1,
+            total: live.questions.length,
+            text: q.question,
+          });
+        }
+
+        socket.emit("previous_questions", {
+          questions: previousQuestions,
+          currentIndex: live.currentIdx,
+        });
+      }
     });
-  }
-});
   });
 }
 
