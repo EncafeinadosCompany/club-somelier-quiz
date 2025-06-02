@@ -1,4 +1,5 @@
 const AuthService = require('../services/auth.service');
+const {AuthResponseDto} = require('../dtos/auth.response.dto');
 
 class AuthController {
   constructor() {
@@ -9,9 +10,11 @@ class AuthController {
     try {
       const { email, password } = req.body;
       const user = await this.authService.login(email, password);
-      res.status(200).json({ message: 'Login successful', user });
+      res.status(200).json(new AuthResponseDto({ user }));
     } catch (error) {
-      res.status(401).json({ message: error.message });
+      if (error.statusCode) {
+        return res.status(error.statusCode).json({ message: error.message });
+      }
     }
   }
 

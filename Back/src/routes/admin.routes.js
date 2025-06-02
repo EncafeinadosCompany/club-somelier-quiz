@@ -9,7 +9,7 @@ const {authenticateJWT} = require('../middlewares/auth.middleware')
 
 router
     .get('/:id', adminController.getAdminById)
-    .post('/',authenticateJWT, validateAdmin, adminController.createAdmin)
+    .post('/', validateAdmin, adminController.createAdmin)
 
 
 module.exports = router;
