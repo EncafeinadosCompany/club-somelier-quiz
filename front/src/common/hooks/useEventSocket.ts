@@ -12,122 +12,53 @@ export function useEventSocketParticipant(
     const [eventEnded, setEventEnded] = useState(false);
     const [results, setResults] = useState<any[]>([]);
     const [isConnected, setIsConnected] = useState(false);
-    const [isInitializing, setIsInitializing] = useState(true);
 
     useEffect(() => {
         if (!accessCode || !participantId) return;
 
         if (!participantSocket.connected) participantSocket.connect();
-        participantSocket.emit("join_event", { accessCode, participantId });        /* listeners ------------ */        const onJoined = (data: any) => {
-            console.log('🔗 Joined event:', data);
-            setIsConnected(true);
-            setIsInitializing(false);
-            
-            // Si al unirse ya hay información del estado actual
-            if (data.eventStarted) {
-                setEventStarted(true);
-            }
-            if (data.currentQuestion) {
-                setCurrentQuestion(data.currentQuestion);
-            }
-            if (data.eventEnded) {
-                setEventEnded(true);
-            }
-            
-            // Solicitar estado actual por si acaso
-            setTimeout(() => {
-                if (participantSocket.connected) {
-                    participantSocket.emit('request_current_state', { accessCode, participantId });
-                }
-            }, 500);
-        };
-        
-        const onStarted = () => {
-            console.log('🚀 Event started');
-            setEventStarted(true);
-        };
-        
+        participantSocket.emit("join_event", { accessCode, participantId });
+
+        /* listeners ------------ */
+        const onJoined = () => setIsConnected(true);
+        const onStarted = () => setEventStarted(true);
         const onShow = (q: any) => {
-            console.log('📋 New question:', q);
             setCurrentQuestion(q);
             setAnswerAck(null);           // limpiamos feedback anterior
         };
-        
-        const onNoMore = () => {
-            console.log('🏁 No more questions');
-            setNoMore(true);
-        };
-        
+        const onNoMore = () => setNoMore(true);
         const onResults = (scores: any[]) => {
             console.log("🥇 Resultados:", scores);
             setResults(scores);
             setEventEnded(true);
         };
 
-        const onAck = (payload: any) => {
-            console.log('✅ Answer acknowledged:', payload);
-            setAnswerAck(payload);
-        };
+        const onAck = (payload: any) => setAnswerAck(payload);
 
-        const onError = (error: any) => {
-            console.error('❌ Socket error:', error);
-            setIsInitializing(false);
-        };
-
-        const onConnect = () => {
-            console.log('🔗 Participant socket connected');
-            setIsConnected(true);
-        };        const onDisconnect = () => {
-            console.log('❌ Participant socket disconnected');
-            setIsConnected(false);
-        };
-
-        const onCurrentState = (state: any) => {
-            console.log('📊 Current event state:', state);
-            if (state.eventStarted !== undefined) {
-                setEventStarted(state.eventStarted);
-            }
-            if (state.currentQuestion) {
-                setCurrentQuestion(state.currentQuestion);
-            }
-            if (state.eventEnded !== undefined) {
-                setEventEnded(state.eventEnded);
-            }
-            if (state.noMoreQuestions !== undefined) {
-                setNoMore(state.noMoreQuestions);
-            }
-        };participantSocket.on('connect', onConnect);
-        participantSocket.on('disconnect', onDisconnect);
         participantSocket.on('joined_ok', onJoined);
         participantSocket.on('event_started', onStarted);
         participantSocket.on('show_question', onShow);
         participantSocket.on("no_more_questions", onNoMore);
         participantSocket.on("event_results", onResults);
         participantSocket.on('answer_ack', onAck);
-        participantSocket.on('error', onError);
 
         return () => {
-            participantSocket.off('connect', onConnect);
-            participantSocket.off('disconnect', onDisconnect);
             participantSocket.off('joined_ok', onJoined);
             participantSocket.off('event_started', onStarted);
             participantSocket.off('show_question', onShow);
             participantSocket.off('no_more_questions', onNoMore);
             participantSocket.off('event_results', onResults);
             participantSocket.off('answer_ack', onAck);
-            participantSocket.off('error', onError);
         };
 
-    }, [accessCode, participantId]);    /* -------- API que exponemos -------- */
+    }, [accessCode, participantId]);
+
+    /* -------- API que exponemos -------- */
     const submitAnswer = (questionId: number, answer: boolean) => {
         participantSocket.emit('submit_answer', { questionId, answer });
     };
 
-    const requestCurrentState = () => {
-        if (participantSocket.connected) {
-            participantSocket.emit('request_current_state', { accessCode, participantId });
-        }
-    };    return {
+    return {
         socket: participantSocket,
         eventStarted,
         currentQuestion,
@@ -136,9 +67,7 @@ export function useEventSocketParticipant(
         eventEnded,
         results,
         isConnected,
-        isInitializing,
-        submitAnswer,
-        requestCurrentState
+        submitAnswer
     };
 }
 

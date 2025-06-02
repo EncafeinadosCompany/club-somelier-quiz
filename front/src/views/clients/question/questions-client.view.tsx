@@ -27,9 +27,7 @@ export function QuestionsView() {
     noMoreQuestions,
     eventEnded,
     results,
-    eventStarted,
-    isConnected,
-    isInitializing
+    eventStarted
   } = useEventSocketParticipant(accessCode, participantId);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
@@ -65,7 +63,7 @@ export function QuestionsView() {
     setIsWaitingForResponse(true);
     submitAnswer(currentQuestion.questionId, answer);
   };
-  // Loading states
+
   if (!questionnaire) {
     return (
       <MainLayout backgroundVariant="gradient">
@@ -79,63 +77,18 @@ export function QuestionsView() {
     );
   }
 
-  // Socket connection and initialization
-  if (isInitializing || !isConnected) {
-    return (
-      <MainLayout backgroundVariant="gradient">
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center space-y-4 max-w-md mx-auto px-4">
-            <div className="w-10 h-10 border-3 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin mx-auto" />
-            <h2 className="text-lg font-semibold text-[var(--text-primary)]">
-              Conectando al evento
-            </h2>
-            <p className="text-[var(--text-secondary)]">
-              {questionnaire.title}
-            </p>
-          </div>
-        </div>
-      </MainLayout>
-    );
-  }
-
-  // Event ended
-  if (eventEnded || noMoreQuestions) {
-    return (
-      <MainLayout backgroundVariant="gradient">
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center space-y-6 max-w-md mx-auto px-4">
-            <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
-            <h2 className="text-2xl font-semibold text-[var(--text-primary)]">
-              ¡Evento finalizado!
-            </h2>
-            <p className="text-[var(--text-secondary)]">
-              Gracias por participar en "{questionnaire.title}"
-            </p>
-            {results.length > 0 && (
-              <div className="bg-[var(--surface-secondary)] p-4 rounded-xl">
-                <p className="text-sm text-[var(--text-primary)]">
-                  Resultados disponibles
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      </MainLayout>
-    );
-  }
-
-  // Event not started yet
-  if (!eventStarted) {
+  // Event has started but no question yet
+  if (eventStarted && !currentQuestion) {
     return (
       <MainLayout backgroundVariant="gradient">
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center space-y-4 max-w-md mx-auto px-4">
             <div className="w-12 h-12 border-3 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin mx-auto" />
             <h2 className="text-xl font-semibold text-[var(--text-primary)]">
-              {questionnaire.title}
+              ¡El evento ha comenzado!
             </h2>
             <p className="text-[var(--text-secondary)]">
-              El evento aún no ha comenzado. Esperando que el administrador inicie el quiz...
+              Esperando la primera pregunta del administrador...
             </p>
           </div>
         </div>
@@ -143,18 +96,18 @@ export function QuestionsView() {
     );
   }
 
-  // Event started but no current question
+  // No event started yet or no question
   if (!currentQuestion) {
     return (
       <MainLayout backgroundVariant="gradient">
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center space-y-4 max-w-md mx-auto px-4">
-            <div className="w-12 h-12 border-3 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin mx-auto" />
-            <h2 className="text-xl font-semibold text-[var(--text-primary)]">
-              {questionnaire.title}
+            <div className="w-8 h-8 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin mx-auto" />
+            <h2 className="text-lg font-semibold text-[var(--text-primary)]">
+              Conectado al evento
             </h2>
             <p className="text-[var(--text-secondary)]">
-              El evento ha comenzado. Esperando la primera pregunta...
+              Esperando que el administrador inicie el quiz...
             </p>
           </div>
         </div>
