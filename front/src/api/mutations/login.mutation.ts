@@ -22,14 +22,12 @@ export function useLogin() {
       }
     },
     onSuccess: (data) => {
-      // Guardar token y datos del usuario
       localStorage.setItem('authToken', data.token)
       localStorage.setItem('admin', JSON.stringify(data.admin))
       
       console.log('Login exitoso:')
       
-      // Redirigir a eventos
-      navigate('/event')
+      navigate('/admin')
     },
     onError: (error: Error) => {
       console.error('Error de login:', error.message)
