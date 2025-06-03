@@ -6,20 +6,39 @@ import { Button } from "@/common/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/common/ui/card"
 import { Input } from "@/common/ui/input"
 import { Label } from "@/common/ui/label"
-import { MainLayout } from '../../common/widgets/clients/main-layout.widget'
-import { Eye, EyeOff, User, ArrowLeft } from "lucide-react"
+import { Eye, EyeOff, User, Lock, ArrowLeft, Loader2, Mail } from "lucide-react"
+import { useLogin } from "@/api/mutations/login.mutation"
+import { MainLayout } from "@/common/widgets/clients/main-layout.widget"
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
-    username: "",
+    email: "", 
     password: "",
   })
 
+  const loginMutation = useLogin()
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("Login attempt:", formData)
-    // Aquí irá tu lógica de autenticación
+    
+    if (!formData.email.trim()) {
+      alert('Por favor ingresa tu email')
+      return
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(formData.email)) {
+      alert('Por favor ingresa un email válido')
+      return
+    }
+    
+    if (!formData.password.trim()) {
+      alert('Por favor ingresa tu contraseña')
+      return
+    }
+
+    loginMutation.mutate(formData)
   }
 
   const handleInputChange = (field: string, value: string) => {
@@ -62,20 +81,29 @@ export default function LoginPage() {
           </CardHeader>
 
           <CardContent className="space-y-6 pb-8">
+            {/* Mostrar error si existe */}
+            {loginMutation.isError && (
+              <div className="bg-red-500/10 border border-red-500/20 text-red-600 px-4 py-3 rounded-lg text-sm">
+                {loginMutation.error?.message || 'Error al iniciar sesión'}
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="username" className="text-sm font-medium text-[var(--text-primary)]">
-                  Usuario
+                <Label htmlFor="email" className="text-sm font-medium text-[var(--text-primary)]">
+                  Email
                 </Label>
                 <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--text-secondary)]" />
                   <Input
-                    id="username"
-                    type="text"
-                    placeholder="Ingresa tu usuario"
-                    value={formData.username}
-                    onChange={(e) => handleInputChange("username", e.target.value)}
+                    id="email"
+                    type="email"
+                    placeholder="Ingresa tu email"
+                    value={formData.email}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
                     className="pl-10 h-12 border-2 border-[var(--border-primary)] rounded-xl focus:border-[var(--accent-primary)] transition-colors"
                     required
+                    disabled={loginMutation.isPending}
                   />
                 </div>
               </div>
@@ -85,6 +113,7 @@ export default function LoginPage() {
                   Contraseña
                 </Label>
                 <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--text-secondary)]" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
@@ -93,11 +122,13 @@ export default function LoginPage() {
                     onChange={(e) => handleInputChange("password", e.target.value)}
                     className="pl-10 pr-10 h-12 border-2 border-[var(--border-primary)] rounded-xl focus:border-[var(--accent-primary)] transition-colors"
                     required
+                    disabled={loginMutation.isPending}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                    disabled={loginMutation.isPending}
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -106,9 +137,17 @@ export default function LoginPage() {
 
               <Button
                 type="submit"
-                className="w-full h-12 bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] hover:from-[var(--accent-primary-hover)] hover:to-[var(--accent-secondary-hover)] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
+                disabled={loginMutation.isPending}
+                className="w-full h-12 bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] hover:from-[var(--accent-primary-hover)] hover:to-[var(--accent-secondary-hover)] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
-                Iniciar Sesión
+                {loginMutation.isPending ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Iniciando sesión...
+                  </>
+                ) : (
+                  'Iniciar Sesión'
+                )}
               </Button>
             </form>
           </CardContent>

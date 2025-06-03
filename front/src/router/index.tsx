@@ -1,7 +1,7 @@
 import App from "@/App";
 import {BrowserRouter as Router,Route,Routes,Navigate} from "react-router-dom";
 import { QuestionsView } from "@/views/clients/question/questions-client.view";
-import { NotFound } from "@/common/utils/404";
+import { NotFoundPage } from "@/common/utils/404";
 import Navbar from "@/common/widgets/admin/nav_widget";
 import HomeCuestion from "@/views/admin/questionnaire/questionnaire-view";
 import { QuizLoader } from "@/common/atoms/QuizLoader";
@@ -48,7 +48,7 @@ export default function AuthRoutes() {
             <Suspense fallback={<SuspenseLoader />}>
                 <Routes>
                     <Route path="/" element={<AppWithLoading />}>
-                        <Route path="404" element={<NotFound />} />
+                        <Route path="404" element={<NotFoundPage />} />
                         <Route index element={<HomeView />} />
                         <Route path="client" element={<HomeView />} />
                         <Route path="waiting" element={<WaitingViewTest />} />
