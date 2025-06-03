@@ -62,11 +62,7 @@ export default function HomeCuestion() {
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
       {/* Background Image */}
-      <img
-        src={clubSomelier}
-        alt="Beautiful mountain landscape"
-        className="object-cover absolute h-full w-full"
-      />
+      < AnimatedBackground></AnimatedBackground>
       {/* <AnimatedBackground /> */}
 
     <div className="w-fit z-100  right-2 top-2 flex absolute ">

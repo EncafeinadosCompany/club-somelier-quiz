@@ -131,7 +131,7 @@ export default function QuestionsView() {
                 alt="Beautiful mountain landscape"
                 className="object-cover absolute h-full w-full"
             /> */}
-                        <AnimatedBackground />
+            <AnimatedBackground />
             
 
             {/* Main Content */}

@@ -2,7 +2,7 @@
 
 import { ChefHat, Utensils, Wine, Beef, Flame, Wheat, Grape, UtensilsCrossed } from "lucide-react"
 import { useEffect, useState } from "react"
-import clubSomelier from "@/assets/clubSomelier.png"
+import clubSomelier from "@/assets/Copilot_20250603_132231.png"
 interface FloatingIcon {
   id: number
   Icon: any
