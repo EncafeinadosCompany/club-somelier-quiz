@@ -1,6 +1,20 @@
 import { participantSocket, adminSocket } from "@/api/client/socket";
 import { useEffect, useState } from "react";
 
+
+export interface Participant {
+  fullName: string;
+  id: number;
+}
+
+// Interface para los resultados
+export interface ResultsType {
+  participant: Participant;
+  participant_id: number;
+  total: number;
+}
+
+
 export function useEventSocketParticipant(
     accessCode?: string,
     participantId?: string | null
@@ -10,9 +24,9 @@ export function useEventSocketParticipant(
     const [answerAck, setAnswerAck] = useState<{ is_correct: boolean; score: number } | null>(null);
     const [noMoreQuestions, setNoMore] = useState(false);
     const [eventEnded, setEventEnded] = useState(false);
-    const [results, setResults] = useState<any[]>([]);
+    const [results, setResults] = useState<ResultsType[]>([]);
     const [isConnected, setIsConnected] = useState(false);
-    
+
     useEffect(() => {
         if (!accessCode || !participantId) return;
 
@@ -25,17 +39,17 @@ export function useEventSocketParticipant(
             // Solicitar la pregunta actual inmediatamente al unirse
             participantSocket.emit("request_current_question", { accessCode });
         };
-        
+
         const onStarted = () => setEventStarted(true);
-        
+
         const onShow = (q: any) => {
             console.log("📝 Recibida pregunta:", q);
             setCurrentQuestion(q);
             setAnswerAck(null);
         };
-        
+
         const onNoMore = () => setNoMore(true);
-        
+
         const onResults = (scores: any[]) => {
             console.log("🥇 Resultados:", scores);
             setResults(scores);
@@ -97,8 +111,6 @@ export function useEventSocketAdmin(accessCode: string) {
     useEffect(() => {
         if (!accessCode) return;
 
-        console.log('Admin Socket:', adminSocket);
-
         if (!adminSocket.connected) adminSocket.connect();
 
         adminSocket.on('connect', () => {
@@ -140,6 +152,11 @@ export function useEventSocketAdmin(accessCode: string) {
             console.log('✅ Event results:', results);
         });
 
+        adminSocket.on('event_ended', () => {
+            console.log('✅ Event ended');
+            setEventEnded(true);
+        });
+
         if (adminSocket.connected) {
             setIsConnected(true);
             adminSocket.emit('admin:join', { accessCode });
@@ -154,9 +171,11 @@ export function useEventSocketAdmin(accessCode: string) {
             adminSocket.off('show_question');
             adminSocket.off('no_more_questions');
             adminSocket.off('event_results');
+            adminSocket.off('event_ended');
             adminSocket.disconnect();
         };
     }, [accessCode]);
+
 
     const startEvent = () => {
         console.log('🚀 Starting event:', accessCode);
