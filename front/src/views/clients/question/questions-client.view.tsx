@@ -149,6 +149,68 @@ export function QuestionsView() {
     );
   }
 
+  if (eventEnded) {
+    return (
+      <MainLayout backgroundVariant="gradient">
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center space-y-6 max-w-md mx-auto px-4">
+            <div className="w-16 h-16 mx-auto bg-[var(--accent-primary)]/10 rounded-full flex items-center justify-center">
+              <CheckCircle className="w-10 h-10 text-[var(--accent-primary)]" />
+            </div>
+            
+            <div>
+              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-2">
+                ¡El evento ha finalizado!
+              </h2>
+              <p className="text-[var(--text-secondary)]">
+                Gracias por participar. Los resultados han sido registrados.
+              </p>
+            </div>
+            
+            {results.length > 0 && (
+              <div className="mt-8">
+                <h3 className="text-lg font-semibold mb-4">Resultados finales</h3>
+                <div className="bg-white/10 backdrop-blur-md rounded-xl border border-white/20 p-4">
+                  <div className="space-y-3">
+                    {results.slice(0, 10).map((result, index) => (
+                      <div 
+                        key={result.participant_id} 
+                        className={`flex justify-between items-center p-2 rounded-lg ${
+                          result.participant_id === participantId 
+                          ? 'bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/20' 
+                          : ''
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">
+                            {index + 1}.
+                          </span>
+                          <span>
+                            {result.participant?.fullName || 'Participante'}
+                          </span>
+                        </div>
+                        <span className="font-bold">
+                          {Math.round(result.total * 10) / 10} pts
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            <button 
+              onClick={() => navigate('/', { replace: true })}
+              className="mx-auto mt-6 px-6 py-3 bg-[var(--accent-primary)] text-white rounded-lg hover:bg-[var(--accent-primary)]/80 transition-colors"
+            >
+              Volver al inicio
+            </button>
+          </div>
+        </div>
+      </MainLayout>
+    );
+  }
+
   if (!currentQuestion) {
     return (
       <MainLayout backgroundVariant="gradient">

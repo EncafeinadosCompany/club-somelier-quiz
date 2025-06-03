@@ -42,6 +42,11 @@ export function useEventSocketParticipant(
             setEventEnded(true);
         };
 
+        const onEventEnded = () => {
+            console.log("🏁 Evento finalizado");
+            setEventEnded(true);
+        };
+
         const onAck = (payload: any) => setAnswerAck(payload);
 
         participantSocket.on('joined_ok', onJoined);
@@ -49,6 +54,7 @@ export function useEventSocketParticipant(
         participantSocket.on('show_question', onShow);
         participantSocket.on("no_more_questions", onNoMore);
         participantSocket.on("event_results", onResults);
+        participantSocket.on("event_ended", onEventEnded);
         participantSocket.on('answer_ack', onAck);
 
         return () => {
@@ -57,6 +63,7 @@ export function useEventSocketParticipant(
             participantSocket.off('show_question', onShow);
             participantSocket.off('no_more_questions', onNoMore);
             participantSocket.off('event_results', onResults);
+            participantSocket.off('event_ended', onEventEnded);
             participantSocket.off('answer_ack', onAck);
         };
 
