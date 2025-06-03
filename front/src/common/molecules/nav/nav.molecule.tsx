@@ -31,21 +31,21 @@ const NavItem = memo(({
   <Link
     to={item.href}
     className={cn(
-      "flex items-center px-4 py-3 rounded-lg transition-all duration-200",
+      "flex items-center no-underline px-4 py-3 rounded-lg transition-all duration-200",
       isActive
-        ? "bg-blue-500/20 text-blue-400"
+        ? "bg-amber-900/50 text-white/60"
         : "text-white/70 hover:bg-white/10 hover:text-white"
     )}
     onClick={onClick}
   >
-    <div className="flex-shrink-0">
+    <div className="flex-shrink-0 text-white/60">
       {item.icon}
     </div>
-    <span className="ml-3 font-medium">
+    <span className="ml-3 font-medium text-white/60 ">
       {item.title}
     </span>
     {isActive && (
-      <div className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400"></div>
+      <div className="ml-auto w-1.5 h-1.5 rounded-full bg-amber-100"></div>
     )}
   </Link>
 ));
@@ -74,9 +74,9 @@ export const NavGeneral = ({
   const closeNav = () => setIsExpanded(false);
 
   return (
-    <div className="flex flex-col h-full min-h-screen w-full bg-[#110202]">
+    <div className="flex flex-col h-full min-h-screen w-full bg-[#E6DCC8]">
       {/* Header - Always visible */}
-      <header className="sticky top-0 z-30 bg-white/10 backdrop-blur-lg border-b border-white/20 px-4 py-3 flex items-center justify-between">
+      <header className="sticky top-0 z-30 bg-[#4e250a] backdrop-blur-lg border-b border-white/20 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-3">
         <Button
           variant="ghost" 
@@ -105,14 +105,14 @@ export const NavGeneral = ({
       {!isMobile && (
         <div
           className={cn(
-            "fixed top-0 left-0 z-50 h-full w-72 bg-black/75 backdrop-blur-xl border-r border-white/10 shadow-xl transition-transform duration-300 ease-in-out",
+            "fixed top-0 left-0 z-50 h-full w-72 bg-[#371a06] backdrop-blur-xl border-r border-white/10 shadow-xl transition-transform duration-300 ease-in-out",
             isExpanded ? "translate-x-0" : "-translate-x-full"
           )}
         >
           {/* Navigation Header */}
           <div className="flex items-center justify-between p-4 border-b border-white/10">
             <div className="flex items-center space-x-3">
-              <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center">
+              <div className="h-8 w-8 rounded-full bg-amber-500 flex items-center justify-center">
                 <span className="font-bold text-white">Q</span>
               </div>
               <span className="font-bold text-white">{name || "QuizApp"}</span>
@@ -129,7 +129,7 @@ export const NavGeneral = ({
 
           {/* Navigation Items */}
           <div className="p-3 overflow-y-auto max-h-[calc(100vh-64px)]">
-            <nav className="space-y-1">
+            <nav className="space-y-1 text-white/60">
               {navItems.map((item) => (
                 <NavItem 
                   key={item.href}
@@ -159,11 +159,11 @@ export const NavGeneral = ({
       {isMobile && isExpanded && (
         <>
           <div 
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40"
+            className="fixed inset-0 bg-[] backdrop-blur-sm z-40"
             onClick={closeNav}
           ></div>
           
-          <div className="fixed top-0 right-0 z-50 h-full w-72 bg-black/75 backdrop-blur-xl border-l border-white/10 shadow-xl">
+          <div className="fixed top-0 right-0 z-50 h-full w-72 bg-[#4e250a]/50 backdrop-blur-xl border-l border-white/10 shadow-xl">
             <div className="flex items-center justify-between p-4 border-b border-white/10">
               <span className="font-bold text-white">Menú</span>
               <Button
@@ -177,7 +177,7 @@ export const NavGeneral = ({
             </div>
             
             <div className="p-3">
-              <nav className="space-y-1">
+              <nav className="space-y-1 text-white/60">
                 {navItems.map((item) => (
                   <NavItem 
                     key={item.href}
