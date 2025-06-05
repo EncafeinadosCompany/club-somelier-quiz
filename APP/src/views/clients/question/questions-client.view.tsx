@@ -7,6 +7,8 @@ import { useEventSocketParticipant } from '@/common/hooks/useEventSocket';
 import { QuestionCard } from '@/common/atoms/QuestionCard';
 import { CheckCircle, XCircle } from 'lucide-react';
 import { AnswerButtons } from '@/common/molecules/AnswerButtons';
+import { ParticipantsRanking } from '@/common/molecules/ParticipantsRanking';
+import { LiveRankingWidget } from '@/common/molecules/LiveRankingWidget';
 
 interface LocationState {
   questionnaireId: number;
@@ -194,6 +196,49 @@ export function QuestionsView() {
     );
   }
 
+  if (eventEnded) {
+    return (
+      <MainLayout backgroundVariant="gradient">
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center space-y-6 max-w-md mx-auto px-4">
+            <div className="w-16 h-16 mx-auto bg-[var(--accent-primary)]/10 rounded-full flex items-center justify-center">
+              <CheckCircle className="w-10 h-10 text-[var(--accent-primary)]" />
+            </div>
+            
+            <div>
+              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-2">
+                ¡El evento ha finalizado!
+              </h2>
+              <p className="text-[var(--text-secondary)]">
+                Gracias por participar. Los resultados han sido registrados.
+              </p>
+            </div>
+            
+            {results.length > 0 && (
+              <div className="mt-8">
+                <ParticipantsRanking
+                  participants={results}
+                  currentParticipantId={participantId}
+                  title="Resultados finales"
+                  maxToShow={10}
+                  showMedals={true}
+                  animate={true}
+                />
+              </div>
+            )}
+            
+            <button 
+              onClick={() => navigate('/', { replace: true })}
+              className="mx-auto mt-6 px-6 py-3 bg-[var(--accent-primary)] text-white rounded-lg hover:bg-[var(--accent-primary)]/80 transition-colors"
+            >
+              Volver al inicio
+            </button>
+          </div>
+        </div>
+      </MainLayout>
+    );
+  }
+
   if (!currentQuestion) {
     return (
       <MainLayout backgroundVariant="gradient">
@@ -284,6 +329,15 @@ export function QuestionsView() {
                 </div>
               </div>
             </motion.div>
+          )}
+
+          {/* Añadir el widget de ranking si hay resultados parciales */}
+          {results.length > 0 && (
+            <LiveRankingWidget
+              participants={results}
+              currentParticipantId={participantId}
+              maxToShow={5}
+            />
           )}
         </div>
       </div>
