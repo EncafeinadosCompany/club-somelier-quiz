@@ -9,4 +9,4 @@ services:
       - key: NODE_ENV
         value: production
     autoDeploy: true
-    rootDir: api
+    rootDir: API
