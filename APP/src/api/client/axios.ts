@@ -1,3 +1,4 @@
+import { getAuthStorage } from "@/common/storage/permission-store";
 import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
 
 export default class AuthClient {
@@ -7,13 +8,14 @@ export default class AuthClient {
     constructor() {
         this.client = axios.create({
             baseURL: import.meta.env.VITE_API_URL,
+
             headers: {
                 'Content-Type': 'application/json'
             }
         })
         this.client.interceptors.request.use(
             (config) => {
-                const token = localStorage.getItem('token');
+                const { token } = getAuthStorage();
                 if (token) {
                     config.headers['Authorization'] = `Bearer ${token}`;
                 }
@@ -65,9 +67,12 @@ export default class AuthClient {
         }
     }
 
-    public async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    public async delete<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
         try {
-            const response = await this.client.delete<T>(url, config);
+            const response = await this.client.delete<T>(url, {
+                ...config,
+                data: data
+            });
             return response.data;
         } catch (error) {
             console.log(`DELETE ${url}`);

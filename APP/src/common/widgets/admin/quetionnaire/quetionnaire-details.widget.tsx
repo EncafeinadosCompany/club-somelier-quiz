@@ -1,18 +1,20 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSearchParams } from "react-router-dom";
-import {FileText,Plus,Save,Calendar,Trash2,Edit3,HelpCircle} from "lucide-react";
-import { GetQuestionnaire } from "@/api/types/quetionnaire.type";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { FileText, Plus, Save, Calendar, Trash2, Edit3, HelpCircle } from "lucide-react";
+import { GetQuestionnaire, QuestionnaireQuestion } from "@/api/types/quetionnaire.type";
 import AnimatedBackground from "@/common/atoms/animated-background";
 import EventFormModal from "@/common/widgets/admin/events/events-form.widget";
+import { useDeleteQuetionnaireMutation } from "@/api/mutations/quetionnaire.mutation";
+import { question } from "@/api/types/questions.type";
 
 
 interface QuestionnaireDetailProps {
-  useQuestionnaireByIDQuery: (id: string) => { data: GetQuestionnaire | undefined};
+  useQuestionnaireByIDQuery: (id: string) => { data: GetQuestionnaire | undefined };
   onSave?: (draft: GetQuestionnaire) => void;
 }
 
-export default function QuestionnaireDetail({useQuestionnaireByIDQuery,onSave}:QuestionnaireDetailProps) {
+export default function QuestionnaireDetail({ useQuestionnaireByIDQuery, onSave }: QuestionnaireDetailProps) {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
 
@@ -20,6 +22,9 @@ export default function QuestionnaireDetail({useQuestionnaireByIDQuery,onSave}:Q
   const [questionnaire, setQuestionnaire] = useState<GetQuestionnaire | null>(null);
   const [IsCreateEventModalOpen, setIsCreateEventModalOpen] = useState(false)
   const [draft, setDraft] = useState<GetQuestionnaire | null>(null);
+  const deleteQuestion = useDeleteQuetionnaireMutation()
+  
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState({
     title: false,
     description: false,
@@ -41,33 +46,17 @@ export default function QuestionnaireDetail({useQuestionnaireByIDQuery,onSave}:Q
     setDraft((prev) => (prev ? { ...prev, [field]: value } : prev));
   };
 
-  const handleRemoveQuestion = (idx: number) => {
-    setDraft((prev) =>
-      prev
-        ? {
-          ...prev,
-          questions: (prev.questions ?? []).filter((_, i) => i !== idx),
-        }
-        : prev
-    );
+  const handleRemoveQuestion = (data:QuestionnaireQuestion, id:string) => {
+    console.log("Eliminar pregunta", data, id);
+    deleteQuestion.mutateAsync({
+      questionnaire_id: Number(id),
+      question_id: data.id
+    }
+    )
   };
 
   const handleAddQuestion = () => {
-    const newQuestion = {
-      id: Date.now(),
-      question: "Nueva pregunta",
-      response: false,
-      position: draft?.questions?.length ?? 0,
-      levelName: "Nivel 1",
-    };
-    setDraft((prev) =>
-      prev
-        ? {
-          ...prev,
-          questions: [...(prev.questions ?? []), newQuestion],
-        }
-        : prev
-    );
+    navigate(`/admin/questionnaire/edit/${draft?.id}`);
   };
 
   const handleSave = () => {
@@ -104,21 +93,21 @@ export default function QuestionnaireDetail({useQuestionnaireByIDQuery,onSave}:Q
 
   return (
 
-    <div className="h-full w-full flex flex-col ">
-       
+    <div className="relative min-h-screen w-full flex flex-col ">
+      <AnimatedBackground></AnimatedBackground>
 
-      <div className="flex-1 flex max-h-[90vh] mx-auto xl:min-w-7xl overflow-y-auto flex-col p-4 sm:p-6 lg:p-8 xl:p-3 min-h-0">
+      <div className="flex-1 flex max-h-[80vh] bg-black mx-auto xl:min-w-7xl overflow-y-auto flex-col p-4 sm:p-6 lg:p-8 xl:p-3 min-h-0">
 
 
         {/* Header Card - Fixed */}
-        
+
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="bg-white/30 backdrop-blur-xl rounded-xl shadow-lg border border-white/30 p-4 mb-2 flex-shrink-0"
         >
-          
+
           {/* Title Section */}
           <div className="flex items-center gap-2 mb-1">
             <div className="p-1 bg-gradient-to-br from-amber-100 mb-2 to-orange-100 rounded-md shadow-sm flex-shrink-0">
@@ -208,7 +197,7 @@ export default function QuestionnaireDetail({useQuestionnaireByIDQuery,onSave}:Q
               className="w-full sm:w-auto flex items-center justify-center bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white px-4 py-3 rounded-xl sm:rounded-2xl font-medium shadow-lg transition-all duration-200 mt-2 sm:mt-0"
             >
               <Plus className="h-4 w-4 mr-1" />
-              <span>Agregar Pregunta</span>
+              <span>Editar</span>
             </motion.button>
           </div>
 
@@ -278,14 +267,18 @@ export default function QuestionnaireDetail({useQuestionnaireByIDQuery,onSave}:Q
                         </div>
 
                         {/* Delete Button */}
-                        <motion.button
+                        {/* <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
-                          onClick={() => handleRemoveQuestion(idx)}
+                          onClick={() => {
+                            if (q.question && id) {
+                              handleRemoveQuestion(q, id);
+                            }
+                          }}
                           className="p-1.5 sm:p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg sm:rounded-xl transition-all duration-200"
                         >
                           <Trash2 className="h-5 w-5 sm:h-7 sm:w-7" />
-                        </motion.button>
+                        </motion.button> */}
                       </div>
                     </div>
                   </motion.div>
@@ -318,7 +311,7 @@ export default function QuestionnaireDetail({useQuestionnaireByIDQuery,onSave}:Q
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 flex-shrink-0"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 flex-shrink-0 sticky bottom-0 z-10 mt-auto py-3 bg-transparent"
         >
           {/* Save Button */}
           <motion.button
@@ -329,19 +322,17 @@ export default function QuestionnaireDetail({useQuestionnaireByIDQuery,onSave}:Q
           >
             <Save className="h-4 w-4 sm:h-5 sm:w-5" />
             <span className="text-sm sm:text-base">Guardar Cambios</span>
-            <div className="w-2 h-2 bg-white/30 rounded-full animate-pulse"></div>
           </motion.button>
 
           {/* Create Event Button */}
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={()=> setIsCreateEventModalOpen(true)}
+            onClick={() => setIsCreateEventModalOpen(true)}
             className="bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold shadow-xl flex items-center justify-center gap-2 sm:gap-3 transition-all duration-300"
           >
             <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
             <span className="text-sm sm:text-base">Crear Evento</span>
-            <div className="w-2 h-2 bg-white/30 rounded-full animate-bounce"></div>
           </motion.button>
         </motion.div>
 

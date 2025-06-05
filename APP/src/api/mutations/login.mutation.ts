@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import AuthClient from '../client/axios'
 import { LoginRequest, LoginResponse } from '../types/login.type'
+import { setAuthStorage } from '@/common/storage/permission-store'
 
 const apiClient = new AuthClient()
 
@@ -21,12 +22,8 @@ export function useLogin() {
         throw error
       }
     },
-    onSuccess: (data) => {
-      localStorage.setItem('authToken', data.token)
-      localStorage.setItem('admin', JSON.stringify(data.admin))
-      
-      console.log('Login exitoso:')
-      
+    onSuccess: (data) => {      
+      setAuthStorage(data.token, data.admin)
       navigate('/admin')
     },
     onError: (error: Error) => {

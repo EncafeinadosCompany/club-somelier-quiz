@@ -7,8 +7,9 @@ export interface Getcategories {
 }
 
 
+
+
 export interface PostCategorie {
     name: string,
     description?: string
 }
-

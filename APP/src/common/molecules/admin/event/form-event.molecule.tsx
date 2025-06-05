@@ -56,7 +56,7 @@ export default function FormEvent ({form, handleFormSubmit, isEditing, onClose}:
                       <Input
                         {...field}
                         type="date"
-                        className="bg-white/10 border-white/20 text-white"
+                        className="bg-white/10 border-white/20  text-gray-300"
                       />
                     </FormControl>
                     <FormMessage />
@@ -68,16 +68,16 @@ export default function FormEvent ({form, handleFormSubmit, isEditing, onClose}:
                 control={form.control}
                 name="start_time"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full">
                     <FormLabel className="text-white/80 text-sm font-medium">
                       <Clock className="inline h-4 w-4 mr-2" />
                       Hora de inicio
                     </FormLabel>
-                    <FormControl>
+                    <FormControl className="w-full">
                       <Input
                         {...field}
                         type="time"
-                        className="bg-white/10 border-white/20 text-white"
+                        className="bg-white/10 border-white/20  w-full"
                       />
                     </FormControl>
                     <FormMessage />
@@ -121,7 +121,7 @@ export default function FormEvent ({form, handleFormSubmit, isEditing, onClose}:
                       <Input
                         {...field}
                         type="time"
-                        className="bg-white/10 border-white/20 text-white"
+                        className="bg-white/10 border-white/20 w-full"
                       />
                     </FormControl>
                     <FormMessage />

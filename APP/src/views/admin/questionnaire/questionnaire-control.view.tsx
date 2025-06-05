@@ -10,7 +10,7 @@ export default function AdminControlView() {
     if (!accessCode) return <div>Error: Código de acceso no proporcionado</div>;
 
     const [timeElapsed, setTimeElapsed] = useState(0);
-    const [connectedParticipants, setConnectedParticipants] = useState(8);
+    const [connectedParticipants] = useState(8);
     const {isConnected,eventStarted,currentQuestion,noMoreQuestions,eventEnded,startEvent,nextQuestion,endEvent} = useEventSocketAdmin(accessCode);
 
     useEffect(() => {
@@ -51,13 +51,13 @@ export default function AdminControlView() {
     const eventStatus = getEventStatus();
 
     return (
-        <div className="min-h-screen p-4">
+        <div className="min-h-screen relative ">
             <AnimatedBackground />
-            <div className="max-w-4xl mx-auto space-y-6">
+            <div className="max-w-6xl  mx-auto bg-black z-10 space-y-6">
                 {/* Header */}
                 <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
                     <div className="flex items-center justify-between">
-                        <div>
+                        <div >
                             <h1 className="text-2xl font-bold text-white mb-2">Panel de Control</h1>
                             <p className="text-blue-200">
                                 Código de acceso:

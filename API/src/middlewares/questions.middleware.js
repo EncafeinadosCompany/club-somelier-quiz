@@ -3,8 +3,7 @@ const { body, validationResult } = require('express-validator');
 const validateQuestion = [
   body('question')
     .trim()
-    .notEmpty().withMessage('La pregunta es obligatoria')
-    .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ¿?¡!.,:;()\s]+$/).withMessage('La pregunta solo puede contener letras'),
+    .notEmpty().withMessage('La pregunta es obligatoria'),
 
   body('response')
     .notEmpty().withMessage('La respuesta es obligatoria')

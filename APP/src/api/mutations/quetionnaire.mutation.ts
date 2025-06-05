@@ -3,12 +3,9 @@ import AuthClient from "@/api/client/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import toast from "react-hot-toast";
-import { GetQuestionnaire, PostQuestionnaire } from "../types/quetionnaire.type";
+import { DeleteQuestionnaire, GetQuestionnaire, PostQuestionnaire } from "../types/quetionnaire.type";
 const authClient = new AuthClient();
 
-/**
- * Mutation hook for creating a new questionnaire
- */
 export const useCreateQuestionnaireMutation = () => {
     const queryClient = useQueryClient();
 
@@ -42,17 +39,13 @@ export const useCreateQuestionnaireMutation = () => {
     });
 };
 
-/**
- * Interface for update questionnaire data with ID
- */
+
 interface UpdateQuestionnaireData {
     id: number;
     data: Partial<PostQuestionnaire>;
 }
 
-/**
- * Mutation hook for updating an existing questionnaire
- */
+
 export const useUpdateQuestionnaireMutation = () => {
     const queryClient = useQueryClient();
 
@@ -69,16 +62,36 @@ export const useUpdateQuestionnaireMutation = () => {
             const loadingToast = toast.loading('Actualizando cuestionario...', { id: "loading-update-questionnaire" });
             toast.success('¡Cuestionario actualizado con éxito!', { id: loadingToast });
 
-            // Invalidate both the list and the specific questionnaire
             if (data && data.id) {
                 queryClient.invalidateQueries({ queryKey: ['Questionnaire', data.id] });
             }
-            
-            // Always invalidate the questionnaires list
+
             queryClient.invalidateQueries({ queryKey: ['Questionnaires'] });
         },
         onError: (error: any) => {
             toast.error(error.message || 'Error al actualizar el cuestionario');
+        }
+    });
+};
+
+
+
+export const useDeleteQuetionnaireMutation = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation<any, Error, DeleteQuestionnaire>({
+        mutationFn: async (data: DeleteQuestionnaire): Promise<any> => {
+
+            console.log('data', data);
+            const result = await authClient.delete(`/questionnaire-questions`, { data });
+            return result;
+        },
+        onSuccess: () => {
+            toast.success('pregunta eliminada con éxito');
+            queryClient.invalidateQueries({ queryKey: ['Questionnaires'] });
+        },
+        onError: (error: any) => {
+            toast.error(error.message || 'Error al eliminar la pregunta');
         }
     });
 };

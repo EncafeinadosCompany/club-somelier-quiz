@@ -1,5 +1,5 @@
 import App from "@/App";
-import {BrowserRouter as Router,Route,Routes,Navigate} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import { QuestionsView } from "@/views/clients/question/questions-client.view";
 import { NotFoundPage } from "@/common/utils/404";
 import Navbar from "@/common/widgets/admin/nav_widget";
@@ -18,6 +18,7 @@ import LoginPage from "@/views/home/login-view";
 import LandingPage from "@/views/home/landing-view";
 import ContactPage from "@/views/home/contact-view";
 import { HomeView } from "@/views/home/home-view";
+import PrivateRoute from "./token-route";
 
 
 
@@ -49,36 +50,36 @@ export default function AuthRoutes() {
                 <Routes>
                     <Route path="/" element={<AppWithLoading />}>
                         <Route path="404" element={<NotFoundPage />} />
-                        <Route index element={<HomeView />} />
+                        <Route element={<HomeView />} />
                         <Route path="client" element={<HomeView />} />
                         <Route path="waiting" element={<WaitingViewTest />} />
                         <Route path="questions" element={<QuestionsView />} />
 
                         {/* RUTA LANDING AGREGADA */}
-                        <Route path="landing" element={<LandingPage />} />
+                        <Route index element={<LandingPage />} />
                         <Route path="contact" element={<ContactPage />} />
 
 
 
                         {/* LOGIN */}
                         <Route path="login" element={<LoginPage />} />
+                        <Route element={<PrivateRoute/>}>
+                            {/* <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}> */}
+                            <Route path="admin" element={<Navbar />}>
+                                <Route index element={<HomeCuestion />} />
+                                <Route path="event" element={<EventView />} />
+                                <Route path="questions" element={<HomeQuestionsView />} />
+                                <Route path="questionnaireDetails" element={<QuestionnaireDetailPage />} />
+                                <Route path="questionnaire/create" element={<QuestionnaireFormView />} />
+                                <Route path="questionnaire/edit/:id" element={<QuestionnaireEditContainer />} />
+                                <Route path="control" element={<AdminControlView />} />
 
-                        
-                        {/* <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}> */}
-                        <Route path="admin" element={<Navbar />}>
-                            <Route index element={<HomeCuestion />} />
-                            <Route path="event" element={<EventView />} />
-                            <Route path="questions" element={<HomeQuestionsView />} />
-                            <Route path="questionnaireDetails" element={<QuestionnaireDetailPage />} />
-                            <Route path="questionnaire/create" element={<QuestionnaireFormView />} />
-                            <Route path="questionnaire/edit/:id" element={<QuestionnaireEditContainer />} />
-                            <Route path="control" element={<AdminControlView />} />
+                            </Route>
+                            {/* </Route> */}
+                        </Route>
 
                         </Route>
-                        {/* </Route> */}
-                    </Route>
-
-                    <Route path="*" element={<Navigate to="/404" replace />} />
+                        <Route path="*" element={<Navigate to="/404" replace />} />
                 </Routes>
             </Suspense>
         </Router>
