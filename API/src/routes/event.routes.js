@@ -6,11 +6,11 @@ const router = express.Router();
 const eventController = new EventController();
 
 router
-    .get('/', eventController.getAllEvents)
-    .get('/:id', eventController.getEventById)
+    .get('/',authenticateJWT, eventController.getAllEvents)
+    .get('/:id',authenticateJWT, eventController.getEventById)
     .get('/code/:code', eventController.getEventByCode)
-    .post('/', eventController.createEvent)
-    .put('/:id', eventController.updateEvent)
-    .delete('/:id', eventController.deleteEvent)
+    .post('/',authenticateJWT, eventController.createEvent)
+    .put('/:id',authenticateJWT, eventController.updateEvent)
+    .delete('/:id',authenticateJWT, eventController.deleteEvent)
 
 module.exports = router;

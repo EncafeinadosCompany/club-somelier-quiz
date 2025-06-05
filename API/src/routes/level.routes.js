@@ -3,10 +3,12 @@ const LevelController = require('../controllers/level.controller');
 
 const router = express.Router();
 const levelController = new LevelController();
+const {authenticateJWT} = require('../middlewares/auth.middleware')
+
 
 router
-    .get('/', levelController.getLevels)
-    .get('/:id', levelController.getLevelById)
-    .post('/', levelController.createLevel)
+    .get('/',authenticateJWT, levelController.getLevels)
+    .get('/:id',authenticateJWT, levelController.getLevelById)
+    .post('/',authenticateJWT, levelController.createLevel)
 
 module.exports = router;

@@ -8,8 +8,8 @@ const adminController = new AdminController();
 const {authenticateJWT} = require('../middlewares/auth.middleware')
 
 router
-    .get('/:id', adminController.getAdminById)
-    .post('/', validateAdmin, adminController.createAdmin)
+    .get('/:id', authenticateJWT, adminController.getAdminById)
+    // .post('/', validateAdmin, adminController.createAdmin)
 
 
 module.exports = router;

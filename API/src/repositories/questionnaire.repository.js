@@ -49,6 +49,11 @@ class QuestionnairesRepository {
     await Questionnaire.update(data, { where: { id }, transaction });
     return this.findById(id);
   }
+
+  // Agrega este método simple
+  async findByPk(id) {
+    return await Questionnaire.findByPk(id);
+  }
 }
 
 module.exports = QuestionnairesRepository;

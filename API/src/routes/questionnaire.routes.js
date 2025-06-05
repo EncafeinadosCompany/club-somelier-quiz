@@ -4,11 +4,12 @@ const QuestionnaireController = require('../controllers/questionnaire.controller
 const { validateQuestionnaire, validateUpdateQuestionnaire } = require('../middlewares/questionnaire.middleware');
 const questionnaireController = new QuestionnaireController();
 const router = Router();
+const { authenticateJWT } = require('../middlewares/auth.middleware');
 
 router
-    .get('/', questionnaireController.getAllQuestionnaires)
+    .get('/',authenticateJWT, questionnaireController.getAllQuestionnaires)
     .get('/:id', questionnaireController.getQuestionnaireById)
-    .post('/', validateQuestionnaire, questionnaireController.createQuestionnaire)
-    .patch('/:id',validateUpdateQuestionnaire, questionnaireController.updateQuestionnaire)
+    .post('/',authenticateJWT, validateQuestionnaire, questionnaireController.createQuestionnaire)
+    .patch('/:id',authenticateJWT, validateUpdateQuestionnaire, questionnaireController.updateQuestionnaire)
 
 module.exports = router;
