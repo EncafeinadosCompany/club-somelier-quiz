@@ -23,19 +23,19 @@ class AdminController {
   };
 
 
-  createAdmin = async (req, res, next) => {
-    try {
-      const admin = await this.adminService.createAdmin(req.body);
-      const formattedAdmin = new AdminResponseDto(admin);
-      res.status(201).json(formattedAdmin);
+  // createAdmin = async (req, res, next) => {
+  //   try {
+  //     const admin = await this.adminService.createAdmin(req.body);
+  //     const formattedAdmin = new AdminResponseDto(admin);
+  //     res.status(201).json(formattedAdmin);
 
-    } catch (error) {
-        if (error.status === 409) {
-            return res.status(409).json({ message: error.message });
-        }
-      res.status(500).json({ message: "Error creating admin", error });
-    }
-  };
+  //   } catch (error) {
+  //       if (error.status === 409) {
+  //           return res.status(409).json({ message: error.message });
+  //       }
+  //     res.status(500).json({ message: "Error creating admin", error });
+  //   }
+  // };
 }
 
 module.exports = AdminController;

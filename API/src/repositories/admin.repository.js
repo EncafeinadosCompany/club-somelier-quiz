@@ -6,9 +6,9 @@ class AdminRepository {
         return await Admin.findByPk(id)
     }
 
-    async create(data) {
-        return await Admin.create(data);
-    }
+    // async create(data) {
+    //     return await Admin.create(data);
+    // }
 
     async findByEmail(email) {
         return await Admin.findOne({
