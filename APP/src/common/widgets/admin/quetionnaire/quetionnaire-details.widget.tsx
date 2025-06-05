@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { FileText, Plus, Save, Calendar, Trash2, Edit3, HelpCircle } from "lucide-react";
-import { GetQuestionnaire } from "@/api/types/quetionnaire.type";
+import { GetQuestionnaire, QuestionnaireQuestion } from "@/api/types/quetionnaire.type";
 import AnimatedBackground from "@/common/atoms/animated-background";
 import EventFormModal from "@/common/widgets/admin/events/events-form.widget";
+import { useDeleteQuetionnaireMutation } from "@/api/mutations/quetionnaire.mutation";
+import { question } from "@/api/types/questions.type";
 
 
 interface QuestionnaireDetailProps {
@@ -20,6 +22,9 @@ export default function QuestionnaireDetail({ useQuestionnaireByIDQuery, onSave 
   const [questionnaire, setQuestionnaire] = useState<GetQuestionnaire | null>(null);
   const [IsCreateEventModalOpen, setIsCreateEventModalOpen] = useState(false)
   const [draft, setDraft] = useState<GetQuestionnaire | null>(null);
+  const deleteQuestion = useDeleteQuetionnaireMutation()
+  
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState({
     title: false,
     description: false,
@@ -41,33 +46,17 @@ export default function QuestionnaireDetail({ useQuestionnaireByIDQuery, onSave 
     setDraft((prev) => (prev ? { ...prev, [field]: value } : prev));
   };
 
-  const handleRemoveQuestion = (idx: number) => {
-    setDraft((prev) =>
-      prev
-        ? {
-          ...prev,
-          questions: (prev.questions ?? []).filter((_, i) => i !== idx),
-        }
-        : prev
-    );
+  const handleRemoveQuestion = (data:QuestionnaireQuestion, id:string) => {
+    console.log("Eliminar pregunta", data, id);
+    deleteQuestion.mutateAsync({
+      questionnaire_id: Number(id),
+      question_id: data.id
+    }
+    )
   };
 
   const handleAddQuestion = () => {
-    const newQuestion = {
-      id: Date.now(),
-      question: "Nueva pregunta",
-      response: false,
-      position: draft?.questions?.length ?? 0,
-      levelName: "Nivel 1",
-    };
-    setDraft((prev) =>
-      prev
-        ? {
-          ...prev,
-          questions: [...(prev.questions ?? []), newQuestion],
-        }
-        : prev
-    );
+    navigate(`/admin/questionnaire/edit/${draft?.id}`);
   };
 
   const handleSave = () => {
@@ -208,7 +197,7 @@ export default function QuestionnaireDetail({ useQuestionnaireByIDQuery, onSave 
               className="w-full sm:w-auto flex items-center justify-center bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white px-4 py-3 rounded-xl sm:rounded-2xl font-medium shadow-lg transition-all duration-200 mt-2 sm:mt-0"
             >
               <Plus className="h-4 w-4 mr-1" />
-              <span>Agregar Pregunta</span>
+              <span>Editar</span>
             </motion.button>
           </div>
 
@@ -278,14 +267,18 @@ export default function QuestionnaireDetail({ useQuestionnaireByIDQuery, onSave 
                         </div>
 
                         {/* Delete Button */}
-                        <motion.button
+                        {/* <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
-                          onClick={() => handleRemoveQuestion(idx)}
+                          onClick={() => {
+                            if (q.question && id) {
+                              handleRemoveQuestion(q, id);
+                            }
+                          }}
                           className="p-1.5 sm:p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg sm:rounded-xl transition-all duration-200"
                         >
                           <Trash2 className="h-5 w-5 sm:h-7 sm:w-7" />
-                        </motion.button>
+                        </motion.button> */}
                       </div>
                     </div>
                   </motion.div>

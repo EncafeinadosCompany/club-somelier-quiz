@@ -31,3 +31,10 @@ export interface PostQuestionnaire {
     categories: number[];
     questions: number[];
 }
+
+
+export interface DeleteQuestionnaire {
+	questionnaire_id:number,
+	question_id:number
+
+}
