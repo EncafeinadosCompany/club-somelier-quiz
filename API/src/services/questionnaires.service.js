@@ -77,7 +77,7 @@ class QuestionnairesService {
     const t = await sequelize.transaction();
 
     try {
-      const existingQuestionnaire = await this.questionnaireRepository.findById(
+      const existingQuestionnaire = await this.questionnaireRepository.findByPk(
         id
       );
       if (!existingQuestionnaire) {
@@ -138,7 +138,7 @@ class QuestionnairesService {
         const existingQuestionIds = existingQuestionAssociations.map(
           (assoc) => assoc.question_id
         );
-        
+
         const newAssociations = [];
         for (const [index, questionId] of data.questions.entries()) {
           if (!existingQuestionIds.includes(questionId)) {
@@ -156,7 +156,7 @@ class QuestionnairesService {
           );
         }
       }
-        // ACTUALIZAR EL QUESTIONNAIRE
+      // ACTUALIZAR EL QUESTIONNAIRE
       const updateData = {};
       if (data.title !== undefined) updateData.title = data.title;
       if (data.description !== undefined)
@@ -166,9 +166,11 @@ class QuestionnairesService {
         await this.questionnaireRepository.update(id, updateData, t);
       }
 
-     await t.commit();
-const updatedQuestionnaire = await this.questionnaireRepository.findById(id);
-return updatedQuestionnaire;
+      await t.commit();
+      const updatedQuestionnaire = await this.questionnaireRepository.findById(
+        id
+      );
+      return updatedQuestionnaire;
     } catch (error) {
       await t.rollback();
       throw error;

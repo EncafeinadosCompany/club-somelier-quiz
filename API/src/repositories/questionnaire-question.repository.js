@@ -18,14 +18,17 @@ class QuestionnaireQuestionRepository {
   }
 
   async findByQuestionnaireId(questionnaireId) {
-    return await QuestionnaireQuestion.findAll({
-      where: {
-        questionnaire_id: questionnaireId,
-      },
-      order: [['position', 'ASC']],
-      include: [{ model: Question, as: 'questions' }]
-    });
-  }
+  return await QuestionnaireQuestion.findAll({
+    where: {
+      questionnaire_id: questionnaireId,
+    },
+    order: [['position', 'ASC']],
+    include: [{ 
+      model: Question, 
+      as: 'question', 
+    }],
+  });
+}
 
 }
 

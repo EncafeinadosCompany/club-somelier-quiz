@@ -11,7 +11,9 @@ class QuestionnaireController {
             const questionnaires = await this.questionnaireService.findAll();
             res.json(new ListQuestionnairesDTO(questionnaires));
         } catch (error) {
-
+            if (error.status === 409) {
+        return res.status(409).json({ message: error.message });
+      }
             res.status(500).json({ error: 'Internal Server Error' });
         }
     }
@@ -64,7 +66,10 @@ class QuestionnaireController {
             if (error.status === 404) {
                 return res.status(404).json({ message: error.message });
             }
-            res.status(500).json({ error: 'Internal Server Error' });
+            if (error.status === 409) {
+        return res.status(409).json({ message: error.message });
+      }
+            res.status(500).json({ error: error.message });
         }
     }
 }

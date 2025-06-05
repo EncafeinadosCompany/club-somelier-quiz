@@ -42,6 +42,11 @@ Question.belongsToMany(Questionnaire, {
     otherKey: 'questionnaire_id',
     as: 'questionnaires',
 });
+
+QuestionnaireQuestion.belongsTo(Question, {
+  foreignKey: "question_id",
+  as: "question", 
+});
 //-----------------------------------------------------------------------------------------
 Question.belongsToMany(Category, {
     through: QuestionCategory,
