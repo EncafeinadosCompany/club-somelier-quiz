@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/common/ui/d
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/common/ui/alert-dialog"
 import CategoryFormDialog from "../categories/form-categories.widget"
 
+
 export const CategoriesWidget = () => {
     const { data, isLoading } = useCategoriesQuery()
     const { mutate: deleteCategory } = useDeleteCategorieMutation()
