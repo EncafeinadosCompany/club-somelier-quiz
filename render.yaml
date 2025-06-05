@@ -3,8 +3,8 @@ services:
     name: api
     env: node
     plan: free
-    buildCommand: cd API && npm install
-    startCommand: cd API && npm start
+    buildCommand: npm install
+    startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
