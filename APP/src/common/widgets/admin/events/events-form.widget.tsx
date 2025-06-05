@@ -115,7 +115,7 @@ export default function EventFormModal({
 
     return (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 shadow-xl max-w-md w-full p-6">
+            <div className="bg-white/10 min-w-3xl backdrop-blur-lg rounded-2xl border border-white/20 shadow-xl max-w-md w-full p-6">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-xl font-semibold text-white">
                         {isEditing ? "Editar Evento" : "Crear Nuevo Evento"}

@@ -66,6 +66,7 @@ export default function CategoryFormDialog({
             } else {
                 await createCategory(data);
             }
+            form.reset();
             onClose();
         } catch (error) {
             console.error("Error al guardar categoría:", error);
@@ -76,14 +77,14 @@ export default function CategoryFormDialog({
 
     return (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 shadow-xl max-w-md w-full p-6">
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-semibold text-white">
+            <div className="bg-white/10 relative  backdrop-blur-lg rounded-2xl border border-white/20 shadow-xl max-w-md w-full p-6">
+                <div className="flex items-center justify-between mb-3">
+                    <p className="text-lg font-semibold text-white">
                         {isEditing ? "Editar Categoría" : "Crear Nueva Categoría"}
-                    </h2>
+                    </p>
                     <button
                         onClick={onClose}
-                        className="text-white/70 hover:text-white transition-colors"
+                        className="text-white/70 absolute right-0 top-1 hover:text-white transition-colors"
                     >
                         <X className="h-5 w-5" />
                     </button>
@@ -97,7 +98,7 @@ export default function CategoryFormDialog({
                                 <Input
                                     id="name"
                                     placeholder="Nombre de la categoría"
-                                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                                    className="bg-white/10 border-white/20 text-gray-400 placeholder:text-black/50"
                                     {...form.register("name")}
                                 />
                                 {form.formState.errors.name && (
@@ -110,7 +111,7 @@ export default function CategoryFormDialog({
                                 <Textarea
                                     id="description"
                                     placeholder="Descripción de la categoría"
-                                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                                    className="bg-white/10 border-white/20 text-gray-400 placeholder:text-black/50"
                                     {...form.register("description")}
                                 />
                                 {form.formState.errors.description && (

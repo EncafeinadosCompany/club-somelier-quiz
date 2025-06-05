@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "react-router-dom";
-import {FileText,Plus,Save,Calendar,Trash2,Edit3,HelpCircle} from "lucide-react";
+import { FileText, Plus, Save, Calendar, Trash2, Edit3, HelpCircle } from "lucide-react";
 import { GetQuestionnaire } from "@/api/types/quetionnaire.type";
 import AnimatedBackground from "@/common/atoms/animated-background";
 import EventFormModal from "@/common/widgets/admin/events/events-form.widget";
 
 
 interface QuestionnaireDetailProps {
-  useQuestionnaireByIDQuery: (id: string) => { data: GetQuestionnaire | undefined};
+  useQuestionnaireByIDQuery: (id: string) => { data: GetQuestionnaire | undefined };
   onSave?: (draft: GetQuestionnaire) => void;
 }
 
-export default function QuestionnaireDetail({useQuestionnaireByIDQuery,onSave}:QuestionnaireDetailProps) {
+export default function QuestionnaireDetail({ useQuestionnaireByIDQuery, onSave }: QuestionnaireDetailProps) {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
 
@@ -104,21 +104,21 @@ export default function QuestionnaireDetail({useQuestionnaireByIDQuery,onSave}:Q
 
   return (
 
-    <div className="h-full w-full flex flex-col ">
-       
+    <div className="relative min-h-screen w-full flex flex-col ">
+      <AnimatedBackground></AnimatedBackground>
 
-      <div className="flex-1 flex max-h-[90vh] mx-auto xl:min-w-7xl overflow-y-auto flex-col p-4 sm:p-6 lg:p-8 xl:p-3 min-h-0">
+      <div className="flex-1 flex max-h-[80vh] bg-black mx-auto xl:min-w-7xl overflow-y-auto flex-col p-4 sm:p-6 lg:p-8 xl:p-3 min-h-0">
 
 
         {/* Header Card - Fixed */}
-        
+
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="bg-white/30 backdrop-blur-xl rounded-xl shadow-lg border border-white/30 p-4 mb-2 flex-shrink-0"
         >
-          
+
           {/* Title Section */}
           <div className="flex items-center gap-2 mb-1">
             <div className="p-1 bg-gradient-to-br from-amber-100 mb-2 to-orange-100 rounded-md shadow-sm flex-shrink-0">
@@ -318,7 +318,7 @@ export default function QuestionnaireDetail({useQuestionnaireByIDQuery,onSave}:Q
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 flex-shrink-0"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 flex-shrink-0 sticky bottom-0 z-10 mt-auto py-3 bg-transparent"
         >
           {/* Save Button */}
           <motion.button
@@ -329,19 +329,17 @@ export default function QuestionnaireDetail({useQuestionnaireByIDQuery,onSave}:Q
           >
             <Save className="h-4 w-4 sm:h-5 sm:w-5" />
             <span className="text-sm sm:text-base">Guardar Cambios</span>
-            <div className="w-2 h-2 bg-white/30 rounded-full animate-pulse"></div>
           </motion.button>
 
           {/* Create Event Button */}
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={()=> setIsCreateEventModalOpen(true)}
+            onClick={() => setIsCreateEventModalOpen(true)}
             className="bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold shadow-xl flex items-center justify-center gap-2 sm:gap-3 transition-all duration-300"
           >
             <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
             <span className="text-sm sm:text-base">Crear Evento</span>
-            <div className="w-2 h-2 bg-white/30 rounded-full animate-bounce"></div>
           </motion.button>
         </motion.div>
 

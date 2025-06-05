@@ -5,7 +5,6 @@ import { Trash2, Plus, Edit2 } from "lucide-react"
 import { useState } from "react"
 
 import { Getcategories } from "@/api/types/categories.type"
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/common/ui/dialog"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/common/ui/alert-dialog"
 import CategoryFormDialog from "../categories/form-categories.widget"
 
@@ -40,7 +39,7 @@ export const CategoriesWidget = () => {
 
     return (
         <>
-            <div className="bg-white/10 rounded-xl p-4 border border-white/20">
+            <div className="bg-white/10 rounded-xl h-[45vh] overflow-y-auto p-4 border border-white/20">
                 <div className="flex justify-between items-center">
                     <h4 className="text-white font-medium mb-3">Categorías</h4>
                     <Button
@@ -67,7 +66,7 @@ export const CategoriesWidget = () => {
                     {data && data.map(category => (
                         <div 
                             key={category.id} 
-                            className="flex justify-between items-center text-white/80 p-2 hover:bg-white/5 rounded-md"
+                            className="flex justify-between items-center  text-white/80 p-2 hover:bg-white/5 rounded-md"
                         >
                             <div>
                                 <span className="capitalize font-medium">{category.name}</span>

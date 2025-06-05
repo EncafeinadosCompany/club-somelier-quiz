@@ -3,6 +3,7 @@ import { Button } from "@/common/ui/button";
 import { LogOutIcon, X, Menu } from "lucide-react";
 import { memo } from "react";
 import { NavItemType } from "@/api/types/nav.types";
+import { clearAuthStorage } from "@/common/storage/permission-store";
 
 interface NavGeneralProps {
   isMobile: boolean;
@@ -144,12 +145,13 @@ export const NavGeneral = ({
 
           {/* Logout Button */}
           <div className="absolute bottom-8 left-0 right-0 px-3">
-            <button
-              className="w-full flex items-center px-4 py-3 rounded-lg text-white/60 hover:bg-white/10 hover:text-white transition-colors"
-            >
+           <Link to={'/'}
+                onClick={()=> clearAuthStorage()}
+                className="w-full flex items-center px-4 py-3 rounded-lg text-white/60 hover:bg-white/10 hover:text-white transition-colors"  
+           >
               <LogOutIcon className="h-5 w-5" />
               <span className="ml-3 font-medium">Cerrar sesión</span>
-            </button>
+           </Link>
           </div>
         </div>
       )}

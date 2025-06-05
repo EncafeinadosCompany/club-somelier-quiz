@@ -12,6 +12,7 @@ export const useCreateCategorieMutation = () => {
     return useMutation<Getcategories, Error, PostCategorie>({
         mutationFn: async (categorieData): Promise<Getcategories> => {
             try {
+                console.log('Creating category with data:', categorieData);
                 const response: AxiosResponse<Getcategories> = await authClient.post('/categories', categorieData);
                 return response.data;
             } catch (error: any) {

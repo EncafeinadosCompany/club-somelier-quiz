@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Award } from 'lucide-react';
-import { ParticipantsRanking, Participant } from './ParticipantsRanking';
+import { ParticipantsRanking} from './ParticipantsRanking';
+import { ResultsType } from '../hooks/useEventSocket';
 
 interface LiveRankingWidgetProps {
-  participants: Participant[];
+  participants: ResultsType[];
   currentParticipantId?: string;
   maxToShow?: number;
 }
@@ -20,7 +21,7 @@ export function LiveRankingWidget({
   const currentParticipantRank = currentParticipantId ? 
     participants
       .sort((a, b) => b.total - a.total)
-      .findIndex(p => p.participant_id === currentParticipantId) + 1 : 
+      .findIndex(p => p.participant_id.toString()=== currentParticipantId) + 1 : 
     null;
 
   return (

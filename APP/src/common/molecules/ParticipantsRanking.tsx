@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Trophy, Medal, User, Award, Star } from 'lucide-react';
+import { ResultsType } from '../hooks/useEventSocket';
 
 export interface Participant {
   participant_id: string;
@@ -12,7 +13,7 @@ export interface Participant {
 }
 
 interface ParticipantsRankingProps {
-  participants: Participant[];
+  participants: ResultsType[];
   currentParticipantId?: string;
   title?: string;
   maxToShow?: number;
@@ -40,7 +41,7 @@ export function ParticipantsRanking({
   const sortedParticipants = [...participants]
     .sort((a, b) => b.total - a.total)
     .slice(0, maxToShow)
-    .map((p, i) => ({ ...p, position: p.position || i + 1 }));
+    .map((p, i) => ({ ...p, position: p.total || i + 1 }));
 
   const getMedalIcon = (position: number) => {
     switch (position) {
@@ -61,7 +62,7 @@ export function ParticipantsRanking({
 
   // Encontrar la posición del participante actual
   const currentParticipantPosition = currentParticipantId ? 
-    sortedParticipants.findIndex(p => p.participant_id === currentParticipantId) + 1 : -1;
+    sortedParticipants.findIndex(p => p.participant_id.toString() === currentParticipantId) + 1 : -1;
 
   // Container variants for staggered animation
   const containerVariants = {
@@ -106,7 +107,7 @@ export function ParticipantsRanking({
           animate={animate ? "show" : undefined}
         >
           {sortedParticipants.map((participant, index) => {
-            const isCurrentUser = participant.participant_id === currentParticipantId;
+            const isCurrentUser = participant.participant_id.toString() === currentParticipantId;
             
             return (
               <MotionWrapper
