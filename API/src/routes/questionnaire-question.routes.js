@@ -5,7 +5,7 @@ const router = express.Router();
 const questionnaireQuestionController = new QuestionnaireQuestionController();
 
 router
-  .delete('/', questionnaireQuestionController.deleteQuestionnaireQuestion);
+  .delete('/',authenticateJWT, questionnaireQuestionController.deleteQuestionnaireQuestion);
 
 
 module.exports = router;
