@@ -1,8 +1,10 @@
 import AuthClient from "@/api/client/axios";
+import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
+
 import { PostCategorie, Getcategories } from "@/api/types/categories.type";
-import toast from "react-hot-toast";
+import { useError } from "@/common/hooks/useErros";
 
 const authClient = new AuthClient();
 
@@ -11,18 +13,13 @@ export const useCreateCategorieMutation = () => {
 
     return useMutation<Getcategories, Error, PostCategorie>({
         mutationFn: async (categorieData): Promise<Getcategories> => {
+            const useErrors = useError('categories');
             try {
                 console.log('Creating category with data:', categorieData);
                 const response: AxiosResponse<Getcategories> = await authClient.post('/categories', categorieData);
                 return response.data;
             } catch (error: any) {
-                if (error?.response?.status === 409) {
-                    const conflictError = new Error(error.response?.data?.message || 'Categoría duplicada');
-                    (conflictError as any).statusCode = 409;
-                    (conflictError as any).message = error.response?.data?.message || 'La categoría ya existe';
-                    throw conflictError;
-                }
-
+                useErrors(error);
                 throw error;
             }
         },
@@ -33,7 +30,7 @@ export const useCreateCategorieMutation = () => {
         },
         onError: (error: any) => {
             if (error?.statusCode !== 409) {
-                toast.error(error.message || 'Error al crear la categoría');
+                console.error('Error al crear la categoría:', error);
             }
         }
     });
@@ -72,8 +69,8 @@ export const useUpdateCategorieMutation = () => {
 };
 
 export const useDeleteCategorieMutation = () => {
+    const useErrors = useError('categories');
     const queryClient = useQueryClient();
-
     return useMutation<void, Error, number>({
         mutationFn: async (id: number): Promise<void> => {
             await authClient.delete(`/categories/${id}`);
@@ -82,8 +79,8 @@ export const useDeleteCategorieMutation = () => {
             toast.success('Categoría eliminada con éxito');
             queryClient.invalidateQueries({ queryKey: ['categories'] });
         },
-        onError: (error: any) => {
-            toast.error(error.message || 'Error al eliminar la categoría');
+        onError: (error) => {
+            useErrors(error);
         }
     });
 };

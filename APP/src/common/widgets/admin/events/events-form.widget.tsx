@@ -32,8 +32,6 @@ export default function EventFormModal({
     const { mutateAsync: useCreateEvent } = useCreateEventMutation()
     const { mutateAsync: useEditEvent } = useUpdateEventMutation()
 
-
-    // Define form with explicit type
     const form = useForm<EventFormData>({
         resolver: zodResolver(eventFormSchema),
         defaultValues: initialData ? {
@@ -51,7 +49,6 @@ export default function EventFormModal({
         }
     });
 
-    // Reset form when initialData changes
     useEffect(() => {
         if (isEditing && initialData) {
             form.reset({
@@ -81,7 +78,6 @@ export default function EventFormModal({
     }, [form, initialData, isEditing, selectedCuestion]);
 
     const handleFormSubmit = (data: EventFormData) => {
-        // Manually transform the data
         const startDateTime = new Date(`${data.start_date}T${data.start_time}`);
         const endDateTime = new Date(`${data.end_date}T${data.end_time}`);
 
@@ -92,22 +88,13 @@ export default function EventFormModal({
             end_time: endDateTime.toISOString()
         };
 
-        console.log(transformedData);
-
         if (isEditing && initialData?.id) {
-
-            console.log('id', initialData.id)
             useEditEvent({ id: initialData.id, data: transformedData })
         } else {
 
-            useCreateEvent(transformedData, {
-                onSuccess: (newEvent) => {
-                    console.log('Event created:', newEvent);
-                    // Additional success handling if needed
-                }
-            });
+            useCreateEvent(transformedData);
         }
-
+        form.reset();
         onClose();
     };
 
@@ -121,7 +108,10 @@ export default function EventFormModal({
                         {isEditing ? "Editar Evento" : "Crear Nuevo Evento"}
                     </h2>
                     <button
-                        onClick={onClose}
+                        onClick={()=>{
+                            onClose();
+                            form.reset();
+                        }}
                         className="text-white/70 hover:text-white transition-colors"
                     >
                         <X className="h-5 w-5" />

@@ -1,13 +1,17 @@
 
 import AuthClient from "@/api/client/axios";
+import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
-import toast from "react-hot-toast";
+
 import { DeleteQuestionnaire, GetQuestionnaire, PostQuestionnaire } from "../types/quetionnaire.type";
+import { useError } from "@/common/hooks/useErros";
+
 const authClient = new AuthClient();
 
 export const useCreateQuestionnaireMutation = () => {
     const queryClient = useQueryClient();
+    const useErrors = useError('questionnaires');
 
     return useMutation< GetQuestionnaire, Error, PostQuestionnaire>({
         mutationFn: async (questionnaireData): Promise< GetQuestionnaire> => {
@@ -15,13 +19,7 @@ export const useCreateQuestionnaireMutation = () => {
                 const response: AxiosResponse<GetQuestionnaire> = await authClient.post('/questionnaires', questionnaireData);
                 return response.data;
             } catch (error: any) {
-                if (error?.response?.status === 409) {
-                    const conflictError = new Error(error.response?.data?.message || 'Questionnaire conflict');
-                    (conflictError as any).statusCode = 409;
-                    (conflictError as any).message = error.response?.data?.message || 'Questionnaire already exists';
-                    throw conflictError;
-                }
-
+                useErrors(error);
                 throw error;
             }
         },
@@ -33,7 +31,7 @@ export const useCreateQuestionnaireMutation = () => {
         },
         onError: (error: any) => {
             if (error?.statusCode !== 409) {
-                toast.error(error.message || 'Error al crear el cuestionario');
+                console.error(error.message || 'Error al crear el cuestionario');
             }
         }
     });
@@ -48,6 +46,7 @@ interface UpdateQuestionnaireData {
 
 export const useUpdateQuestionnaireMutation = () => {
     const queryClient = useQueryClient();
+    const useErrors = useError('questionnaires');
 
     return useMutation< GetQuestionnaire, Error, UpdateQuestionnaireData>({
         mutationFn: async ({ id, data }): Promise< GetQuestionnaire> => {
@@ -55,6 +54,7 @@ export const useUpdateQuestionnaireMutation = () => {
                 const response: AxiosResponse< GetQuestionnaire> = await authClient.patch(`/questionnaires/${id}`, data);
                 return response.data;
             } catch (error: any) {
+                useErrors(error);
                 throw error;
             }
         },
@@ -69,7 +69,7 @@ export const useUpdateQuestionnaireMutation = () => {
             queryClient.invalidateQueries({ queryKey: ['Questionnaires'] });
         },
         onError: (error: any) => {
-            toast.error(error.message || 'Error al actualizar el cuestionario');
+            console.error(error.message || 'Error al actualizar el cuestionario');
         }
     });
 };
@@ -79,6 +79,7 @@ export const useUpdateQuestionnaireMutation = () => {
 export const useDeleteQuetionnaireMutation = () => {
     const queryClient = useQueryClient();
 
+    
     return useMutation<any, Error, DeleteQuestionnaire>({
         mutationFn: async (data: DeleteQuestionnaire): Promise<any> => {
 

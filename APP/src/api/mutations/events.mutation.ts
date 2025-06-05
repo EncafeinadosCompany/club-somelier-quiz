@@ -1,27 +1,24 @@
 import AuthClient from "@/api/client/axios";
+import toast from "react-hot-toast";
+import { useError } from "@/common/hooks/useErros";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import { PostEvent, EventDetail } from "@/api/types/events.types";
-import toast from "react-hot-toast";
+
 
 const authClient = new AuthClient();
 
 export const useCreateEventMutation = () => {
     const queryClient = useQueryClient();
-
+    const useErrors = useError('events');
     return useMutation<EventDetail, Error, PostEvent>({
         mutationFn: async (eventData): Promise<EventDetail> => {
             try {
                 const response: AxiosResponse<EventDetail> = await authClient.post('/events', eventData);
                 return response.data;
             } catch (error: any) {
-                if (error?.response?.status === 409) {
-                    const conflictError = new Error(error.response?.data?.message || 'Event conflict');
-                    (conflictError as any).statusCode = 409;
-                    (conflictError as any).message = error.response?.data?.message || 'Event already exists';
-                    throw conflictError;
-                }
-
+                useErrors(error);
                 throw error;
             }
         },
@@ -32,7 +29,7 @@ export const useCreateEventMutation = () => {
         },
         onError: (error: any) => {
             if (error?.statusCode !== 409) {
-                toast.error(error.message || 'Error al crear el evento');
+                console.error(error.message || 'Error al crear el evento');
             }
         }
     });

@@ -33,7 +33,7 @@ export default function FormEvent ({form, handleFormSubmit, isEditing, onClose}:
                   <FormControl>
                     <Input
                       {...field}
-                      className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                      className="bg-white/90 border-white/20 text-white placeholder:text-white/50"
                       placeholder="Ingresa el nombre del evento"
                     />
                   </FormControl>
@@ -56,7 +56,7 @@ export default function FormEvent ({form, handleFormSubmit, isEditing, onClose}:
                       <Input
                         {...field}
                         type="date"
-                        className="bg-white/10 border-white/20  text-gray-300"
+                        className="bg-white/90 border-white/20  text-gray-300"
                       />
                     </FormControl>
                     <FormMessage />
@@ -77,7 +77,7 @@ export default function FormEvent ({form, handleFormSubmit, isEditing, onClose}:
                       <Input
                         {...field}
                         type="time"
-                        className="bg-white/10 border-white/20  w-full"
+                        className="bg-white/90 border-white/20  w-full"
                       />
                     </FormControl>
                     <FormMessage />
@@ -100,7 +100,7 @@ export default function FormEvent ({form, handleFormSubmit, isEditing, onClose}:
                       <Input
                         {...field}
                         type="date"
-                        className="bg-white/10 border-white/20 text-white"
+                        className="bg-white/90 border-white/20 text-white"
                       />
                     </FormControl>
                     <FormMessage />
@@ -121,7 +121,7 @@ export default function FormEvent ({form, handleFormSubmit, isEditing, onClose}:
                       <Input
                         {...field}
                         type="time"
-                        className="bg-white/10 border-white/20 w-full"
+                        className="bg-white/90 border-white/20 w-full"
                       />
                     </FormControl>
                     <FormMessage />
@@ -133,7 +133,10 @@ export default function FormEvent ({form, handleFormSubmit, isEditing, onClose}:
             <div className="flex gap-3 pt-4">
               <Button
                 type="button"
-                onClick={onClose}
+                onClick={()=>{
+                    onClose();
+                    form.reset();
+                }}
                 className="flex-1 bg-white/10 hover:bg-white/20 text-white border-white/20"
                 variant="outline"
               >
