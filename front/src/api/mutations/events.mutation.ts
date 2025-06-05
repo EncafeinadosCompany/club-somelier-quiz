@@ -61,7 +61,6 @@ export const useUpdateEventMutation = () => {
             const loadingToast = toast.loading('Actualizando evento...', { id: "loading-update" });
             toast.success('¡Evento actualizado con éxito!', { id: loadingToast });
 
-            // Invalidate both the list and the specific event
             if (data && data.id) {
                 queryClient.invalidateQueries({ queryKey: ['event', data.id] });
             } else {
