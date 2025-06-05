@@ -39,11 +39,3 @@ jobs:
       - name: Build frontend
         working-directory: ./APP
         run: npm run build
-
-      - name: Start frontend
-        working-directory: ./APP
-        run: npm run preview &
-
-      - name: Wait for frontend to be ready
-        working-directory: ./APP
-        run: npx wait-on http://localhost:5173
