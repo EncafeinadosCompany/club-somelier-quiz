@@ -64,7 +64,7 @@ export default function HomeCuestion() {
       < AnimatedBackground></AnimatedBackground>
       {/* <AnimatedBackground /> */}
 
-    <div className="w-fit z-100  right-2 top-2 flex absolute ">
+    <div className="w-fit z-100 right-2 top-3 flex absolute ">
       <Button onClick={()=> OncreateQuestionnarie()} className="rounded-lg bg-amber-100 hover:text-red-800 hover:bg-white/40">Crear Cuestionario</Button>
     </div>
 

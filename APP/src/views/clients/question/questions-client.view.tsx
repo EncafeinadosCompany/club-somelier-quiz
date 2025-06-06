@@ -225,14 +225,14 @@ export function QuestionsView() {
                     <div className="mb-2 flex justify-between items-center">
                       <span className="text-sm text-[var(--text-secondary)]">Puntuación</span>
                       <span className="text-sm font-medium text-[var(--text-primary)]">
-                        {Math.round((result.total ))}%
+                        {Math.round((result.total ))}
                       </span>
                     </div>
                     <div className="h-3 w-full bg-white/10 rounded-full overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{
-                          width: `${Math.round((result.total))}%`
+                          width: `${Math.round((result.total))}`
                         }}
                         transition={{ delay: 0.5, duration: 0.8 }}
                         className="h-full bg-[var(--accent-primary)] rounded-full"
