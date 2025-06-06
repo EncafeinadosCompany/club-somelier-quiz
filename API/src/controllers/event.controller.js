@@ -10,6 +10,21 @@ class EventController {
     res.json(events);
   }
 
+  getAllEventsByStatus= async (req, res) =>{
+    try{
+      const events = await this.eventService.getAllEventsByStatus(req.params.status);
+    res.json(events)
+    }catch(error){
+      if (error.status === 404) {
+        return res.status(404).json({ message: error.message });
+      }
+      res.status(500).json({ message: 'Internal Server Error', error });
+    }
+
+
+    
+  }
+
   getEventById = async (req, res) => {
     const event = await this.eventService.getEventById(req.params.id);
     if (!event) return res.status(404).json({ error: 'Event not found' });
