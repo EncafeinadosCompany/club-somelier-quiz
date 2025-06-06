@@ -116,32 +116,22 @@ export function QuestionsView() {
 
 
   const handleShareResults = (data: ResultsType[]) => {
-    // Sort participants by score (highest first)
+
     const sortedResults = [...data].sort((a, b) => b.total - a.total);
 
-    // Format the current participant's result
-    const participantResult = data.find(r => r.participant.id.toString() === participantId);
-    const totalQuestions = questionnaire?.questions?.length || 0;
-
-    // Create the basic share text
     let shareText = `¡He completado el quiz "${questionnaire?.title}"! 🎯\n` 
 
-    // Add the leaderboard with all participants
     shareText += `📊 Resultados finales:\n`;
 
-    // Add each participant's result to the share text
     sortedResults.forEach((result, index) => {
    
       const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
 
-      // Add the line for this participant
       shareText += `${medal} ${result.participant.fullName}: pts ${result.total}\n`;
     });
 
-    // Add hashtags
     shareText += `\n#QuizApp #${questionnaire?.title.replace(/\s+/g, '')}`;
 
-    // Try using Web Share API first (works on mobile devices)
     if (navigator.share) {
       navigator.share({
         title: `Resultados del Quiz "${questionnaire?.title}"`,
@@ -150,10 +140,9 @@ export function QuestionsView() {
       return;
     }
 
-    // Fallback methods with direct links
     const encodedText = encodeURIComponent(shareText);
 
-    // Open sharing options in a modal/popup
+
     setShareOptions({
       show: true,
       text: shareText,
