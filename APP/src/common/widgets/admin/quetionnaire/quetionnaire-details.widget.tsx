@@ -47,7 +47,6 @@ export default function QuestionnaireDetail({ useQuestionnaireByIDQuery, onSave 
   };
 
   const handleRemoveQuestion = (data:QuestionnaireQuestion, id:string) => {
-    console.log("Eliminar pregunta", data, id);
     deleteQuestion.mutateAsync({
       questionnaire_id: Number(id),
       question_id: data.id
@@ -267,7 +266,7 @@ export default function QuestionnaireDetail({ useQuestionnaireByIDQuery, onSave 
                         </div>
 
                         {/* Delete Button */}
-                        {/* <motion.button
+                        <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                           onClick={() => {
@@ -278,7 +277,7 @@ export default function QuestionnaireDetail({ useQuestionnaireByIDQuery, onSave 
                           className="p-1.5 sm:p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg sm:rounded-xl transition-all duration-200"
                         >
                           <Trash2 className="h-5 w-5 sm:h-7 sm:w-7" />
-                        </motion.button> */}
+                        </motion.button>
                       </div>
                     </div>
                   </motion.div>

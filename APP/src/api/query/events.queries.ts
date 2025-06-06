@@ -26,6 +26,28 @@ export const useEventsQuery = () => {
     });
 };
 
+
+export const useEventsByStatusQuery = () => {
+    return useQuery<EventDetail[], Error>({
+        queryKey: ['events'],
+        queryFn: async (): Promise<EventDetail[]> => {
+            try {
+                const response = await authClient.get<EventDetail[]>('/events/status/draft');
+
+                if (!Array.isArray(response)) {
+                    return [];
+                }
+
+                return response;
+            } catch (error) {
+                throw error;
+            }
+        },
+        refetchOnWindowFocus: true,
+        retry: 1
+    });
+};
+
 /**
  * @param id The event ID to fetch
  */

@@ -8,6 +8,7 @@ const eventController = new EventController();
 router
     .get('/',authenticateJWT, eventController.getAllEvents)
     .get('/:id',authenticateJWT, eventController.getEventById)
+    .get('/status/:status', eventController.getAllEventsByStatus)
     .get('/code/:code', eventController.getEventByCode)
     .post('/',authenticateJWT, eventController.createEvent)
     .put('/:id',authenticateJWT, eventController.updateEvent)

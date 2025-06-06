@@ -30,6 +30,10 @@ class EventRepository {
         return this.getById(id);
     }
 
+    async getEventByStatus(status){
+        return await Event.findAll({where: {status: status}})
+    }
+
     async delete(id) {
         return await Event.destroy({ where: { id } });
     }

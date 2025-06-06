@@ -13,8 +13,8 @@ export const useCreateQuestionnaireMutation = () => {
     const queryClient = useQueryClient();
     const useErrors = useError('questionnaires');
 
-    return useMutation< GetQuestionnaire, Error, PostQuestionnaire>({
-        mutationFn: async (questionnaireData): Promise< GetQuestionnaire> => {
+    return useMutation<GetQuestionnaire, Error, PostQuestionnaire>({
+        mutationFn: async (questionnaireData): Promise<GetQuestionnaire> => {
             try {
                 const response: AxiosResponse<GetQuestionnaire> = await authClient.post('/questionnaires', questionnaireData);
                 return response.data;
@@ -48,10 +48,10 @@ export const useUpdateQuestionnaireMutation = () => {
     const queryClient = useQueryClient();
     const useErrors = useError('questionnaires');
 
-    return useMutation< GetQuestionnaire, Error, UpdateQuestionnaireData>({
-        mutationFn: async ({ id, data }): Promise< GetQuestionnaire> => {
+    return useMutation<GetQuestionnaire, Error, UpdateQuestionnaireData>({
+        mutationFn: async ({ id, data }): Promise<GetQuestionnaire> => {
             try {
-                const response: AxiosResponse< GetQuestionnaire> = await authClient.patch(`/questionnaires/${id}`, data);
+                const response: AxiosResponse<GetQuestionnaire> = await authClient.patch(`/questionnaires/${id}`, data);
                 return response.data;
             } catch (error: any) {
                 useErrors(error);
@@ -79,16 +79,20 @@ export const useUpdateQuestionnaireMutation = () => {
 export const useDeleteQuetionnaireMutation = () => {
     const queryClient = useQueryClient();
 
-    
     return useMutation<any, Error, DeleteQuestionnaire>({
         mutationFn: async (data: DeleteQuestionnaire): Promise<any> => {
 
-            console.log('data', data);
-            const result = await authClient.delete(`/questionnaire-questions`, { data });
-            return result;
+            try {
+                const result = await authClient.delete(`/questionnaire-questions`, data);
+                return result;
+            }
+            catch (error: any) {
+                throw error;
+            }
         },
-        onSuccess: () => {
-            toast.success('pregunta eliminada con éxito');
+        onSuccess: (_, data) => {
+            toast.success('Pregunta eliminada con éxito');
+            queryClient.invalidateQueries({ queryKey: ['Questionnaire', data.questionnaire_id] });
             queryClient.invalidateQueries({ queryKey: ['Questionnaires'] });
         },
         onError: (error: any) => {
