@@ -9,6 +9,17 @@ class EventService {
     return await this.eventRepository.getAll();
   }
 
+  async getAllEventsByStatus(event){
+    const validStatuses = ['draft', 'closed', 'live'];
+    if(!validStatuses.includes(event)){
+      const error = new Error('Status is not already exists.')
+      error.status=404
+      throw error
+    }
+
+    return await this.eventRepository.getEventByStatus(event)
+  }
+
   async getEventById(id) {
     return await this.eventRepository.getById(id);
   }

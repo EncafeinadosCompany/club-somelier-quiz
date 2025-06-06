@@ -3,10 +3,10 @@ services:
     name: api
     env: node
     plan: free
-    buildCommand: cd api && npm install
-    startCommand: cd api && npm start
+    buildCommand: npm install
+    startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
     autoDeploy: true
-    rootDir: api
+    rootDir: API
