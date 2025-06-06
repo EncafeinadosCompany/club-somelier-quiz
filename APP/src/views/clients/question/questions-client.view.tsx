@@ -122,28 +122,20 @@ export function QuestionsView() {
     // Format the current participant's result
     const participantResult = data.find(r => r.participant.id.toString() === participantId);
     const totalQuestions = questionnaire?.questions?.length || 0;
-    const percentage = participantResult
-      ? Math.round((participantResult.total / totalQuestions) * 100)
-      : 0;
 
     // Create the basic share text
-    let shareText = `¡He completado el quiz "${questionnaire?.title}"! 🎯\n` +
-      `Mi puntuación: ${participantResult?.total || 0} pts (${percentage}%)\n\n`;
+    let shareText = `¡He completado el quiz "${questionnaire?.title}"! 🎯\n` 
 
     // Add the leaderboard with all participants
     shareText += `📊 Resultados finales:\n`;
 
     // Add each participant's result to the share text
     sortedResults.forEach((result, index) => {
-      const isCurrentUser = result.participant.id.toString() === participantId;
+   
       const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
-      const userMarker = isCurrentUser ? ' ← Yo' : '';
-
-      // Format the percentage
-      const userPercentage = Math.round((result.total / totalQuestions) * 100);
 
       // Add the line for this participant
-      shareText += `${medal} ${result.participant.fullName}: ${result.total} pts (${userPercentage}%)${userMarker}\n`;
+      shareText += `${medal} ${result.participant.fullName}: pts ${result.total}\n`;
     });
 
     // Add hashtags
@@ -233,9 +225,9 @@ export function QuestionsView() {
                       </h2>
                     </div>
                     <div className="px-4 py-2 rounded-full bg-[var(--accent-primary)]/20 border border-[var(--accent-primary)]/30">
-                      <span className="text-lg font-bold text-[var(--accent-primary)]">
-                        {result.total} pts
-                      </span>
+                        <span className="text-lg font-bold text-[var(--accent-primary)]">
+                          {result.total.toFixed(2)} pts
+                        </span>
                     </div>
                   </div>
 
@@ -244,14 +236,14 @@ export function QuestionsView() {
                     <div className="mb-2 flex justify-between items-center">
                       <span className="text-sm text-[var(--text-secondary)]">Puntuación</span>
                       <span className="text-sm font-medium text-[var(--text-primary)]">
-                        {Math.round((result.total / (questionnaire.questions?.length || 1)) * 100)}%
+                        {Math.round((result.total ))}%
                       </span>
                     </div>
                     <div className="h-3 w-full bg-white/10 rounded-full overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{
-                          width: `${Math.round((result.total / (questionnaire.questions?.length || 1)) * 100)}%`
+                          width: `${Math.round((result.total))}%`
                         }}
                         transition={{ delay: 0.5, duration: 0.8 }}
                         className="h-full bg-[var(--accent-primary)] rounded-full"
