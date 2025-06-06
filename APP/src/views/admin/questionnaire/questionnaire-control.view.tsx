@@ -51,11 +51,11 @@ export default function AdminControlView() {
     const eventStatus = getEventStatus();
 
     return (
-        <div className="min-h-screen relative ">
-            <AnimatedBackground />
-            <div className="max-w-6xl  mx-auto bg-black z-10 space-y-6">
-                {/* Header */}
-                <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+        <div className="min-h-screen relative flex items-center justify-center py-8">
+        <AnimatedBackground />
+        <div className="w-full max-w-6xl mx-auto px-4 bg-black/10 p-4 rounded-b-lg z-10 space-y-6">
+            {/* Header */}
+            <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
                     <div className="flex items-center justify-between">
                         <div >
                             <h1 className="text-2xl font-bold text-white mb-2">Panel de Control</h1>
@@ -80,10 +80,7 @@ export default function AdminControlView() {
                                     </>
                                 )}
                             </div>
-                            <div className="flex items-center space-x-2 bg-blue-500/20 px-3 py-1 rounded-lg">
-                                <Users className="w-4 h-4 text-blue-300" />
-                                <span className="text-blue-300 text-sm">{connectedParticipants}</span>
-                            </div>
+                           
                         </div>
                     </div>
                 </div>
@@ -199,11 +196,8 @@ export default function AdminControlView() {
                         </h2>
 
                         <div className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="bg-blue-500/20 rounded-lg p-4 text-center">
-                                    <div className="text-2xl font-bold text-blue-300">{connectedParticipants}</div>
-                                    <div className="text-blue-200 text-sm">Participantes</div>
-                                </div>
+                            <div className="grid grid-cols-1 gap-4">
+                          
                                 <div className="bg-purple-500/20 rounded-lg p-4 text-center">
                                     <div className="text-2xl font-bold text-purple-300">
                                         {currentQuestion?.position || 0}
