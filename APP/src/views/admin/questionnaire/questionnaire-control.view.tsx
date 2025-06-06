@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import {Play,SkipForward,Square,Users,CheckCircle,Clock,BookOpen,AlertCircle,Wifi,WifiOff} from 'lucide-react';
+import { Play, SkipForward, Square, Users, CheckCircle, Clock, BookOpen, AlertCircle, Wifi, WifiOff } from 'lucide-react';
 import { useEventSocketAdmin } from '@/common/hooks/useEventSocket';
 import { useSearchParams } from 'react-router-dom';
 import AnimatedBackground from '@/common/atoms/animated-background';
@@ -11,7 +11,7 @@ export default function AdminControlView() {
 
     const [timeElapsed, setTimeElapsed] = useState(0);
     const [connectedParticipants] = useState(8);
-    const {isConnected,eventStarted,currentQuestion,noMoreQuestions,eventEnded,startEvent,nextQuestion,endEvent} = useEventSocketAdmin(accessCode);
+    const { isConnected, eventStarted, currentQuestion, noMoreQuestions, eventEnded, startEvent, nextQuestion, endEvent } = useEventSocketAdmin(accessCode);
 
     useEffect(() => {
         let interval: string | number | NodeJS.Timeout | undefined;
@@ -52,10 +52,12 @@ export default function AdminControlView() {
 
     return (
         <div className="min-h-screen relative flex items-center justify-center py-8">
-        <AnimatedBackground />
-        <div className="w-full max-w-6xl mx-auto px-4 bg-black/10 p-4 rounded-b-lg z-10 space-y-6">
-            {/* Header */}
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+            <AnimatedBackground />
+            <div className="w-full max-w-6xl mx-auto px-2 absolute bg-black/10 p-6 rounded-b-lg z-10 space-y-6 
+            flex flex-col">
+              <div className='w-full  space-y-6  overflow-y-auto max-h-[70vh] '>
+                  {/* Header */}
+                <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
                     <div className="flex items-center justify-between">
                         <div >
                             <h1 className="text-2xl font-bold text-white mb-2">Panel de Control</h1>
@@ -80,7 +82,7 @@ export default function AdminControlView() {
                                     </>
                                 )}
                             </div>
-                           
+
                         </div>
                     </div>
                 </div>
@@ -197,7 +199,7 @@ export default function AdminControlView() {
 
                         <div className="space-y-4">
                             <div className="grid grid-cols-1 gap-4">
-                          
+
                                 <div className="bg-purple-500/20 rounded-lg p-4 text-center">
                                     <div className="text-2xl font-bold text-purple-300">
                                         {currentQuestion?.position || 0}
@@ -264,6 +266,7 @@ export default function AdminControlView() {
                         </ul>
                     </div>
                 </div>
+              </div>
             </div>
         </div>
     );
