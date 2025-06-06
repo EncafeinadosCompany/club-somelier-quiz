@@ -11,7 +11,7 @@ import {
 import { Input } from "@/common/ui/input";
 import { Label } from "@/common/ui/label";
 import { Textarea } from "@/common/ui/textarea";
-import { Mail, Phone, MapPin, Clock, User } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, User, Instagram } from "lucide-react";
 import { NavbarLandind } from "@/common/molecules/nav/nav-landing.molecule";
 import { Footer } from "@/common/molecules/footer.molecule";
 
@@ -175,6 +175,20 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-slate-800 text-xs">
+                        Nombre
+                      </h3>
+                      <p className="text-slate-600 text-xs">
+                        Martin Ossa Roldán
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-2">
+                    <div className="w-6 h-6 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Mail className="w-3 h-3 text-emerald-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-slate-800 text-xs">
                         Email
                       </h3>
                       <p className="text-slate-600 text-xs">
@@ -192,21 +206,7 @@ export default function ContactPage() {
                         Teléfono
                       </h3>
                       <p className="text-slate-600 text-xs">
-                        +1 (555) 123-4567
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2">
-                    <div className="w-6 h-6 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <MapPin className="w-3 h-3 text-emerald-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-slate-800 text-xs">
-                        Dirección
-                      </h3>
-                      <p className="text-slate-600 text-xs">
-                        Calle Principal 123, Ciudad
+                        +57 3128716875
                       </p>
                     </div>
                   </div>
@@ -220,10 +220,30 @@ export default function ContactPage() {
                         Horarios
                       </h3>
                       <p className="text-slate-600 text-xs">
-                        Lun-Vie: 9AM-6PM | Sáb: 10AM-4PM
+                        24 horas
                       </p>
                     </div>
                   </div>
+
+                  <div className="flex items-start gap-2">
+                    <div className="w-6 h-6 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Instagram className="w-3 h-3 text-emerald-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-slate-800 text-xs">
+                        Instagram
+                      </h3>
+                      <a 
+                        href="https://www.instagram.com/chefmartinossa/" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-slate-600 text-xs hover:text-emerald-600 transition-colors"
+                      >
+                        @chefmartinossa
+                      </a>
+                    </div>
+                  </div>
+
                   <div className="flex-1" />
                 </CardContent>
               </Card>

@@ -16,25 +16,55 @@ export default function LoginPage() {
     email: "", 
     password: "",
   })
+  const [errors, setErrors] = useState({
+    email: "",
+    password: ""
+  })
+  const [touched, setTouched] = useState({
+    email: false,
+    password: false
+  })
 
   const loginMutation = useLogin()
+
+  const validateEmail = (email: string) => {
+    if (!email.trim()) {
+      return 'Por favor ingresa tu email'
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      return 'Por favor ingresa un email válido'
+    }
+    return ''
+  }
+
+  const validatePassword = (password: string) => {
+    if (!password.trim()) {
+      return 'Por favor ingresa tu contraseña'
+    }
+    if (password.length < 6) {
+      return 'La contraseña debe tener al menos 6 caracteres'
+    }
+    return ''
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (!formData.email.trim()) {
-      alert('Por favor ingresa tu email')
-      return
-    }
+    const emailError = validateEmail(formData.email)
+    const passwordError = validatePassword(formData.password)
     
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(formData.email)) {
-      alert('Por favor ingresa un email válido')
-      return
-    }
+    setErrors({
+      email: emailError,
+      password: passwordError
+    })
     
-    if (!formData.password.trim()) {
-      alert('Por favor ingresa tu contraseña')
+    setTouched({
+      email: true,
+      password: true
+    })
+    
+    if (emailError || passwordError) {
       return
     }
 
@@ -46,13 +76,32 @@ export default function LoginPage() {
       ...prev,
       [field]: value,
     }))
+    
+    // Validar en tiempo real si el campo ya fue tocado
+    if (touched[field as keyof typeof touched]) {
+      if (field === 'email') {
+        setErrors(prev => ({ ...prev, email: validateEmail(value) }))
+      } else if (field === 'password') {
+        setErrors(prev => ({ ...prev, password: validatePassword(value) }))
+      }
+    }
+  }
+
+  const handleBlur = (field: string) => {
+    setTouched(prev => ({ ...prev, [field]: true }))
+    
+    if (field === 'email') {
+      setErrors(prev => ({ ...prev, email: validateEmail(formData.email) }))
+    } else if (field === 'password') {
+      setErrors(prev => ({ ...prev, password: validatePassword(formData.password) }))
+    }
   }
 
   return (
     <MainLayout backgroundVariant="gradient">
       {/* Botón de regreso */}
       <div className="absolute top-6 left-6 z-10">
-        <Link to="/landing">
+        <Link to="/">
           <Button
             variant="outline"
             size="sm"
@@ -101,11 +150,22 @@ export default function LoginPage() {
                     placeholder="Ingresa tu email"
                     value={formData.email}
                     onChange={(e) => handleInputChange("email", e.target.value)}
-                    className="pl-10 h-12 border-2 border-[var(--border-primary)] rounded-xl focus:border-[var(--accent-primary)] transition-colors"
+                    onBlur={() => handleBlur("email")}
+                    className={`pl-10 h-12 border-2 rounded-xl transition-colors ${
+                      errors.email && touched.email
+                        ? "border-red-500 focus:border-red-500"
+                        : "border-[var(--border-primary)] focus:border-[var(--accent-primary)]"
+                    }`}
                     required
                     disabled={loginMutation.isPending}
                   />
                 </div>
+                {/* Mostrar mensaje de error de email */}
+                {errors.email && touched.email && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.email}
+                  </p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -120,7 +180,12 @@ export default function LoginPage() {
                     placeholder="Ingresa tu contraseña"
                     value={formData.password}
                     onChange={(e) => handleInputChange("password", e.target.value)}
-                    className="pl-10 pr-10 h-12 border-2 border-[var(--border-primary)] rounded-xl focus:border-[var(--accent-primary)] transition-colors"
+                    onBlur={() => handleBlur("password")}
+                    className={`pl-10 pr-10 h-12 border-2 rounded-xl transition-colors ${
+                      errors.password && touched.password
+                        ? "border-red-500 focus:border-red-500"
+                        : "border-[var(--border-primary)] focus:border-[var(--accent-primary)]"
+                    }`}
                     required
                     disabled={loginMutation.isPending}
                   />
@@ -133,6 +198,12 @@ export default function LoginPage() {
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
+                {/* Mostrar mensaje de error de contraseña */}
+                {errors.password && touched.password && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.password}
+                  </p>
+                )}
               </div>
 
               <Button
