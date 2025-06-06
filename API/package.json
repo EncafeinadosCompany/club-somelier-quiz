@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
-    "start:dev": "node index.js",
+    "start:dev": "nodemon index.js",
+    "start": "node index.js",
     "test": "jest",
     "seed:create": "npx sequelize-cli seed:generate --name",
     "seed": "npx sequelize-cli db:seed:all"
