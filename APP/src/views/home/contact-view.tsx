@@ -13,7 +13,7 @@ import { Label } from "@/common/ui/label";
 import { Textarea } from "@/common/ui/textarea";
 import { Mail, Phone, MapPin, Clock, User, Instagram } from "lucide-react";
 import { NavbarLandind } from "@/common/molecules/nav/nav-landing.molecule";
-import { Footer } from "@/common/molecules/footer.molecule";
+import { Footer } from "@/common/molecules/nav/footer.molecule";
 
 export default function ContactPage() {
   const handleSubmit = (e: React.FormEvent) => {

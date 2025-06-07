@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import { AppBackground } from '../../molecules/AppBackground';
-import { ThemeToggle } from '../../atoms/ThemeToggle';
+import { AppBackground } from '@/common/molecules/app-background.molecule';
+import { ThemeToggle } from '@/common/atoms/ThemeToggle';
 
 interface MainLayoutProps {
   children: ReactNode;

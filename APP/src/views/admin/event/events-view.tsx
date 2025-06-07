@@ -24,12 +24,11 @@ export default function EventsView() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedEventId, setSelectedEventId] = useState<number | null>(null)
   const [IsCreateEventModalOpen, setIsCreateEventModalOpen] = useState(false)
-  
+
   const navigate = useNavigate()
-  // Fetch all events
+
   const { data: events = [], isLoading, isError } = useEventsQuery()
 
-  // Fetch selected event details
   const {
     data: selectedEvent,
     isLoading: isLoadingDetails,
@@ -40,7 +39,7 @@ export default function EventsView() {
     setIsLoaded(true)
   }, [])
 
-  // Filter events by name
+
   const filteredEvents = useMemo(() => {
     return events.filter((event) =>
       event.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -74,19 +73,10 @@ export default function EventsView() {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
-      {/* Background Image */}
-      {/* <img
-        src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop"
-        alt="Beautiful mountain landscape"
-        className="object-cover absolute h-full w-full"
-      /> */}
       <AnimatedBackground />
-      
-      
 
-      {/* Main Content */}
       <main className="relative h-screen w-full pt-5 flex">
-        {/* Sidebar */}
+
         <div
           className={`w-80 h-full bg-white/10 backdrop-blur-lg p-6 shadow-xl border-r border-white/20 rounded-tr-3xl opacity-100 ${isLoaded ? "animate-fade-in" : ""} flex flex-col`}
           style={{ animationDelay: "0.4s" }}
@@ -257,7 +247,7 @@ export default function EventsView() {
                         <Play className="h-4 w-4 mr-1" />
                         Iniciar Evento
                       </Button>
-                      
+
                       <Button
                         size="sm"
                         variant="outline"

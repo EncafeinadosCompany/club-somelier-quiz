@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Award } from 'lucide-react';
-import { ParticipantsRanking} from './ParticipantsRanking';
-import { ResultsType } from '../hooks/useEventSocket';
+import { ParticipantsRanking } from './participants-ranking.molecule';
+import { ResultsType } from '../../hooks/useEventSocket';
 
 interface LiveRankingWidgetProps {
   participants: ResultsType[];
@@ -16,24 +16,23 @@ export function LiveRankingWidget({
   maxToShow = 5
 }: LiveRankingWidgetProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  
-  // Encontrar ranking del participante actual
-  const currentParticipantRank = currentParticipantId ? 
+
+  const currentParticipantRank = currentParticipantId ?
     participants
       .sort((a, b) => b.total - a.total)
-      .findIndex(p => p.participant_id.toString()=== currentParticipantId) + 1 : 
+      .findIndex(p => p.participant_id.toString() === currentParticipantId) + 1 :
     null;
 
   return (
     <div className="fixed bottom-5 right-5 z-10">
-      <motion.div 
+      <motion.div
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         className="bg-[var(--background-tertiary)]/80 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg overflow-hidden"
         style={{ width: isExpanded ? '300px' : '180px' }}
       >
-        {/* Header - siempre visible */}
-        <div 
+
+        <div
           className="flex items-center justify-between p-3 cursor-pointer"
           onClick={() => setIsExpanded(!isExpanded)}
         >
@@ -43,21 +42,21 @@ export function LiveRankingWidget({
               {isExpanded ? 'Ranking actual' : 'Tu posición'}
             </span>
           </div>
-          
+
           <div className="flex items-center gap-2">
             {currentParticipantRank && !isExpanded && (
               <span className="font-bold text-[var(--accent-primary)]">
                 {currentParticipantRank}º
               </span>
             )}
-            {isExpanded ? 
-              <ChevronDown className="w-4 h-4 text-[var(--text-secondary)]" /> : 
+            {isExpanded ?
+              <ChevronDown className="w-4 h-4 text-[var(--text-secondary)]" /> :
               <ChevronUp className="w-4 h-4 text-[var(--text-secondary)]" />
             }
           </div>
         </div>
-        
-        {/* Contenido expandible */}
+
+
         <AnimatePresence>
           {isExpanded && (
             <motion.div
@@ -66,7 +65,7 @@ export function LiveRankingWidget({
               exit={{ height: 0, opacity: 0 }}
               className="px-3 pb-3"
             >
-              <ParticipantsRanking 
+              <ParticipantsRanking
                 participants={participants}
                 currentParticipantId={currentParticipantId}
                 maxToShow={maxToShow}

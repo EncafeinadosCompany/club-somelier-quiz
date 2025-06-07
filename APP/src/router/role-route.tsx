@@ -1,6 +1,6 @@
 
 // import { getAuthStorage } from "@/common/utils/auth_storage.utils";
-import { ROLES } from "@/common/utils/Roles";
+import { ROLES } from "@/common/utils/roles";
 
 import toast from "react-hot-toast";
 import { Navigate, Outlet } from "react-router-dom";

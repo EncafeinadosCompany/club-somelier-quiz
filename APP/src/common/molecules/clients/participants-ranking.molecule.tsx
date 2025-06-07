@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Trophy, Medal, User, Award, Star } from 'lucide-react';
-import { ResultsType } from '../hooks/useEventSocket';
+import { ResultsType } from '../../hooks/useEventSocket';
 
 export interface Participant {
   participant_id: string;

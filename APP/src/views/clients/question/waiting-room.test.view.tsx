@@ -43,7 +43,7 @@ export function WaitingViewTest() {
         isConnected
     } = useEventSocketParticipant(accessCode!, participantId!);
 
-    // Navegar a preguntas cuando evento inicia o llega pregunta
+
     useEffect(() => {
         if (eventStarted || currentQuestion) {
             navigate("/questions", {

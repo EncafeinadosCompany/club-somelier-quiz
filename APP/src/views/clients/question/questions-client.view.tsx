@@ -6,9 +6,9 @@ import { MainLayout } from '@/common/widgets/clients/main-layout.widget';
 import { ResultsType, useEventSocketParticipant } from '@/common/hooks/useEventSocket';
 import { QuestionCard } from '@/common/atoms/QuestionCard';
 import { CheckCircle, Mail, XCircle } from 'lucide-react';
-import { AnswerButtons } from '@/common/molecules/AnswerButtons';
-import { ParticipantsRanking } from '@/common/molecules/ParticipantsRanking';
-import { LiveRankingWidget } from '@/common/molecules/LiveRankingWidget';
+import { AnswerButtons } from '@/common/molecules/clients/answer-buttons.molecule';
+import { ParticipantsRanking } from '@/common/molecules/clients/participants-ranking.molecule';
+import { LiveRankingWidget } from '@/common/molecules/clients/live-ranking,molecule';
 
 interface LocationState {
   questionnaireId: number;

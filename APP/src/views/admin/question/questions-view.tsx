@@ -30,10 +30,9 @@ export default function QuestionsView() {
     const [levelFilter, setLevelFilter] = useState<string | null>(null)
     const [responseFilter, setResponseFilter] = useState<boolean | null>(null)
 
-    // Fetch questions, categories, and selected question
-    const { data: questions = [], isLoading, isError } = useQuestionsQuery()
+    const { data: questions = [], isLoading} = useQuestionsQuery()
     const { data: categories = [], isLoading: isLoadingCategories } = useCategoriesQuery()
-    const { data: nivels= [] } = useNivelesQuery();
+    const { data: nivels = [] } = useNivelesQuery();
 
     const {
         data: selectedQuestion,
@@ -50,7 +49,6 @@ export default function QuestionsView() {
         setIsLoaded(true)
     }, [])
 
-    // Filter questions based on search term and filters
     const filteredQuestions = useMemo(() => {
         return questions.filter((q) => {
             // Text search
@@ -125,18 +123,11 @@ export default function QuestionsView() {
 
     return (
         <div className="relative min-h-screen w-full overflow-hidden">
-            {/* Background Image */}
-            {/* <img
-                src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop"
-                alt="Beautiful mountain landscape"
-                className="object-cover absolute h-full w-full"
-            /> */}
-            <AnimatedBackground />
-            
 
-            {/* Main Content */}
+            <AnimatedBackground />
+
             <main className="relative h-[92vh] w-full pt-5 flex">
-                {/* Sidebar - Filters */}
+
                 <div
                     className={`w-80 h-full bg-white/10 backdrop-blur-lg p-6 shadow-xl border-r border-white/20 rounded-tr-3xl opacity-100 ${isLoaded ? "animate-fade-in" : ""} flex flex-col`}
                     style={{ animationDelay: "0.4s" }}
@@ -302,10 +293,9 @@ export default function QuestionsView() {
                             </Button>
                         </div>
 
-                        {/* Questions List */}
                         <div className="space-y-4 max-h-[calc(100vh-250px)] overflow-y-auto pr-2">
                             {isLoading ? (
-                                // Loading skeletons
+
                                 Array(5).fill(0).map((_, i) => (
                                     <div key={i} className="bg-white/10 backdrop-blur-lg rounded-xl border border-white/20 p-4 hover:bg-white/20 transition-all duration-200">
                                         <Skeleton className="h-6 w-3/4 bg-white/20 mb-2" />

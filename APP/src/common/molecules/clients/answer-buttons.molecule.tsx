@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { AnswerButton } from '../atoms/AnswerButton';
+import { AnswerButton } from '../../atoms/AnswerButton';
 import { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 
@@ -11,25 +11,23 @@ interface AnswerButtonsProps {
   className?: string;
 }
 
-export function AnswerButtons({ 
-  onAnswer, 
-  isVisible = true, 
+export function AnswerButtons({
+  onAnswer,
+  isVisible = true,
   disabled = false,
   isWaiting = false,
-  className = "" 
+  className = ""
 }: AnswerButtonsProps) {
   const [showButtons, setShowButtons] = useState(false);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
-    
-    // Solo iniciar el temporizador si los botones deben ser visibles
+
     if (!isWaiting && isVisible && !disabled) {
       timer = setTimeout(() => {
         setShowButtons(true);
       }, 800);
     } else {
-      // Si no deben ser visibles, asegurarnos que estén ocultos
       setShowButtons(false);
     }
 
@@ -45,14 +43,14 @@ export function AnswerButtons({
     }, 300);
   };
 
-  // Si estamos esperando respuesta, mostrar loader
+
   if (isWaiting) {
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
-        transition={{ 
+        transition={{
           duration: 0.4,
           type: "spring",
           stiffness: 300,
@@ -74,11 +72,11 @@ export function AnswerButtons({
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
-      animate={{ 
-        opacity: isVisible ? 1 : 0, 
-        y: isVisible ? 0 : 20 
+      animate={{
+        opacity: isVisible ? 1 : 0,
+        y: isVisible ? 0 : 20
       }}
-      transition={{ 
+      transition={{
         delay: 0.5,
         duration: 0.6,
         type: "spring",
