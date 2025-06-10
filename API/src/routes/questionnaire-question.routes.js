@@ -7,5 +7,4 @@ const questionnaireQuestionController = new QuestionnaireQuestionController();
 router
   .delete('/',authenticateJWT, questionnaireQuestionController.deleteQuestionnaireQuestion);
 
-
 module.exports = router;

@@ -19,9 +19,7 @@ class ParticipantService {
 
   async createParticipant(data, accessCode) {
     let participant;
-    const existingParticipant = await this.participantRepository.findByEmail(
-      data.email
-    );
+    const existingParticipant = await this.participantRepository.findByEmail(data.email);
 
     if (existingParticipant) {
       participant = existingParticipant;
