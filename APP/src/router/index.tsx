@@ -16,7 +16,6 @@ import QuestionnaireEditContainer from "@/views/admin/questionnaire/questionnair
 import AdminControlView from "@/views/admin/questionnaire/questionnaire-control.view";
 import LoginPage from "@/views/home/login-view";
 import LandingPage from "@/views/home/landing-view";
-import ContactPage from "@/views/home/contact-view";
 import { HomeView } from "@/views/home/home-view";
 import PrivateRoute from "./token-route";
 
@@ -57,7 +56,7 @@ export default function AuthRoutes() {
 
                         {/* RUTA LANDING AGREGADA */}
                         <Route index element={<LandingPage />} />
-                        <Route path="contact" element={<ContactPage />} />
+                      
 
 
 
