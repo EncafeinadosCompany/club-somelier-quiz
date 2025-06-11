@@ -3,8 +3,15 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 import istanbul from "vite-plugin-istanbul";
+import { visualizer } from 'rollup-plugin-visualizer';
 export default defineConfig({
   plugins: [
+    visualizer({
+      filename: './dist/stats.html', // Asegúrate que esté bien ubicado
+      open: true,                    // Abre automáticamente el archivo en el navegador
+      gzipSize: true,
+      brotliSize: true,
+    }),
     react(),
     tailwindcss(),
     istanbul({
@@ -18,7 +25,7 @@ export default defineConfig({
   build: {
     sourcemap: true, // o 'inline' o 'hidden'
   },
-  
+
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

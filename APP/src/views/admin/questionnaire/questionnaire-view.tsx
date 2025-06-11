@@ -88,13 +88,13 @@ export default function HomeCuestion() {
                 Buscar cuestionarios
               </label>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black/50" />
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white" />
                 <Input
                   type="text"
                   placeholder="Buscar por título, categoría..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="bg-white/10 border-white/20 text-white placeholder:text-black/50 pl-10"
+                  className="bg-white/20 border-white/20 text-white placeholder:text-gray250 pl-10"
                 />
               </div>
             </div>

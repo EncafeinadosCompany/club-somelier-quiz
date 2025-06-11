@@ -47,7 +47,7 @@ export const CategoriesWidget = () => {
                         className="bg-amber-600 hover:bg-amber-700 text-white h-7 rounded-full"
                         onClick={handleOpenCreate}
                     >
-                        <Plus className="h-3.5 w-3.5 mr-1" />
+                        <Plus className="h-3.5 w-3.5" />
                         <span className="text-xs">Crear</span>
                     </Button>
                 </div>
