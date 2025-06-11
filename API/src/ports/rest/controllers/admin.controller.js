@@ -1,5 +1,5 @@
-const AdminService = require("../services/admin.service");
-const { AdminResponseDto } = require("../dtos/admin.response.dto");
+const AdminService = require("../../../services/admin.service");
+const { AdminResponseDto } = require("../../../dtos/admin.response.dto");
 
 
 class AdminController {

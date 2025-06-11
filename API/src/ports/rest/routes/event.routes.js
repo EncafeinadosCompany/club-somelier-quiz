@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const EventController = require('../controllers/event.controller');
-const { authenticateJWT } = require('../middlewares/auth.middleware');
+const { authenticateJWT } = require('../../../middlewares/auth.middleware');
 
 const eventController = new EventController();
 

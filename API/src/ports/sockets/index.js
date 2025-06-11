@@ -2,12 +2,12 @@ const registerAdminHandlers = require("./handlers/admin.handler");
 const registerParticipantHandlers = require("./handlers/participant.handler");
 const registerSharedHandlers = require("./handlers/shared.handler");
 
-const liveEvents = require("../services/live-event.service");
+const liveEvents = require("../../services/live-event.service");
 
-const AdminService = require("../services/admin.service");
-const EventService = require("../services/event.service");
-const AnswerService = require("../services/answer.service");
-const QuestionnairesService = require("../services/questionnaires.service");
+const AdminService = require("../../services/admin.service");
+const EventService = require("../../services/event.service");
+const AnswerService = require("../../services/answer.service");
+const QuestionnairesService = require("../../services/questionnaires.service");
 
 const adminService = new AdminService();
 const eventService = new EventService();

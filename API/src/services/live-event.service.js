@@ -1,4 +1,4 @@
-const liveEvents = new Map();
+const liveEvents = new Map(); // key: accessCode, value: { eventId, questions, currentIdx, questionStart }
 
 const LiveEventService = {
   set(accessCode, data) {

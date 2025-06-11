@@ -1,4 +1,4 @@
-const QuestionnaireQuestionService = require("../services/questionaire-question.service");
+const QuestionnaireQuestionService = require("../../../services/questionaire-question.service");
 
 class QuestionnaireQuestionController {
   constructor() {

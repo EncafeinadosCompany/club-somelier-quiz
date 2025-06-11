@@ -2,8 +2,8 @@ const { Router } = require('express');
 const router = Router();
 
 const QuestionnaireController = require('../controllers/questionnaire.controller');
-const { authenticateJWT } = require('../middlewares/auth.middleware');
-const { validateQuestionnaire, validateUpdateQuestionnaire } = require('../middlewares/questionnaire.middleware');
+const { authenticateJWT } = require('../../../middlewares/auth.middleware');
+const { validateQuestionnaire, validateUpdateQuestionnaire } = require('../../../middlewares/questionnaire.middleware');
 
 const questionnaireController = new QuestionnaireController();
 

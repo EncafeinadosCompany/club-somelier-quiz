@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const CategoryController = require('../controllers/category.controller');
-const { validateCategory } = require('../middlewares/category.middleware');
-const { authenticateJWT } = require('../middlewares/auth.middleware')
+const { validateCategory } = require('../../../middlewares/category.middleware');
+const { authenticateJWT } = require('../../../middlewares/auth.middleware')
 
 const categoryController = new CategoryController();
 

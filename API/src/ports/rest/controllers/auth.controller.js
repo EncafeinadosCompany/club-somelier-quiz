@@ -1,5 +1,5 @@
-const AuthService = require('../services/auth.service');
-const {AuthResponseDto} = require('../dtos/auth.response.dto');
+const AuthService = require('../../../services/auth.service');
+const {AuthResponseDto} = require('../../../dtos/auth.response.dto');
 
 class AuthController {
   constructor() {

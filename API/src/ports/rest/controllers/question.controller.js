@@ -1,5 +1,5 @@
-const { QuestionsResponseDto, ListQuestionsResponseDto } = require("../dtos/questions.response.dto");
-const QuestionService = require("../services/question.service");
+const { QuestionsResponseDto, ListQuestionsResponseDto } = require("../../../dtos/questions.response.dto");
+const QuestionService = require("../../../services/question.service");
 
 class QuestionController {
     constructor() {

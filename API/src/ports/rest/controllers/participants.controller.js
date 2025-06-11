@@ -1,4 +1,4 @@
-const ParticipantService = require("../services/participant.service");
+const ParticipantService = require("../../../services/participant.service");
 
 class ParticipantController {
   constructor() {

@@ -1,4 +1,4 @@
-const LevelService = require("../services/level.service");
+const LevelService = require("../../../services/level.service");
 
 class LevelController {
   constructor() {

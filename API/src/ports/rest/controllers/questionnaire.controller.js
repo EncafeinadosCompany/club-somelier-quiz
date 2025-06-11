@@ -1,5 +1,5 @@
-const { QuestionnaireAndQuestionsDTO, ListQuestionnairesDTO } = require("../dtos/questionnaire.dto");
-const QuestionnaireService = require("../services/questionnaires.service");
+const { QuestionnaireAndQuestionsDTO, ListQuestionnairesDTO } = require("../../../dtos/questionnaire.dto");
+const QuestionnaireService = require("../../../services/questionnaires.service");
 
 class QuestionnaireController {
     constructor() {

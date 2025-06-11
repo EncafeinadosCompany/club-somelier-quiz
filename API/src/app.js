@@ -1,6 +1,6 @@
 const { connectToDatabase, sequelize } = require('./config/connection');
-const { initializeWebSockets } = require('./sockets/index');
-const routerApi = require('./routes/index');
+const { initializeWebSockets } = require('./ports/sockets/index');
+const routerApi = require('./ports/rest/routes/index');
 const express = require('express');
 const cors = require('cors');
 
