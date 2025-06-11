@@ -10,11 +10,34 @@ class AnswerService {
     }
 
     async submitAnswer({ accessCode, participantId, questionId, answer }) {
-        const live = this.liveEvents.get(accessCode);
-        if (!live) throw new Error("No active session");
+        const live = this.liveEvents.getOrFail(accessCode);
 
-        const existingAnswer = await this.answerRepo.findBy({
+        const existingAnswer = await this.#checkExistingAnswer(live.eventId, questionId, participantId);
+        if (existingAnswer) return existingAnswer;
+
+        const { question, level } = this.#getLiveQuestionAndLevel(live, questionId);
+
+        const is_correct = answer === question.response;
+
+        const seconds = this.#calculateSeconds(live.questionStart);
+        const score = this.#calculateScore(is_correct, level, seconds);
+
+        await this.answerRepo.create({
             event_id: live.eventId,
+            question_id: questionId,
+            participant_id: participantId,
+            response: answer,
+            is_correct,
+            response_time: seconds,
+            points_awarded: score,
+        });
+
+        return { is_correct, score };
+    }
+
+    async #checkExistingAnswer(eventId, questionId, participantId) {
+        const existingAnswer = await this.answerRepo.findBy({
+            event_id: eventId,
             question_id: questionId,
             participant_id: participantId,
         });
@@ -26,33 +49,28 @@ class AnswerService {
                 duplicate: true,
             };
         }
+        return null;
+    }
 
+    async #getLiveQuestionAndLevel(live, questionId) {
         const question = live.questions.find((q) => q.id === questionId);
         if (!question) throw new Error("Question not found in live session");
 
-        if (!live.questionStart) throw new Error("Question start time not set");
-
-        const is_correct = answer === question.response;
         const level = await this.levelRepo.findById(question.level_id);
-        const basePts = level.points
-        
-        const elapsedMs = Date.now() - live.questionStart;
-        const seconds = elapsedMs / 1000;
-        const score = is_correct ? Math.max(basePts - 1 * seconds, 0) : 0;
+        return { question, level };
+    }
 
-        const roundedScore = Math.round(score);
+    #calculateSeconds(questionStart) {
+        if (!questionStart) throw new Error("Question start time is not set");
 
-        await this.answerRepo.create({
-            event_id: live.eventId,
-            question_id: questionId,
-            participant_id: participantId,
-            response: answer,
-            is_correct,
-            response_time: seconds,
-            points_awarded: roundedScore,
-        });
+        const elapsedMs = Date.now() - questionStart;
+        return elapsedMs / 1000;
+    }
 
-        return { is_correct, score: roundedScore };
+    #calculateScore(isCorrect, level, elapsedSeconds) {
+        if (!isCorrect) return 0;
+        const score = Math.max(level.points - 1 * elapsedSeconds, 0);
+        return Math.round(score);
     }
 
 }

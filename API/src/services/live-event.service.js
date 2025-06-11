@@ -9,6 +9,12 @@ const LiveEventService = {
     return liveEvents.get(accessCode);
   },
 
+  getOrFail(accessCode) {
+    const session = liveEvents.get(accessCode);
+    if (!session) throw new Error("No active session");
+    return session;
+  },
+
   delete(accessCode) {
     liveEvents.delete(accessCode);
   },

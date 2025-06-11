@@ -41,6 +41,7 @@ class AdminService {
 
     const event = await this.eventRepo.getByCode(accessCode);
     await this.eventRepo.update(event.id, { status: 'live' });
+    
     const qn = await this.questionnaireRepo.findById(event.questionnaire_id);
 
     const questions = qn.questions
@@ -58,8 +59,7 @@ class AdminService {
   }
 
   nextQuestion(accessCode) {
-    const live = this.liveEvents.get(accessCode);
-    if (!live) throw new Error("No live session");
+    const live = this.liveEvents.getOrFail(accessCode);
 
     live.currentIdx += 1;
     if (live.currentIdx >= live.questions.length) return { done: true };
@@ -80,8 +80,7 @@ class AdminService {
   }
 
   async endEvent(accessCode) {
-    const live = this.liveEvents.get(accessCode);
-    if (!live) throw new Error("No live session");
+    const live = this.liveEvents.getOrFail(accessCode);
 
     await this.eventRepo.update(live.eventId, { status: 'closed' });
     const scores = await this.answerRepo.getScoresByEvent(live.eventId);

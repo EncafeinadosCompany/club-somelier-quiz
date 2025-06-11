@@ -10,10 +10,8 @@ class QuestionnairesService {
   constructor() {
     this.questionnaireRepository = new QuestionnaireRepository();
     this.categoryRepository = new CategoryRepository();
-    this.questionnaireCategoryRepository =
-      new QuestionnaireCategoryRepository();
-    this.questionnaireQuestionRepository =
-      new QuestionnaireQuestionRepository();
+    this.questionnaireCategoryRepository = new QuestionnaireCategoryRepository();
+    this.questionnaireQuestionRepository = new QuestionnaireQuestionRepository();
     this.questionRepository = new QuestionRepository();
   }
 
