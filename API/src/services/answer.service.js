@@ -15,7 +15,7 @@ class AnswerService {
         const existingAnswer = await this.#checkExistingAnswer(live.eventId, questionId, participantId);
         if (existingAnswer) return existingAnswer;
 
-        const { question, level } = this.#getLiveQuestionAndLevel(live, questionId);
+        const { question, level } = await this.#getLiveQuestionAndLevel(live, questionId);
 
         const is_correct = answer === question.response;
 
