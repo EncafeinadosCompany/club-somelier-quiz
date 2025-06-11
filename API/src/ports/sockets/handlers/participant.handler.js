@@ -7,7 +7,6 @@ function participantHandler(socket, io, services) {
     socket.on("join_event", async ({ accessCode, participantId }) => {
         socket.join(accessCode);
         socket.data = { accessCode, participantId };
-        console.log(`${socket.id} joined ${accessCode}`);
         socket.emit("joined_ok");
     });
 

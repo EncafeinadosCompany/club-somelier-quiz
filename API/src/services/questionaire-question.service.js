@@ -39,7 +39,6 @@ class QuetionnaireQuestionService {
     }
 
     const question = await this.questionRepository.findById(questionId);
-    console.log("question", question);
 
     if (!question) {
       const error = new Error("Question no found");
@@ -47,14 +46,11 @@ class QuetionnaireQuestionService {
       throw error;
     }
 
-
     const result =
       await this.questionnaireQuestionRepository.deleteByQuestionnaireandQuestion(
         questionnaireId,
         questionId
       );
-
-      console.log("result", result);
 
     return result;
   }

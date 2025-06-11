@@ -5,7 +5,7 @@ const startServer = async () => {
         const server = new Server();
         server.listen();
     } catch (error) {
-        console.error('Error al iniciar la aplicación:', error.message);
+        console.error('Error starting the application:', error.message);
         process.exit(1);
     }
 };

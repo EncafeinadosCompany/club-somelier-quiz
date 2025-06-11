@@ -12,51 +12,45 @@ const questionsData = require('../data/questions.json');
 module.exports = {
   async up(queryInterface, Sequelize) {
     try {
-      // Paso 1: Sembrar las preguntas básicas
       const questions = questionsData.map(q => ({
         question: q.question,
         response: q.response,
         level_id: q.level_id
       }));
-      
+
       await SeederHelper.seedData(queryInterface, QUESTION_TABLE, questions, 'question');
-      
-      // Paso 2: Establecer las relaciones con categorías
+
       await RelationSeederHelper.seedRelations(
         queryInterface,
-        QUESTION_TABLE,          // Tabla fuente
-        CATEGORIE_TABLE,         // Tabla objetivo
-        QUESTION_CATEGORY_TABLE, // Tabla intermedia
-        questionsData,           // Datos con relaciones
-        'question',              // Campo a buscar en questions
-        'name',                  // Campo a buscar en categories
-        'question_id',           // FK en tabla intermedia
-        'category_id',           // FK en tabla intermedia
-        'categories'             // Propiedad que contiene categorías en el JSON
+        QUESTION_TABLE,
+        CATEGORIE_TABLE,
+        QUESTION_CATEGORY_TABLE,
+        questionsData,
+        'question',
+        'name',
+        'question_id',
+        'category_id',
+        'categories'
       );
-      
-      console.log('✅ Preguntas y sus relaciones sembradas correctamente');
+      console.log('✅ Questions and relations seeded successfully');
       return true;
     } catch (error) {
-      console.error('❌ Error sembrando preguntas:', error);
+      console.error(`❌ Error seeding questions: ${error.message}`);
       return false;
     }
   },
 
   async down(queryInterface, Sequelize) {
     try {
-      // Primero eliminar las relaciones
       await queryInterface.bulkDelete(QUESTION_CATEGORY_TABLE, null, {});
-      console.log('✅ Relaciones de preguntas eliminadas');
-      
-      // Luego eliminar las preguntas
+
       const questions = questionsData.map(q => q.question);
       await queryInterface.bulkDelete(QUESTION_TABLE, {
         question: { [Sequelize.Op.in]: questions }
       }, {});
-      console.log('✅ Preguntas eliminadas');
+
     } catch (error) {
-      console.error('❌ Error eliminando preguntas:', error);
+      throw new Error(`❌ Error deleting questions: ${error.message}`);
     }
   }
 };

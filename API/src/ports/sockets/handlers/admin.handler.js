@@ -5,7 +5,6 @@ function registerAdminHandlers(socket, io, services) {
     socket.on("admin:join", async ({ accessCode }) => {
         socket.join(accessCode);
         socket.data = { accessCode, role: "admin" };
-        console.log(`👑 Admin ${socket.id} joined ${accessCode}`);
         socket.emit("admin:joined_ok");
     });
 
@@ -39,7 +38,6 @@ function registerAdminHandlers(socket, io, services) {
             if (!scores) return;
 
             io.to(accessCode).emit("event_results", scores);
-            console.log(`Event ${accessCode} ended and results sent.`);
             socket.emit("event_ended");
         } catch (err) {
             console.error("Error ending event:", err);
