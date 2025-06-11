@@ -1,4 +1,3 @@
-
 function participantHandler(socket, io, services) {
 
     const { liveEvents, answerService } = services;
@@ -21,7 +20,11 @@ function participantHandler(socket, io, services) {
                 answer,
             });
 
-            socket.emit("answer_ack", { is_correct, score } = response);
+            socket.emit("answer_ack", { 
+                is_correct: response.is_correct, 
+                score: response.score,
+                totalScore: response.totalScore  
+            });
         } catch (error) {
             console.error("Error:", error.message);
             socket.emit("error", "There was a problem processing your answer");

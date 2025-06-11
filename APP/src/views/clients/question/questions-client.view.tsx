@@ -49,11 +49,10 @@ export default function QuestionsView() {
   const [hasAnsweredCurrentQuestion, setHasAnsweredCurrentQuestion] = useState(false);
   const [currentQuestionId, setCurrentQuestionId] = useState<number | null>(null);
   const [isRequestingCurrentState, setIsRequestingCurrentState] = useState(false);
+  const [localTotalScore, setLocalTotalScore] = useState(0);
 
-  // Registro de preguntas respondidas
   const answeredQuestions = useRef<Set<number>>(new Set());
 
-  // Solicitar la pregunta actual cuando estamos conectados pero no tenemos pregunta
   useEffect(() => {
     if (isConnected && eventStarted && !currentQuestion && !isRequestingCurrentState) {
       setIsRequestingCurrentState(true);
@@ -67,20 +66,21 @@ export default function QuestionsView() {
     }
   }, [isConnected, eventStarted, currentQuestion, requestCurrentQuestion]);
 
-  // Validación de parámetros de ruta
   useEffect(() => {
     if (!questionnaireId || !participantId || !accessCode) {
       navigate('/', { replace: true });
     }
   }, [questionnaireId, participantId, accessCode, navigate]);
 
-  // Manejo de confirmación de respuesta
   useEffect(() => {
     if (answerAck && currentQuestionId) {
       setIsWaitingForResponse(false);
       setHasAnsweredCurrentQuestion(true);
-
-      // Guardar la pregunta en el registro de respondidas
+      
+      if (answerAck.is_correct) {
+        setLocalTotalScore(prev => prev + (answerAck.score || 0));
+      }
+      
       answeredQuestions.current.add(currentQuestionId);
 
       setShowFeedback(true);
@@ -90,12 +90,10 @@ export default function QuestionsView() {
     }
   }, [answerAck, currentQuestionId]);
 
-  // Reset de estados cuando llega una nueva pregunta
   useEffect(() => {
     if (currentQuestion && currentQuestion.questionId !== currentQuestionId) {
       setCurrentQuestionId(currentQuestion.questionId);
 
-      // Verificar si ya respondimos esta pregunta antes
       const alreadyAnswered = answeredQuestions.current.has(currentQuestion.questionId);
 
       setIsWaitingForResponse(false);
@@ -104,7 +102,6 @@ export default function QuestionsView() {
     }
   }, [currentQuestion, currentQuestionId]);
 
-  // Manejo de respuesta del usuario
   const handleAnswer = (answer: boolean) => {
     if (!currentQuestion || hasAnsweredCurrentQuestion ||
       answeredQuestions.current.has(currentQuestion.questionId)) return;
@@ -112,7 +109,6 @@ export default function QuestionsView() {
     setIsWaitingForResponse(true);
     submitAnswer(currentQuestion.questionId, answer);
   };
-
 
 
   const handleShareResults = (data: ResultsType[]) => {
@@ -142,7 +138,6 @@ export default function QuestionsView() {
 
     const encodedText = encodeURIComponent(shareText);
 
-
     setShareOptions({
       show: true,
       text: shareText,
@@ -154,7 +149,6 @@ export default function QuestionsView() {
     });
   };
 
-  // Estados de carga y espera
   if (!questionnaire) {
     return (
       <MainLayout backgroundVariant="gradient">
@@ -168,7 +162,6 @@ export default function QuestionsView() {
     );
   }
 
-
   if (eventEnded && results) {
     return (
       <MainLayout backgroundVariant="gradient">
@@ -178,7 +171,6 @@ export default function QuestionsView() {
             animate={{ opacity: 1 }}
             className="w-full max-w-2xl mx-auto text-center space-y-8"
           >
-            {/* Header - outside of the map to avoid repetition */}
             <motion.div
               initial={{ opacity: 0, y: -30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -191,7 +183,6 @@ export default function QuestionsView() {
               </p>
             </motion.div>
 
-            {/* Results container */}
             <div className="space-y-6">
               {results.map((result, index) => (
                 <motion.div
@@ -201,7 +192,6 @@ export default function QuestionsView() {
                   transition={{ delay: 0.3 + (index * 0.1) }}
                   className="rounded-2xl border border-white/20 p-6 bg-white/10 backdrop-blur-md shadow-lg"
                 >
-                  {/* Participant info */}
                   <div className="flex flex-col sm:flex-row items-center justify-between mb-4 pb-4 border-b border-white/10">
                     <div className="flex items-center gap-3 mb-3 sm:mb-0">
                       <div className="w-12 h-12 rounded-full bg-[var(--accent-primary)]/20 flex items-center justify-center">
@@ -220,7 +210,6 @@ export default function QuestionsView() {
                     </div>
                   </div>
 
-                  {/* Score visualization */}
                   <div className="mb-4">
                     <div className="mb-2 flex justify-between items-center">
                       <span className="text-sm text-[var(--text-secondary)]">Puntuación</span>
@@ -243,7 +232,6 @@ export default function QuestionsView() {
               ))}
             </div>
 
-            {/* Action buttons */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
               <motion.button
                 initial={{ opacity: 0, y: 20 }}
@@ -269,7 +257,6 @@ export default function QuestionsView() {
       </MainLayout>
     );
   }
-
 
 
   {
@@ -500,7 +487,9 @@ export default function QuestionsView() {
                     {answerAck.is_correct ? '¡Correcto!' : '¡Incorrecto!'}
                   </p>
                   <p className="text-sm opacity-80">
-                    Tu puntuación actual: {answerAck.score}
+                    {answerAck.is_correct 
+                      ? `+${answerAck.score} pts (Total: ${answerAck.totalScore || localTotalScore} pts)` 
+                      : `Total: ${answerAck.totalScore || localTotalScore} pts`}
                   </p>
                 </div>
               </div>
