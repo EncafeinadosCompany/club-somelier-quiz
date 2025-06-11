@@ -1,7 +1,6 @@
 import { participantSocket, adminSocket } from "@/api/client/socket";
 import { useEffect, useState } from "react";
 
-
 export interface Participant {
   fullName: string;
   id: number;
@@ -14,14 +13,17 @@ export interface ResultsType {
   total: number;
 }
 
-
 export function useEventSocketParticipant(
     accessCode?: string,
     participantId?: string | null
 ) {
     const [eventStarted, setEventStarted] = useState(false);
     const [currentQuestion, setCurrentQuestion] = useState<any>(null);
-    const [answerAck, setAnswerAck] = useState<{ is_correct: boolean; score: number } | null>(null);
+    const [answerAck, setAnswerAck] = useState<{
+  is_correct: boolean;
+  score: number;
+  totalScore?: number;
+} | null>(null);
     const [noMoreQuestions, setNoMore] = useState(false);
     const [eventEnded, setEventEnded] = useState(false);
     const [results, setResults] = useState<ResultsType[]>([]);
@@ -183,7 +185,6 @@ export function useEventSocketAdmin(accessCode: string) {
         };
     }, [accessCode]);
 
-
     const startEvent = () => {
         console.log('🚀 Starting event:', accessCode);
         if (adminSocket.connected) {
@@ -218,3 +219,4 @@ export function useEventSocketAdmin(accessCode: string) {
         endEvent
     };
 }
+
