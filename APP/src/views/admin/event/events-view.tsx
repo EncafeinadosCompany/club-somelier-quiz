@@ -1,22 +1,24 @@
 "use client"
 
+import toast from "react-hot-toast"
 import { useState, useEffect, useMemo } from "react"
-import { Search, Settings, Menu, Calendar, Filter, X, Eye, QrCode, Clock, Link, Copy, Play } from "lucide-react"
+import { Search, Calendar, Filter, X, Eye, QrCode, Clock, Link, Copy, Play } from "lucide-react"
 
 import { Button } from "@/common/ui/button"
+import { Card } from "@/common/ui/card"
 import { Input } from "@/common/ui/input"
-import { useEventsQuery, useEventByIDQuery } from "@/api/query/events.queries"
-
 import { Badge } from "@/common/ui/badge"
 import { Skeleton } from "@/common/ui/skeleton"
-import { Card } from "@/common/ui/card"
-import toast from "react-hot-toast"
+
 import { QRCode } from "@/common/atoms/QRCode"
+import AnimatedBackground from "@/common/atoms/animated-background"
+import { FormatDateTime } from "@/common/utils/format-date-time.utils"
+import EventFormModal from "@/common/widgets/admin/events/events-form.widget"
+
 
 import { useNavigate } from "react-router-dom"
-import EventFormModal from "@/common/widgets/admin/events/events-form.widget"
-import AnimatedBackground from "@/common/atoms/animated-background"
-import clubSomelier from "@/assets/clubSomelier.png"
+import { useEventsQuery, useEventByIDQuery } from "@/api/query/events.queries"
+
 
 
 export default function EventsView() {
@@ -27,13 +29,9 @@ export default function EventsView() {
 
   const navigate = useNavigate()
 
-  const { data: events = [], isLoading, isError } = useEventsQuery()
+  const { data: events = [], isLoading} = useEventsQuery()
 
-  const {
-    data: selectedEvent,
-    isLoading: isLoadingDetails,
-    isError: isErrorDetails
-  } = useEventByIDQuery(selectedEventId)
+  const { data: selectedEvent, isLoading: isLoadingDetails, isError: isErrorDetails} = useEventByIDQuery(selectedEventId)
 
   useEffect(() => {
     setIsLoaded(true)
@@ -173,7 +171,7 @@ export default function EventsView() {
             {/* Events List */}
             <div className="space-y-4 max-h-[calc(100vh-250px)] overflow-y-auto pr-2">
               {isLoading ? (
-                // Loading skeletons
+
                 Array(5).fill(0).map((_, i) => (
                   <div key={i} className="bg-white/10 backdrop-blur-lg rounded-xl border border-white/20 p-4 hover:bg-white/20 transition-all duration-200">
                     <Skeleton className="h-6 w-3/4 bg-white/20 mb-2" />
@@ -200,31 +198,13 @@ export default function EventsView() {
                     <div className="flex items-center text-white/70 text-sm mb-3">
                       <Clock className="h-4 w-4 mr-2" />
                       {event.start_time
-                        ? (() => {
-                          const date = new Date(event.start_time)
-                          return (
-                            <>
-                              {date.toLocaleDateString()}&nbsp;
-                              <span className="mx-1">|</span>
-                              {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </>
-                          )
-                        })()
+                        ? FormatDateTime(event.start_time)
                         : 'Hora no especificada'}
                     </div>
                     <div className="flex items-center text-white/70 text-sm mb-3">
                       <Clock className="h-4 w-4 mr-2" />
                       {event.end_time
-                        ? (() => {
-                          const date = new Date(event.end_time)
-                          return (
-                            <>
-                              {date.toLocaleDateString()}&nbsp;
-                              <span className="mx-1">|</span>
-                              {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </>
-                          )
-                        })()
+                        ? FormatDateTime(event.end_time)
                         : 'Hora no especificada'}
                     </div>
                     <div className="flex mt-3 justify-between">
@@ -320,6 +300,7 @@ export default function EventsView() {
 
 
                   {/* QR Code */}
+
                   <Card className="bg-white/10 backdrop-blur-lg border border-white/20 p-4 mb-4 flex flex-col items-center">
                     <h3 className="text-white font-medium mb-3 flex items-center">
                       <QrCode className="h-5 w-5 mr-2" />

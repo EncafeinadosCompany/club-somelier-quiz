@@ -16,7 +16,7 @@ interface LocationState {
     participantId: string;
 }
 
-export function WaitingViewTest() {
+export default function WaitingViewTest() {
     const { state } = useLocation();
     const { userData, questionnaireId, accessCode, participantId } = (state || {}) as LocationState;
     const navigate = useNavigate();

@@ -5,7 +5,7 @@ import { MainLayout } from '@/common/widgets/clients/main-layout.widget';
 import { Home, ArrowLeft, HelpCircle } from 'lucide-react';
 import NotFoundSvg from '@/assets/notFound.svg';
 
-export function NotFoundPage() {
+export default function NotFoundPage() {
   const navigate = useNavigate();
 
   const handleGoHome = () => {

@@ -16,7 +16,7 @@ interface LocationState {
   accessCode: string;
 }
 
-export function QuestionsView() {
+export default function QuestionsView() {
   const { state } = useLocation();
   const navigate = useNavigate();
   const { questionnaireId, participantId, accessCode } = state as LocationState;

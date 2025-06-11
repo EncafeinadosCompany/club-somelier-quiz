@@ -1,26 +1,26 @@
-import App from "@/App";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import { QuestionsView } from "@/views/clients/question/questions-client.view";
-import { NotFoundPage } from "@/common/utils/404";
-import Navbar from "@/common/widgets/admin/nav_widget";
-import HomeCuestion from "@/views/admin/questionnaire/questionnaire-view";
+import { Suspense, lazy } from "react";
 import { QuizLoader } from "@/common/atoms/QuizLoader";
 import { useAppLoading } from "@/common/hooks/useAppLoading";
-import { Suspense } from "react";
-import QuestionnaireDetailPage from "@/views/admin/questionnaire/questionnaire-details.view";
-import EventView from "@/views/admin/event/events-view";
-import HomeQuestionsView from "@/views/admin/question/questions-view";
-import { WaitingViewTest } from "@/views/clients/question/waiting-room.test.view";
-import QuestionnaireFormView from "@/common/widgets/admin/quetionnaire/form-quetionnaire.widgest";
-import QuestionnaireEditContainer from "@/views/admin/questionnaire/questionnaire-edit.view";
-import AdminControlView from "@/views/admin/questionnaire/questionnaire-control.view";
-import LoginPage from "@/views/home/login-view";
-import LandingPage from "@/views/home/landing-view";
-import ContactPage from "@/views/home/contact-view";
-import { HomeView } from "@/views/home/home-view";
 import PrivateRoute from "./token-route";
+import App from "@/App";
 
-
+// Lazy loaded components
+const NotFoundPage = lazy(() => import("@/common/utils/404"));
+const Navbar = lazy(() => import("@/common/widgets/admin/nav_widget"));
+const QuestionsView = lazy(() => import("@/views/clients/question/questions-client.view"));
+const HomeCuestion = lazy(() => import("@/views/admin/questionnaire/questionnaire-view"));
+const QuestionnaireDetailPage = lazy(() => import("@/views/admin/questionnaire/questionnaire-details.view"));
+const EventView = lazy(() => import("@/views/admin/event/events-view"));
+const HomeQuestionsView = lazy(() => import("@/views/admin/question/questions-view"));
+const WaitingViewTest = lazy(() => import("@/views/clients/question/waiting-room.test.view"));
+const QuestionnaireFormView = lazy(() => import("@/common/widgets/admin/quetionnaire/form-quetionnaire.widgest"));
+const QuestionnaireEditContainer = lazy(() => import("@/views/admin/questionnaire/questionnaire-edit.view"));
+const AdminControlView = lazy(() => import("@/views/admin/questionnaire/questionnaire-control.view"));
+const LoginPage = lazy(() => import("@/views/home/login-view"));
+const LandingPage = lazy(() => import("@/views/home/landing-view"));
+const ContactPage = lazy(() => import("@/views/home/contact-view"));
+const HomeView = lazy(() => import("@/views/home/home-view"));
 
 function AppWithLoading() {
     const { isLoading } = useAppLoading(3000);
@@ -59,12 +59,9 @@ export default function AuthRoutes() {
                         <Route index element={<LandingPage />} />
                         <Route path="contact" element={<ContactPage />} />
 
-
-
                         {/* LOGIN */}
                         <Route path="login" element={<LoginPage />} />
                         <Route element={<PrivateRoute/>}>
-                            {/* <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}> */}
                             <Route path="admin" element={<Navbar />}>
                                 <Route index element={<HomeCuestion />} />
                                 <Route path="event" element={<EventView />} />
@@ -73,13 +70,10 @@ export default function AuthRoutes() {
                                 <Route path="questionnaire/create" element={<QuestionnaireFormView />} />
                                 <Route path="questionnaire/edit/:id" element={<QuestionnaireEditContainer />} />
                                 <Route path="control" element={<AdminControlView />} />
-
                             </Route>
-                            {/* </Route> */}
                         </Route>
-
-                        </Route>
-                        <Route path="*" element={<Navigate to="/404" replace />} />
+                    </Route>
+                    <Route path="*" element={<Navigate to="/404" replace />} />
                 </Routes>
             </Suspense>
         </Router>

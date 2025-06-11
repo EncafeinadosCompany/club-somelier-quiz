@@ -8,7 +8,7 @@ import { useEventByCodeQuery } from '@/api/query/events.queries';
 import { useRegisterParticipant } from '@/api/mutations/participant.mutation';
 import { Participant } from '@/api/types/participant.type';
 
-export function HomeView() {
+export default function HomeView() {
   const [userData, setUserData] = useState<Participant | null>(null);
   const [questionnaireId, setQuestionnaireId] = useState<number | null>(null);
   const [backendErrorMessage, setBackendErrorMessage] = useState<string>('');

@@ -1,26 +1,27 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
-import { Search, Trash2, Filter, X, Edit, Plus, FileText, Tag } from "lucide-react"
+import { useState, useMemo } from "react"
+import { Plus, FileText } from "lucide-react"
 import { Button } from "@/common/ui/button"
-import { Input } from "@/common/ui/input"
 import { useQuestionsQuery, useQuestionByIDQuery } from "@/api/query/questions.queries"
 import { useCategoriesQuery } from "@/api/query/category.queries"
 import { useCreateQuestionMutation, useDeleteQuestionMutation, useUpdateQuestionMutation } from "@/api/mutations/questions.mutation"
-import { Badge } from "@/common/ui/badge"
+
 import { Skeleton } from "@/common/ui/skeleton"
-import { Card } from "@/common/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/common/ui/select"
 import { Postquestion } from "@/api/types/questions.type"
 import { QuestionForm } from "@/common/widgets/admin/questions/questions-form.widget"
 import { QuestionFormData } from "@/api/schemas/questions.schema"
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/common/ui/alert-dialog"
-import { CheckCircle, XCircle } from "lucide-react"
+
+
 import { useNivelesQuery } from "@/api/query/level.queries"
 import AnimatedBackground from "@/common/atoms/animated-background"
+import QuestionFilter from "@/common/molecules/admin/questions/question-filter.molecule"
+import DeleteQuestionConfirmation from "@/common/molecules/admin/questions/question-confirmation-delete.molecule"
+import QuestionDetails from "@/common/molecules/admin/questions/question-details.molecule"
+import QuestionCard from "@/common/molecules/admin/questions/quiestion-card.molecule"
 
 export default function QuestionsView() {
-    const [isLoaded, setIsLoaded] = useState(false)
+    const [isLoaded, setIsLoaded] = useState(true)
     const [searchTerm, setSearchTerm] = useState("")
     const [selectedQuestionId, setSelectedQuestionId] = useState<number | null>(null)
     const [isEditing, setIsEditing] = useState(false)
@@ -30,8 +31,8 @@ export default function QuestionsView() {
     const [levelFilter, setLevelFilter] = useState<string | null>(null)
     const [responseFilter, setResponseFilter] = useState<boolean | null>(null)
 
-    const { data: questions = [], isLoading} = useQuestionsQuery()
-    const { data: categories = [], isLoading: isLoadingCategories } = useCategoriesQuery()
+    const { data: questions = [], isLoading } = useQuestionsQuery()
+    const { data: categories = [] } = useCategoriesQuery()
     const { data: nivels = [] } = useNivelesQuery();
 
     const {
@@ -45,9 +46,6 @@ export default function QuestionsView() {
     const updateQuestionMutation = useUpdateQuestionMutation()
     const deleteQuestionMutation = useDeleteQuestionMutation()
 
-    useEffect(() => {
-        setIsLoaded(true)
-    }, [])
 
     const filteredQuestions = useMemo(() => {
         return questions.filter((q) => {
@@ -128,145 +126,25 @@ export default function QuestionsView() {
 
             <main className="relative h-[92vh] w-full pt-5 flex">
 
-                <div
-                    className={`w-80 h-full bg-white/10 backdrop-blur-lg p-6 shadow-xl border-r border-white/20 rounded-tr-3xl opacity-100 ${isLoaded ? "animate-fade-in" : ""} flex flex-col`}
-                    style={{ animationDelay: "0.4s" }}
-                >
-                    <div className="mb-6">
-                        <h3 className="text-white font-semibold text-lg mb-4 flex items-center">
-                            <Filter className="h-5 w-5 mr-2" />
-                            Filtros
-                        </h3>
+                {/* Filter */}
 
-                        {/* Search Filter */}
-                        <div className="mb-4">
-                            <label className="block text-white/80 text-sm font-medium mb-2">Buscar preguntas</label>
-                            <div className="relative">
-                                <Search className="absolute left-1 top-1/2 h-4 w-4 z-30 -translate-y-1/2 text-gray-500" />
-                                <Input
-                                    type="text"
-                                    placeholder="Buscar por texto..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 pl-6 "
-                                />
-                            </div>
-                        </div>
-
-                        {/* Category Filter */}
-                        <div className="mb-4">
-                            <label className="block text-white/80 text-sm font-medium mb-2">Filtrar por categoría</label>
-                            <Select
-                                value={categoryFilter === null ? "all" : categoryFilter.toString()}
-                                onValueChange={(value) => setCategoryFilter(value === "all" ? null : parseInt(value))}
-                            >
-                                <SelectTrigger className="bg-white/10 border-white/20 text-white">
-                                    <SelectValue placeholder="Todas las categorías" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="all">Todas las categorías</SelectItem>
-                                    {categories.map((category) => (
-                                        <SelectItem key={category.id} value={category.id.toString()}>
-                                            {category.name}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        {/* Level Filter */}
-                        <div className="mb-4">
-                            <label className="block text-white/80 text-sm font-medium mb-2">Filtrar por nivel</label>
-                            <Select
-                                value={levelFilter === null ? "all" : levelFilter}
-                                onValueChange={(value) => setLevelFilter(value === "all" ? null : value)}
-                            >
-                                <SelectTrigger className="bg-white/10 border-white/20 text-white">
-                                    <SelectValue placeholder="Todos los niveles" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="all">Todos los niveles</SelectItem>
-                                    {nivels.map((nivel) => (
-                                        <SelectItem key={nivel.id} value={nivel.name}>
-                                            {nivel.name}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        {/* Response Filter */}
-                        <div className="mb-4">
-                            <label className="block text-white/80 text-sm font-medium mb-2">Filtrar por respuesta</label>
-                            <Select
-                                value={responseFilter === null ? "all" : responseFilter ? "true" : "false"}
-                                onValueChange={(value) => {
-                                    if (value === "all") setResponseFilter(null)
-                                    else setResponseFilter(value === "true")
-                                }}
-                            >
-                                <SelectTrigger className="bg-white/10 border-white/20 text-white">
-                                    <SelectValue placeholder="Cualquier respuesta" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="all">Cualquier respuesta</SelectItem>
-                                    <SelectItem value="true">Realidad</SelectItem>
-                                    <SelectItem value="false">Mito</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        {/* Clear Filters */}
-                        {hasActiveFilters && (
-                            <Button
-                                onClick={clearFilters}
-                                variant="outline"
-                                className="w-full bg-white/10 hover:bg-white/20 text-white border-white/20"
-                            >
-                                <X className="h-4 w-4 mr-2" />
-                                Limpiar Filtros
-                            </Button>
-                        )}
-                    </div>
-
-                    <div className="space-y-5 overflow-y-auto">
-                        {/* Stats */}
-                        <div className="bg-white/10 rounded-xl p-4 border border-white/20 mb-6">
-                            <h4 className="text-white font-medium mb-3">Estadísticas</h4>
-                            <div className="space-y-2 text-sm text-white/80">
-                                <div className="flex justify-between">
-                                    <span>Total preguntas:</span>
-                                    <span className="font-medium text-white">{questions.length}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span>Preguntas filtradas:</span>
-                                    <span className="font-medium text-white">{filteredQuestions.length}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span>Verdaderas:</span>
-                                    <span className="font-medium text-white">{questions.filter(q => q.response).length}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span>Falsas:</span>
-                                    <span className="font-medium text-white">{questions.filter(q => !q.response).length}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Categories */}
-                        <div className="bg-white/10 rounded-xl p-4 border border-white/20">
-                            <h4 className="text-white font-medium mb-3">Categorías</h4>
-                            <div className="space-y-2 text-sm">
-                                {categories.map((category) => (
-                                    <div key={category.id} className="flex justify-between text-white/80">
-                                        <span>{category.name}</span>
-                                        <span>{questions.filter(q => q.categories.some(c => c.id === category.id)).length}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <QuestionFilter
+                    categories={categories}
+                    questions={questions}
+                    nivels={nivels}
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                    categoryFilter={categoryFilter}
+                    levelFilter={levelFilter}
+                    responseFilter={responseFilter}
+                    filteredQuestions={filteredQuestions}
+                    setLevelFilter={setLevelFilter}
+                    setCategoryFilter={setCategoryFilter}
+                    setResponseFilter={setResponseFilter}
+                    isLoaded={isLoaded}
+                    hasActiveFilters={hasActiveFilters}
+                    clearFilters={clearFilters}
+                ></QuestionFilter>
 
                 {/* Questions List */}
                 <div
@@ -306,35 +184,14 @@ export default function QuestionsView() {
                                 ))
                             ) : filteredQuestions.length > 0 ? (
                                 filteredQuestions.map((question) => (
-                                    <div
+                                    <QuestionCard
                                         key={question.id}
-                                        onClick={() => {
-                                            setSelectedQuestionId(question.id)
-                                            setIsEditing(false)
-                                            setIsCreating(false)
-                                        }}
-                                        className={`bg-white/20 backdrop-blur-lg rounded-xl border cursor-pointer 
-                      ${selectedQuestionId === question.id ? 'border-blue-400 bg-white/20' : 'border-white/20'} 
-                      p-4 hover:bg-white/20 transition-all duration-200`}
-                                    >
-                                        <div className="flex justify-between items-start mb-2">
-                                            <h3 className="text-white font-medium text-lg line-clamp-2">{question.question}</h3>
-                                            <Badge className={`${question.response ? 'bg-green-500' : 'bg-red-500'} text-white`}>
-                                                {question.response ? 'Realidad' : 'Mito'}
-                                            </Badge>
-                                        </div>
-                                        <div className="flex items-center text-white/70 text-sm mb-3">
-                                            <Tag className="h-4 w-4 mr-2" />
-                                            <span>{question.level}</span>
-                                        </div>
-                                        <div className="flex flex-wrap gap-2 mt-2">
-                                            {question.categories.map((category) => (
-                                                <Badge key={category.id} className="bg-blue-500/30 text-blue-100 border-blue-500/50">
-                                                    {category.name}
-                                                </Badge>
-                                            ))}
-                                        </div>
-                                    </div>
+                                        question={question}
+                                        selectedQuestionId={selectedQuestionId}
+                                        setSelectedQuestionId={setSelectedQuestionId}
+                                        setIsEditing={setIsEditing}
+                                        setIsCreating={setIsCreating}
+                                    />
                                 ))
                             ) : (
                                 <div className="flex flex-col items-center justify-center py-12">
@@ -407,73 +264,11 @@ export default function QuestionsView() {
                                     </div>
                                 </div>
                             ) : selectedQuestion ? (
-                                <div className="h-full flex flex-col">
-                                    <div className="flex justify-between items-start mb-6">
-                                        <h3 className="text-xl font-bold text-white">
-                                            Detalles
-                                        </h3>
-                                        <div className="flex space-x-2">
-                                            <Button
-                                                onClick={() => setDeleteDialogOpen(true)}
-                                                variant="outline"
-                                                className="bg-red-500/50 hover:bg-red-500/30 text-white border-red-500/30"
-                                            >
-                                                <Trash2 className="h-4 w-4 mr-2" />
-                                                Eliminar
-                                            </Button>
-                                            <Button
-                                                onClick={() => setIsEditing(true)}
-                                                className="bg-blue-500 hover:bg-blue-600 text-white"
-                                            >
-                                                <Edit className="h-4 w-4 mr-2" />
-                                                Editar
-                                            </Button>
-                                        </div>
-                                    </div>
-
-                                    <Card className="bg-white/20 backdrop-blur-lg border border-white/20 p-4 mb-4">
-                                        <h3 className="text-white font-medium mb-2">Pregunta</h3>
-                                        <p className="text-white/90">{selectedQuestion.question}</p>
-                                    </Card>
-
-                                    <div className="grid grid-cols-2 gap-4 mb-4">
-                                        <Card className="bg-white/20 backdrop-blur-lg border border-white/20 p-4">
-                                            <h3 className="text-white font-medium mb-2">Respuesta</h3>
-                                            <div className="flex items-center space-x-2">
-                                                {selectedQuestion.response ? (
-                                                    <>
-                                                        <CheckCircle className="h-10 w-10 text-green-400" />
-                                                        <span className="text-white">Realidad</span>
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <XCircle className="h-10 w-10 text-red-400" />
-                                                        <span className="text-white">Mito</span>
-                                                    </>
-                                                )}
-                                            </div>
-                                        </Card>
-
-                                        <Card className="bg-white/20 backdrop-blur-lg border border-white/20 p-4">
-                                            <h3 className="text-white font-medium mb-2">Nivel</h3>
-                                            <p className="text-white">{selectedQuestion.level}</p>
-                                        </Card>
-                                    </div>
-
-                                    <Card className="bg-white/20 backdrop-blur-lg border border-white/20 p-4 flex-1">
-                                        <h3 className="text-white font-medium mb-3">Categorías</h3>
-                                        <div className="flex flex-wrap gap-2">
-                                            {selectedQuestion.categories.map((category) => (
-                                                <Badge
-                                                    key={category.id}
-                                                    className="bg-blue-500/30 text-blue-100 border-blue-500/50 px-3 py-1"
-                                                >
-                                                    {category.name}
-                                                </Badge>
-                                            ))}
-                                        </div>
-                                    </Card>
-                                </div>
+                                <QuestionDetails
+                                    selectedQuestion={selectedQuestion}
+                                    setIsEditing={setIsEditing}
+                                    setDeleteDialogOpen={setDeleteDialogOpen}
+                                />
                             ) : (
                                 <div className="h-full flex flex-col items-center justify-center">
                                     <p className="text-white/60">No se encontró información de la pregunta</p>
@@ -500,27 +295,11 @@ export default function QuestionsView() {
             </main>
 
             {/* Delete Confirmation Dialog */}
-            <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                <AlertDialogContent className="bg-white/10 backdrop-blur-xl border border-white/20 text-white">
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
-                        <AlertDialogDescription className="text-white/70">
-                            Esta acción eliminará permanentemente esta pregunta y no se puede deshacer.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel className="bg-white/10 border-white/20 text-white hover:bg-white/20">
-                            Cancelar
-                        </AlertDialogCancel>
-                        <AlertDialogAction
-                            onClick={handleDelete}
-                            className="bg-red-500 hover:bg-red-600 text-white"
-                        >
-                            Eliminar
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
+            <DeleteQuestionConfirmation
+                deleteDialogOpen={deleteDialogOpen}
+                setDeleteDialogOpen={setDeleteDialogOpen}
+                handleDelete={handleDelete}
+            />
         </div>
     )
 }
