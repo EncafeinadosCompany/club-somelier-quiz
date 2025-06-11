@@ -10,7 +10,7 @@ function registerAdminHandlers(socket, io, services) {
 
     /* ========== ADMIN: START EVENT ========== */
     socket.on("admin:start_event", async ({ accessCode }) => {
-        const totalQuestions = await adminService.startEvent(accessCode, liveEvents);
+        const totalQuestions = await adminService.startEvent(accessCode);
         io.to(accessCode).emit("event_started", { totalQuestions });
     });
 
