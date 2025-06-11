@@ -2,11 +2,14 @@ const CategoryRepository = require("../repositories/category.repository");
 const QuestionCategoryRepository = require("../repositories/question-category.repository");
 const QuestionRepository = require("../repositories/question.repository");
 
+const LiveEventService = require('./live-event.service')
+
 class QuestionService {
     constructor() {
         this.questionRepository = new QuestionRepository();
         this.categoryRepository = new CategoryRepository();
         this.questionCategoryRepository = new QuestionCategoryRepository()
+        this.liveEvents = LiveEventService;
     }
 
     async createQuestion(data) {
@@ -87,6 +90,28 @@ class QuestionService {
 
         return question;
     }
+
+    getCurrentQuestion(accessCode) {
+        const live = this.liveEvents.get(accessCode);
+
+        if (
+            !live ||
+            live.currentIdx < 0 ||
+            live.currentIdx >= live.questions.length
+        ) {
+            return null;
+        }
+
+        const q = live.questions[live.currentIdx];
+
+        return {
+            questionId: q.id,
+            position: live.currentIdx + 1,
+            total: live.questions.length,
+            text: q.question,
+        };
+    }
+
 }
 
 module.exports = QuestionService;
